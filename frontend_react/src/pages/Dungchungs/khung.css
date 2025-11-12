@@ -1,0 +1,178 @@
+/* khung cha */
+
+.khung-cha{
+    min-height: 100vh;
+}
+
+
+
+/* tiêu-đề */
+
+
+.tieu-de-cha {
+    min-width: 100%;
+    margin: 20px 0px 30px 0;
+    font-size: 16px;
+    height: min-content;
+    color: #ffffff;
+}
+.tieu-de-cha .tieu-de-tren,
+.tieu-de-cha .tieu-de-duoi{
+    width: 100%;
+    height: 60px;
+    padding: 15px 20px;
+    align-items: center;
+    justify-content: space-between;
+    
+    background-color: #1275ff;
+    
+    border-radius: 5px 5px 0 0;
+}
+
+.tieu-de-tren .tieu-de-trai{
+    font-weight: 600;
+    gap: 10px;
+    align-items: center;
+}
+.tieu-de-tren .tieu-de-trai .tieu-de-anh{
+    width: 30px;
+    height: 30px;
+}
+
+.tieu-de-tren .tieu-de-trai .tieu-de-hethong{
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.tieu-de-tren .tieu-de-phai{
+    font-weight: 600;
+    gap: 20px;
+    align-items: center;
+}
+
+
+.tieu-de-tren .tieu-de-phai .khung-thongbao{
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tieu-de-tren .tieu-de-phai .khung-thongbao:hover {
+    color: rgb(255, 157, 0);
+}
+
+.tieu-de-tren .tieu-de-phai .lienket-dang-nhap{
+    text-decoration: none;
+    color: #005fe5;
+    background-color: #ffffff;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 5px 12px 7px;
+    border-radius: 5px;
+}
+
+.tieu-de-tren .tieu-de-phai .lienket-dang-nhap:hover {
+    background-color: rgb(255, 173, 41);
+    color: #ffffff;
+}
+
+.tieu-de-cha .tieu-de-duoi{
+    height: 50px;
+    color: #005fe5;
+    background-color: #f6f6f6;
+    border-radius: 0 0 5px 5px;
+}
+
+.tieu-de-duoi .tieu-de-trai, 
+.tieu-de-duoi .tieu-de-phai{
+    font-weight: 600;
+    gap: 10px;
+    align-items: center;
+}
+
+.tieu-de-duoi .tieu-de-trai .tieu-de-nguoidung{
+    font-size: 16px;
+}
+
+.tieu-de-duoi .tieu-de-phai {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.tieu-de-duoi .tieu-de-phai .dang-xuat{
+    background-color: #ff4d4f;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+
+/* nội dung */
+
+.noi-dung-chinh{
+    flex-grow: 1;
+}
+
+
+
+/* chân trang */
+
+.khung-chan-trang {
+    width: 100%;
+    height: 220px;
+    padding: 40px 50px 30px;
+    margin-top: 30px;
+    align-items: flex-start;
+    justify-content: space-between;
+    background-color: #2b83ff;
+    font-size: 14px;
+    color: #ffffff;
+}
+.khung-chan-trang .chan-trang-con{
+    flex-direction: flex-start;
+    gap: 15px;
+}
+
+.chan-trang-con .tieude{
+    margin-bottom: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.chan-trang-con p{
+    font-size: 17px;
+    align-items: center;
+    gap: 10px;
+}
+
+.chan-trang-con p span{
+    font-weight: bold;
+}
+
+
+.chan-trang-con a{
+    font-size: 16px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.chan-trang-con a:hover {
+    text-decoration: underline;
+}
+
+
+.chan-trang-phai{
+    margin-right: 10px;
+}

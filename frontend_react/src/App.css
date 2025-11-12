@@ -1,0 +1,23 @@
+#root {
+  min-height: 100vh;
+  margin: auto;
+  
+  padding: 0 100px;
+  background-image: url("https://res.cloudinary.com/dpkysexsr/image/upload/c_crop,ar_4:3/v1762735002/background_logo_tr%C6%B0%C6%A1ng_jxllbv.jpg");
+  background-size: cover; 
+  background-position: bottom center; 
+  background-repeat: no-repeat;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important; /* Thay 'white' bằng màu nền bạn muốn */
+    -webkit-text-fill-color: #000 !important; /* Đảm bảo màu chữ vẫn rõ ràng */
+    /* Bạn có thể thêm các thuộc tính khác như border, transition nếu cần */
+    transition: background-color 5000s ease-in-out 0s; /* Một mẹo để ẩn transition của trình duyệt */
+}
+
+
+

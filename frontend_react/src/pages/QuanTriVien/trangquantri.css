@@ -1,0 +1,208 @@
+/* Sử dụng CSS Variable để dễ thay đổi theme */
+:root {
+    --mau-nen-sidebar: #2b83ff;
+    --mau-chu-sidebar: #ffffff;
+    --mau-nen-active: #ffc107;
+    --mau-vien: #ffffff;
+}
+
+/* Container chính sử dụng Flexbox để chia layout 2 cột */
+.quan_tri_container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Thanh Điều Hướng (Sidebar) */
+.thanh_dieu_huong {
+    width: 250px; 
+    background-color: var(--mau-nen-sidebar);
+    color: var(--mau-chu-sidebar);
+    flex-shrink: 0; 
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.ten_ung_dung {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ffffff; 
+}
+
+.danh_sach_menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.muc_menu, .muc_menu_active {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: var(--mau-chu-sidebar);
+    transition: background-color 0.3s;
+}
+
+.muc_menu:hover {
+    background-color: #fffdf6;
+    color: #1275ff;
+    font-weight: bold;
+}
+
+.muc_menu_active {
+    background-color: var(--mau-nen-active);
+    font-weight: bold;
+    border-left: 5px solid #ff9100;
+}
+
+/* Khu vực Nội dung chính */
+.khu_vuc_chinh {
+    flex-grow: 1; 
+    padding: 0px;
+    background-color: #f4f7f6;
+}
+
+
+/* Khung chính cho trang thống kê */
+.khung-chinh-quantri {
+    padding: 20px;
+    /* background-color: white; */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tieude-khung{
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: #1275ff;
+}
+
+.khungs-thongke {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin-bottom: 20px;
+}
+
+.khungs-thongke.flex-row {
+    flex-direction: row;
+}
+
+.thongke-item {
+    flex: 1 1 200px;
+    min-width: 160px;
+    background-color: var(--mau-vien);
+    color: #333;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(18, 117, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    border-left: 4px solid transparent;
+}
+
+.thongke-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(18, 117, 255, 0.09);
+    border-left-color: var(--mau-nen-active);
+}
+
+.thongke-item h3 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #1275ff;
+    font-weight: 700;
+}
+
+/* Số liệu lớn */
+.thongke-item p {
+    margin-left: 5px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ff9e1f;
+}
+
+/* Responsive: xếp dọc trên màn nhỏ */
+@media (max-width: 680px) {
+    .khungs-thongke {
+        flex-direction: column;
+    }
+
+    .thongke-item {
+        width: 100%;
+    }
+}
+
+
+/* Khung bộ lọc (filters) */
+.khungs-boloc {
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+
+
+/* Mỗi mục lọc */
+.boloc-item {
+    flex: 1 1 200px;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+    background-color: var(--mau-vien);
+    padding: 10px 12px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(18, 117, 255, 0.04);
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+/* Nhãn của bộ lọc */
+.label-boloc {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1275ff;
+    margin-bottom: 8px;
+    text-transform: none;
+}
+
+/* Select input của bộ lọc */
+.select-boloc {
+    height: 36px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #e6eefc;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+    cursor: pointer;
+    
+    
+}
+
+.select-boloc:focus {
+    border-color: var(--mau-nen-active);
+    box-shadow: 0 8px 20px rgba(18, 117, 255, 0.06);
+    transform: translateY(-1px);
+}
+
+
+
+/* Make filters responsive: stack vertically on small screens */
+@media (max-width: 680px) {
+    .khungs-boloc {
+        flex-direction: column;
+    }
+
+    .boloc-item {
+        width: 100%;
+        min-width: 0;
+    }
+}
