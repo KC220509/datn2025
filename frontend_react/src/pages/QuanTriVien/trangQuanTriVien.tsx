@@ -159,9 +159,9 @@ const TrangQuanTriVien = () => {
 
     return (
         <>
-            <div className="khung-chinh-quantri flex-col">
+            <div className="trang-quantri flex-col">
 
-                <h1 className="tieude-khung">Thống kê tổng quan</h1>
+                <h1 className="tieude-trang">Thống kê tổng quan</h1>
                 <div className="khungs-thongke flex-row">
                     <div className="thongke-item">
                         <h3>Người dùng</h3>

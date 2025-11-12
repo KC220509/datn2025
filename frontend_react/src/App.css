@@ -7,16 +7,21 @@
   background-size: cover; 
   background-position: bottom center; 
   background-repeat: no-repeat;
+
+  
+  --mau-nen-sidebar: #2b83ff;
+  --mau-chu-sidebar: #ffffff;
+  --mau-nen-active: #ffc107;
+  --mau-vien: #ffffff;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px white inset !important; /* Thay 'white' bằng màu nền bạn muốn */
-    -webkit-text-fill-color: #000 !important; /* Đảm bảo màu chữ vẫn rõ ràng */
-    /* Bạn có thể thêm các thuộc tính khác như border, transition nếu cần */
-    transition: background-color 5000s ease-in-out 0s; /* Một mẹo để ẩn transition của trình duyệt */
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    -webkit-text-fill-color: #000 !important;
+    transition: background-color 5000s ease-in-out 0s; 
 }
 
 

@@ -1,19 +1,12 @@
-/* Sử dụng CSS Variable để dễ thay đổi theme */
-:root {
-    --mau-nen-sidebar: #2b83ff;
-    --mau-chu-sidebar: #ffffff;
-    --mau-nen-active: #ffc107;
-    --mau-vien: #ffffff;
-}
 
-/* Container chính sử dụng Flexbox để chia layout 2 cột */
-.quan_tri_container {
+
+.khung-quantri {
     display: flex;
     min-height: 100vh;
 }
 
-/* Thanh Điều Hướng (Sidebar) */
-.thanh_dieu_huong {
+/* Thanh Điều Hướng  */
+.thanh-dieu-huong {
     width: 250px; 
     background-color: var(--mau-nen-sidebar);
     color: var(--mau-chu-sidebar);
@@ -21,19 +14,19 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.ten_ung_dung {
+.ten-ung-dung {
     text-align: center;
     margin-bottom: 30px;
     color: #ffffff; 
 }
 
-.danh_sach_menu {
+.danh-sach-menu {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.muc_menu, .muc_menu_active {
+.muc-menu, .muc-menu-active {
     display: block;
     padding: 12px 20px;
     text-decoration: none;
@@ -41,20 +34,20 @@
     transition: background-color 0.3s;
 }
 
-.muc_menu:hover {
+.khung-quantri .muc-menu:hover {
     background-color: #fffdf6;
     color: #1275ff;
     font-weight: bold;
 }
 
-.muc_menu_active {
+.khung-quantri .muc-menu-active {
     background-color: var(--mau-nen-active);
     font-weight: bold;
     border-left: 5px solid #ff9100;
 }
 
 /* Khu vực Nội dung chính */
-.khu_vuc_chinh {
+.khu-vuc-chinh {
     flex-grow: 1; 
     padding: 0px;
     background-color: #f4f7f6;
@@ -62,14 +55,14 @@
 
 
 /* Khung chính cho trang thống kê */
-.khung-chinh-quantri {
+.trang-quantri {
     padding: 20px;
     /* background-color: white; */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.tieude-khung{
+.tieude-trang{
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
@@ -77,7 +70,7 @@
     color: #1275ff;
 }
 
-.khungs-thongke {
+.trang-quantri .khungs-thongke {
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
@@ -129,7 +122,7 @@
 
 /* Responsive: xếp dọc trên màn nhỏ */
 @media (max-width: 680px) {
-    .khungs-thongke {
+    .trang-quantri .khungs-thongke {
         flex-direction: column;
     }
 
@@ -140,7 +133,7 @@
 
 
 /* Khung bộ lọc (filters) */
-.khungs-boloc {
+.trang-quantri .khungs-boloc {
     gap: 12px;
     align-items: center;
     margin-bottom: 16px;
@@ -197,7 +190,7 @@
 
 /* Make filters responsive: stack vertically on small screens */
 @media (max-width: 680px) {
-    .khungs-boloc {
+    .trang-quantri .khungs-boloc {
         flex-direction: column;
     }
 

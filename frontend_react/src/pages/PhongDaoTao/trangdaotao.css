@@ -1,0 +1,151 @@
+
+.khung-trangdaotao {
+    min-height: 100vh;
+}
+
+
+.khung-trangdaotao .khung-dieuhuong {
+    width: 100%;
+    height: min-content;
+
+    background-image: linear-gradient(to bottom, #158aff, rgb(78, 137, 255), #7ab8ea); 
+    
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    background-position: top; 
+
+    position: relative;
+}
+
+.khung-trangdaotao .thanh-dieuhuong nav .danhsach-menu {
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+}
+
+.khung-trangdaotao .thanh-dieuhuong nav .danhsach-menu li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.thanh-dieuhuong nav .danhsach-menu li .muc-menu,
+.thanh-dieuhuong nav .danhsach-menu li .muc-menu-active {
+    min-width: min-content;
+    padding: 12px 20px 14px;
+}
+
+
+
+
+
+.khung-trangdaotao .thanh-dieuhuong nav .danhsach-menu li .muc-menu:hover,
+.khung-trangdaotao .thanh-dieuhuong nav .danhsach-menu li .muc-menu-active {
+    color: #eeb200;
+}
+
+/* Trang quản lý sinh viên */
+
+.khung-daotao-sv{
+    min-height: 100vh;
+    padding: 40px 20px 20px 20px;
+    background-color: #ffffff;
+    /* background-color: #d7c9c9; */
+}
+
+
+.khung-daotao-sv .khung-tren{
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+}
+
+.khung-daotao-sv .khung-tren .mo-form{
+    padding: 8px 20px 10px;
+    background-color: #00e73a;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.khung-daotao-sv .khung-tren .mo-form:hover{
+    background-color: #00c233;
+}
+
+
+.khung-daotao-sv .khung-tren .khung-boloc{
+    gap: 20px;
+}
+
+.khung-tren .khung-boloc .loc-hocky{
+    gap: 10px;
+    align-items: center;
+}
+
+
+
+.khung-tren .khung-boloc .loc-hocky .nhan-chon{
+    font-size: 14px;
+    color: #505050;
+    font-weight: bold;
+}
+.khung-tren .khung-boloc .loc-hocky .chon-hocky{
+    padding: 8px 10px 7px;
+    border-radius: 3px;
+    font-size: 14px;
+    border: 1px solid #c0c7ce;
+    color: #707070;
+    cursor: pointer;
+    outline: none;
+
+}
+
+
+.khung-tren .khung-boloc .loc-hocky .chon-hocky:focus{
+    outline: none;
+}
+
+
+.khung-tren .khung-boloc .khung-timkiem{
+    width: max-content;
+    gap: 8px;
+    padding: 3px 3px 3px 10px;
+    background-color: #f3f9ff;
+    border: 1px solid #c0c7ce;
+    border-radius: 3px;
+    align-items: center;
+} 
+
+.khung-boloc .khung-timkiem i{
+    padding: auto 6px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #9f9c9c;
+
+}
+
+.khung-boloc .khung-timkiem .nhap-timkiem{
+    width: 200px;
+    padding: 5px 0px 4px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #707070;
+}
+
+
+.khung-boloc .khung-timkiem .nut-timkiem{
+    min-width: 80px;
+    padding: 6px 10px 5px;
+    background-color: #1275ff;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 3px;
+}

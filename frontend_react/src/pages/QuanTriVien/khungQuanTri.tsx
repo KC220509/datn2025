@@ -3,23 +3,22 @@ import './trangquantri.css';
 
 function KhungQuanTri() {
   return (
-    <div className="quan_tri_container">
-      <aside className="thanh_dieu_huong">
-        {/* <h2 className="ten_ung_dung">Admin Panel</h2> */}
+    <div className="khung-quantri">
+      <aside className="thanh-dieu-huong">
         <nav>
-          <ul className="danh_sach_menu">
+          <ul className="danh-sach-menu">
             <li>
-              <NavLink to="/trang-quan-tri" end className={({ isActive }) => isActive ? 'muc_menu_active' : 'muc_menu'}>
+              <NavLink to="/quan-tri" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                 Tổng Quan
               </NavLink>
             </li>
             <li>
-              <NavLink to="/trang-quan-tri/ql-giang-vien" className={({ isActive }) => isActive ? 'muc_menu_active' : 'muc_menu'}>
+              <NavLink to="/quan-tri/ql-giang-vien" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                 Quản lý Giảng Viên
               </NavLink>
             </li>
             <li>
-              <NavLink to="/trang-quan-tri/ql-sinh-vien" className={({ isActive }) => isActive ? 'muc_menu_active' : 'muc_menu'}>
+              <NavLink to="/quan-tri/ql-sinh-vien" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                 Quản lý Sinh Viên
               </NavLink>
             </li>
@@ -28,7 +27,7 @@ function KhungQuanTri() {
         </nav>
       </aside>
 
-      <main className="khu_vuc_chinh">
+      <main className="khu-vuc-chinh">
         <Outlet />
       </main>
     </div>

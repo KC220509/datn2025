@@ -23,10 +23,10 @@ const DangNhap: React.FC = () => {
 
   const chuyenHuongMacDinh = (vaiTros: string[]): string => {
       if (vaiTros.includes('AD')) {
-          return '/trang-quan-tri';
+          return '/quan-tri';
       }
       if (vaiTros.includes('PDT')) {
-          return '/trang-dao-tao';
+          return '/dao-tao';
       }
       return '/trang-chu'; 
   };

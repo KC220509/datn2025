@@ -14,16 +14,17 @@ import TrangQuanTriVien from './pages/QuanTriVien/trangQuanTriVien';
 
 // Phòng đào tạo
 import PhongDaoTao from './pages/PhongDaoTao/phongDaoTao';
+import KhungTrangDaoTao from './pages/PhongDaoTao/khungTrangDaoTao';
+import QlSinhVien from './pages/PhongDaoTao/qlSinhVien';
 
 
 
 function App() {
-
   return (
    <Routes>
-      
       {/* ROUTE CHA CHUNG LAYOUT KHUNG */}
       <Route element={<Khung trangcon={<Outlet />} />}> 
+
           {/* Không yêu cầu xác thực */}
           <Route index element={<TrangChuyenHuongMacDinh />} />
           <Route path='/trang-chu' element={<TrangChu />} />
@@ -32,18 +33,18 @@ function App() {
           {/* Yêu cầu xác thực vai trò */}
         
           {/* Quản trị viên */}
-          <Route path='/trang-quan-tri' element={
+          <Route path='/quan-tri' element={
               <VaiTroNguoiDung trangcon={<KhungQuanTri />}  vaitros={['AD']} />
             }>
               <Route index element={<TrangQuanTriVien />} />
           </Route>
 
-          <Route path='/trang-dao-tao' element={
-              <VaiTroNguoiDung 
-                trangcon={<PhongDaoTao />} 
-                vaitros={['PDT']} 
-              />
+          {/* Phòng đào tạo */}
+          <Route path='/dao-tao' element={
+              <VaiTroNguoiDung trangcon={<KhungTrangDaoTao />} vaitros={['PDT']} />
             }>
+              <Route index element={<PhongDaoTao />} />
+              <Route path='ql-sinhvien' element={<QlSinhVien />} />
           </Route>
       </Route>
 
