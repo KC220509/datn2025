@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportDanhSachRequest;
+use App\Imports\SinhViensImport;
 use App\Models\HocKyDk;
 use App\Services\KhoaNganhLopService;
 use App\Services\NguoiDungService;
-use Illuminate\Http\Request;
+use Maatwebsite\Excel\Excel;
 
 class DuLieuController extends Controller
 {
@@ -77,4 +79,27 @@ class DuLieuController extends Controller
             'ds_sinhvien' => $dsSinhVien,
         ]);
     }
+
+    public function importDsSinhVien(ImportDanhSachRequest $importDanhSachRequest){
+        $duLieu = $importDanhSachRequest->validated();
+
+        $hocKyId = $duLieu['id_hocky'];
+        $file = $duLieu['file'];
+
+        
+        try{
+            Excel::import(new SinhViensImport($hocKyId), $file);
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Nhập danh sách sinh viên thành công.',
+            ]);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Có lỗi xảy ra trong quá trình nhập dữ liệu: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }

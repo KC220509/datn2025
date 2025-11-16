@@ -31,3 +31,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/ds-khoanganhlop', [DuLieuController::class, 'dsKhoaNganhLop'])->name('dsKhoaNganhLop');
     Route::get('/ds-sinhvien', [DuLieuController::class, 'dsSinhVien'])->name('dsSinhVien');
 });
+
+
+Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:PDT'])->prefix('admin')->group(function () {
+    Route::post('/dssv-tailen', [DuLieuController::class, 'importDsSinhVien'])->name('importDsSinhVien');
+});
+

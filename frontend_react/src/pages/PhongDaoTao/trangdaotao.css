@@ -78,6 +78,157 @@
 }
 
 
+.khung-taidulieu-sv{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.khung-taidulieu-sv .form-taidulieu{
+    width: 400px;
+    gap: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.khung-taidulieu-sv .form-taidulieu .tieude-form{
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.khung-taidulieu-sv .form-taidulieu .dong-form{
+    cursor: pointer;
+    font-size: 15px;
+    color: #999999;
+}
+
+.khung-taidulieu-sv .form-taidulieu .dong-form:hover{
+    color: #ff0000;
+}
+
+.khung-taidulieu-sv .noidung-khungtai{
+ 
+    font-size: 14px;
+    color: #505050;
+    gap: 15px;
+}
+
+.khung-taidulieu-sv .noidung-khungtai .nhan-file{
+    display: block;
+    cursor: pointer;
+}
+
+
+
+
+
+.khung-taidulieu-sv .noidung-khungtai .an-tenfile{
+    display: none;
+}
+
+
+
+.khung-taidulieu-sv .noidung-khungtai .khung-hienthi-file{
+    min-height: 120px;
+    border: 2px dashed #00c233; 
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s ease;
+    align-content: center;
+}
+
+
+
+.noidung-khungtai .nhan-file:hover .khung-hienthi-file{
+    
+    background-color: #f0f8ff;
+    border-color: #00d439;
+}
+
+.noidung-khungtai .khung-hienthi-file .file-chua-chon{
+    align-items: center;
+    gap: 10px;
+    color: #707070;
+}
+
+.noidung-khungtai .khung-hienthi-file .file-chua-chon i{
+    font-size: 40px;
+    color: #00e73a;
+}
+
+
+.noidung-khungtai .khung-hienthi-file .file-chon{
+    min-width: 0;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-items: center;
+    gap: 15px;
+}
+
+.khung-hienthi-file .file-chon .icon-file{
+    font-size: 40px;
+    color: #00e73a;
+}
+
+.khung-hienthi-file .file-chon .ten-file{
+    overflow: hidden;
+    font-size: 16px;
+    font-weight: bold;
+    color: #616161;
+}
+
+.noidung-khungtai .nut-hanhdong-khungtai{
+    padding: 10px 0 0;
+}
+
+.noidung-khungtai .khung-hienthi-file.dang-keo-tep {
+    border-color: #656565; 
+    background-color: #e4e4e4; 
+    border-style: solid; 
+}
+
+
+.noidung-khungtai .nut-hanhdong-khungtai .nut-xacnhan-tai{
+    margin: 0 auto;
+    padding: 8px 20px;
+    font-size: 15px;
+    color: #ffffff;
+    background-color: #00e73a;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.noidung-khungtai .nut-hanhdong-khungtai .nut-xacnhan-tai i{
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.noidung-khungtai .nut-hanhdong-khungtai .nut-xacnhan-tai:hover{
+    background-color: #12c542;
+}
+
+.noidung-khungtai .nut-hanhdong-khungtai .nut-xacnhan-tai.disabled{
+    background-color: #a5baa5;
+    cursor: not-allowed;
+}
+
 .khung-daotao-sv .khung-tren .khung-boloc{
     gap: 20px;
 }
@@ -94,6 +245,7 @@
     color: #505050;
     font-weight: bold;
 }
+
 .khung-tren .khung-boloc .loc-hocky .chon-hocky{
     padding: 8px 10px 7px;
     border-radius: 3px;
@@ -148,4 +300,114 @@
     cursor: pointer;
     font-weight: bold;
     border-radius: 3px;
+}
+
+
+
+.khung-duoi{
+    margin-top: 50px;
+
+}
+
+.khung-duoi .bang-ds-sinhvien{
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+
+.bang-ds-sinhvien {
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+}
+
+/* Head */
+.bang-ds-sinhvien thead th {
+    background-color: #787e87;
+    color: #ffffff;
+    padding: 10px 12px;
+    font-weight: 700;
+    vertical-align: middle;
+    border: 1px solid rgb(255, 255, 255);
+}
+
+/* Cells */
+.bang-ds-sinhvien th,
+.bang-ds-sinhvien td {
+    padding: 10px 12px;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid rgba(223, 223, 223, 0.585);
+    text-align: center;
+}
+
+/* Column widths */
+.col-stt { width: 56px; text-align: center; }
+.col-hoten { width: 200px;  }
+.col-email { width: 220px; }
+.col-msv { width: 160px; }
+.col-lop { width: 90px;}
+.col-gioitinh { width: 90px; text-align: center; }
+.col-sodienthoai { width: 140px; }
+.col-hocky { width: 90px; text-align: center; }
+.col-chucnang,
+.col-chucnag { width: 110px; text-align: center; } 
+
+/* Body rows */
+.bang-ds-sinhvien tbody tr {
+    background-color: #ffffff;
+    transition: background-color 150ms ease, transform 150ms ease;
+}
+
+/* Hover and alternating */
+.bang-ds-sinhvien tbody tr:hover {
+    background-color: #f6fbff;
+}
+.bang-ds-sinhvien tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.nut-chucnang {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #1275ff;
+    border-radius: 4px;
+    transition: background-color 120ms ease, color 120ms ease;
+}
+.nut-chucnang i {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.pdt-xoa-sinhvien {
+    color: #d93025;
+}
+.pdt-xoa-sinhvien:hover {
+    background-color: rgba(217,48,37,0.08);
+}
+
+
+@media (max-width: 1150px) {
+    .col-sodienthoai,
+    .col-hocky { display: none; }
+    .bang-ds-sinhvien th,
+    .bang-ds-sinhvien td { padding: 8px 10px; font-size: 13px; }
+}
+
+@media (max-width: 900px) {
+    .col-email,
+    .col-sodienthoai,
+    .col-msv,
+    .col-hocky { display: none; }
+    .bang-ds-sinhvien th,
+    .bang-ds-sinhvien td { padding: 8px 10px; font-size: 13px; }
 }

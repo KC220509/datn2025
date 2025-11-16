@@ -25,6 +25,14 @@ class NguoiDung extends Authenticatable
         'gioi_tinh',
     ];
 
+    protected $casts = [
+        'gioi_tinh' => 'boolean',
+    ];
+    public function getGioiTinhTextAttribute()
+    {
+        return $this->gioi_tinh ? 'Nam' : 'Nữ';
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -52,5 +60,7 @@ class NguoiDung extends Authenticatable
     {
         return $this->hasMany(VaiTro::class, 'ma_nguoidung', 'id_nguoidung');
     }
+
+
 
 }
