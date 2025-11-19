@@ -14,28 +14,39 @@ return new class extends Migration
         Schema::create('nguoi_dung', function (Blueprint $table) {
             $table->uuid('id_nguoidung')->primary(); 
             $table->string('email')->unique();
-            $table->string('mat_khau');
+            $table->string('mat_khau')->nullable();
             $table->string('ho_ten');
             $table->string('so_dien_thoai', 20)->nullable(); 
             $table->string('dia_chi')->nullable(); 
-            $table->boolean('gioi_tinh')->default(true);
+            $table->boolean('gioi_tinh')->default(true); // true: Nam, false: Nữ
+            $table->boolean('trang_thai')->default(true);
             $table->timestamps(); 
         });
 
         Schema::create('vai_tro', function (Blueprint $table) {
-            $table->uuid('ma_nguoidung');
-            $table->enum('ten_vai_tro', ['AD', 'PDT', 'TBM', 'GV', 'SV']);
+            $table->string('id_vaitro', 10)->primary();
+            $table->string('ten_hien_thi');
             $table->text('mo_ta')->nullable(); 
-            $table->primary(['ma_nguoidung', 'ten_vai_tro']);
             $table->timestamps(); 
+        });
 
+
+        Schema::create('nguoidung_vaitro', function (Blueprint $table) {
+            $table->uuid('ma_nguoidung');
+            $table->string('ma_vaitro', 10);
+            $table->primary(['ma_nguoidung', 'ma_vaitro']);
+            $table->timestamps();
 
             $table->foreign('ma_nguoidung')
                 ->references('id_nguoidung')
                 ->on('nguoi_dung')
                 ->onDelete('cascade');
-        });
 
+            $table->foreign('ma_vaitro')
+                ->references('id_vaitro')
+                ->on('vai_tro')
+                ->onDelete('cascade');
+        });
 
         Schema::create('bai_dang', function (Blueprint $table){
             $table->uuid('id_baidang')->primary();
@@ -60,7 +71,6 @@ return new class extends Migration
         Schema::create('ds_sinhvien_giangvien', function (Blueprint $table){
             $table->uuid('id_danhsach')->primary();
             $table->uuid('ma_hocky');
-            $table->uuid('ma_admin');
             $table->uuid('ma_phongdaotao');
             $table->string('duong_dan_tep');
             $table->timestamps();
@@ -69,11 +79,6 @@ return new class extends Migration
                 ->references('id_hocky')
                 ->on('hoc_ky_dk')
                 ->onDelete('cascade');
-
-            $table->foreign('ma_admin')
-                ->references('id_nguoidung')
-                ->on('nguoi_dung')
-                ->onDelete('cascade');   
             
             $table->foreign('ma_phongdaotao')
                 ->references('id_nguoidung')
@@ -83,7 +88,6 @@ return new class extends Migration
 
 
         Schema::create('nguoidung_hocky', function (Blueprint $table) {
-            // $table->uuid('id_nguoidung_hocky')->primary(); 
             $table->uuid('ma_nguoidung');
             $table->uuid('ma_hocky');
             $table->primary(['ma_nguoidung', 'ma_hocky']);

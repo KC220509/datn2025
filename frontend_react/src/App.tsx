@@ -50,6 +50,7 @@ function App() {
 
       {/* CÁC ROUTE NGOẠI LỆ */}
       <Route path="/khong-co-quyen" element={<div>Bạn không có quyền truy cập.</div>} />
+      <Route path="*" element={<div>Không tìm thấy trang.</div>} />
     </Routes>
   )
 }

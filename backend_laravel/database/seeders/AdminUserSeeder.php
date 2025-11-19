@@ -18,16 +18,16 @@ class AdminUserSeeder extends Seeder
             'id_nguoidung' => $adminId,
             'email' => 'admin@gmail.com',
             'mat_khau' => Hash::make('admin123'),
-            'ho_ten' => 'Admin Hệ thống',
+            'ho_ten' => 'Khánh Công',
             'gioi_tinh' => true,
+            'trang_thai' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        DB::table('vai_tro')->insert([
+        DB::table('nguoidung_vaitro')->insert([
             'ma_nguoidung' => $adminId,
-            'ten_vai_tro' => 'AD',
-            'mo_ta' => 'Quản trị viên hệ thống',
+            'ma_vaitro' => 'AD',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

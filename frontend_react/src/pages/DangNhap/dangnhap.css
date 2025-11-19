@@ -1,6 +1,7 @@
 
 .trang-dang-nhap{
     width: 100%;
+    height: 550px;
     justify-content: space-between;
     gap: 20px;
 }

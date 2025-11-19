@@ -23,18 +23,24 @@ const TrangQuanTriVien = () => {
         id_hocky: number;
         ten_hoc_ky: string;
     }
+
+    interface VaiTro{
+        id_vaitro: string;
+        ten_hien_thi: string;
+    }
+
     interface NguoiDung{
-        id_nguoidung: number;
+        id_nguoidung: string;
         email: string;
         ho_ten: string;
-        vai_tro: string[];
+        vai_tros: VaiTro[];
     }
 
     interface SinhVien{
-        id_sinhvien: number;
-        ho_ten: string;
-        email: string;
-        lop: string;
+        id_sinhvien: string;
+        msv: string;
+        nguoidung: NguoiDung;
+        lop: Lop;
     }
 
     // const DangTaiDuLieu = () => (
@@ -169,11 +175,11 @@ const TrangQuanTriVien = () => {
                     </div>
                     <div className="thongke-item">
                         <h3>Giảng viên</h3>
-                        <p>{dsNguoiDungs.filter(u => u.vai_tro.includes('GV')).length}</p>
+                        <p>{dsNguoiDungs.filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'GV')).length}</p>
                     </div>
                     <div className="thongke-item">
                         <h3>Sinh viên</h3>
-                        <p>{dsNguoiDungs.filter(u => u.vai_tro.includes('SV')).length}</p>
+                        <p>{dsNguoiDungs.filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'SV')).length}</p>
                     </div>
                     <div className="thongke-item">
                         <h3>Đồ án tốt nghiệp</h3>
@@ -239,8 +245,8 @@ const TrangQuanTriVien = () => {
                                     <td>{nd.email}</td>
                                     <td>
                                         {
-                                            (nd.vai_tro && nd.vai_tro.length > 0) 
-                                            ? nd.vai_tro.map((vaiTroItem) => vaiTroItem).join(', ') 
+                                            (nd.vai_tros && nd.vai_tros.length > 0) 
+                                            ? nd.vai_tros.map((vaiTroItem) => vaiTroItem.id_vaitro).join(', ') 
                                             : '-'
                                         }
                                     </td>

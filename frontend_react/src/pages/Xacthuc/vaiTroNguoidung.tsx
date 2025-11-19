@@ -25,8 +25,8 @@ const VaiTroNguoiDung: React.FC<Props> = ({ trangcon, vaitros }) => {
   }
   
   
-  if (vaitros && nguoiDung.vai_tro) {
-    const nguoiDungQuyen = Array.isArray(nguoiDung.vai_tro) ? nguoiDung.vai_tro : [];
+  if (vaitros && nguoiDung.vai_tros) {
+    const nguoiDungQuyen = Array.isArray(nguoiDung.vai_tros) ? nguoiDung.vai_tros.map(vt => vt.id_vaitro) : [];
     
     const coQuyen = vaitros.some(quyen => nguoiDungQuyen.includes(quyen));
 

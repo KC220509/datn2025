@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ImportDanhSachRequest;
+use App\Http\Requests\ImportDanhSachRequest; 
 use App\Imports\SinhViensImport;
 use App\Models\HocKyDk;
 use App\Services\KhoaNganhLopService;
 use App\Services\NguoiDungService;
-use Maatwebsite\Excel\Excel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
+
+// use Excel;
 
 class DuLieuController extends Controller
 {
     protected $nguoiDungService;
     protected $khoaNganhLopService;
+
 
     public function __construct(NguoiDungService $nguoiDungService, KhoaNganhLopService $khoaNganhLopService)
     {
@@ -81,23 +87,53 @@ class DuLieuController extends Controller
     }
 
     public function importDsSinhVien(ImportDanhSachRequest $importDanhSachRequest){
-        $duLieu = $importDanhSachRequest->validated();
+        $hocKyId = $importDanhSachRequest->input('id_hocky');
+        $tep = $importDanhSachRequest->file('file_sinhvien');
 
-        $hocKyId = $duLieu['id_hocky'];
-        $file = $duLieu['file'];
+        $importSinhViens = new SinhViensImport($hocKyId);
 
-        
-        try{
-            Excel::import(new SinhViensImport($hocKyId), $file);
+        try {
+            Excel::import($importSinhViens, $tep);
+
+            $layLois = $importSinhViens->getFailures();
+            if(count($layLois) > 0){
+                $chiTietLoi = [];
+                foreach ($layLois as $loi) {
+                    $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(", ", $loi->errors());
+                }
+                Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
+
+                return response()->json([
+                    'trangthai' => false,
+                    'thongbao' => 'Tải tệp thất bại. Vui lòng kiểm tra lại cấu trúc và dữ liệu trong tệp.',
+                    'loi_chi_tiet' => $chiTietLoi
+                ], 422);
+            }
+
             return response()->json([
                 'trangthai' => true,
-                'thongbao' => 'Nhập danh sách sinh viên thành công.',
+                'thongbao' => 'Tải lên danh sách sinh viên thành công.'
             ]);
-        }
-        catch(\Exception $e){
+        } catch (ValidationException $e) {
+
+            $layLois = $e->failures();
+            $chiTietLoi = [];
+            foreach ($layLois as $loi) {
+                 $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(', ', $loi->errors());
+            }
+            Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
             return response()->json([
                 'trangthai' => false,
-                'thongbao' => 'Có lỗi xảy ra trong quá trình nhập dữ liệu: ' . $e->getMessage(),
+                'thongbao' => 'Tải tệp thất bại. Lỗi xác thực dữ liệu:',
+                'loi_chi_tiet' => $chiTietLoi
+            ], 422);
+
+        } catch (\Exception $e) {
+            Log::error("Lỗi tải tệp:" . $e->getMessage());
+
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Tải tệp thất bại. Lỗi hệ thống: ' . $e->getMessage()
             ], 500);
         }
     }

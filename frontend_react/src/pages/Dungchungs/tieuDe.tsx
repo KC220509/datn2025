@@ -10,7 +10,7 @@ function TieuDe() {
         <div className="tieu-de-duoi flex-row">
             <div className="tieu-de-trai flex-row">
                 <i className="tieu-de-xacminh bi bi-check-circle-fill"></i>
-                <h4 className="tieu-de-ten">{nguoiDung?.ho_ten} ({nguoiDung?.vai_tro})</h4>
+                <h4 className="tieu-de-ten">{nguoiDung?.ho_ten} ({nguoiDung?.vai_tros.map(vt => vt.ten_hien_thi).join(', ')})</h4>
             </div>
             <div className="tieu-de-phai flex-row">
                 <button className="dang-xuat" onClick={dangXuat} type="button">Đăng xuất</button>

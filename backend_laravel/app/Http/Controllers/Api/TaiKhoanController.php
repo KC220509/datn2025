@@ -30,7 +30,13 @@ class TaiKhoanController extends Controller
                 'thongbao' => 'Thông tin đăng nhập không chính xác.'
             ], 401);
         }
-        $vaiTro = $nguoidung->vaiTro()->pluck('ten_vai_tro');
+        
+        $vaiTros = $nguoidung->vaiTros->map(function($vt){
+            return [
+                'id_vaitro' => $vt->id_vaitro,
+                'ten_hien_thi' => $vt->ten_hien_thi
+            ];
+        });
         $token = $nguoidung->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -41,7 +47,7 @@ class TaiKhoanController extends Controller
                 'id_nguoidung' => $nguoidung->id_nguoidung,
                 'ho_ten' => $nguoidung->ho_ten,
                 'email' => $nguoidung->email,
-                'vai_tro' => $vaiTro
+                'vai_tros' => $vaiTros
             ],
         ]);
     }
@@ -49,18 +55,21 @@ class TaiKhoanController extends Controller
 
     public function layNguoiDung(Request $request)
     {
-        // $request->user() sẽ lấy user đang login dựa trên token
         $nguoiDung = $request->user();
 
-        $vaiTro = $nguoiDung->vaiTro()->pluck('ten_vai_tro');
-
+        $vaiTros = $nguoiDung->vaiTros->map(function($vt){
+            return [
+                'id_vaitro' => $vt->id_vaitro,
+                'ten_hien_thi' => $vt->ten_hien_thi
+            ];
+        });
         return response()->json([
             'trangthai' => true,
             'nguoi_dung' => [
                 'id_nguoidung' => $nguoiDung->id_nguoidung,
                 'ho_ten' => $nguoiDung->ho_ten,
                 'email' => $nguoiDung->email,
-                'vai_tro' => $vaiTro
+                'vai_tros' => $vaiTros
             ],
         ]);
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -14,17 +15,23 @@ class VaiTro extends Model
 
    
     protected $table = 'vai_tro';
-     protected $primaryKey = null; 
+     protected $primaryKey = 'id_vaitro'; 
+     protected $keyType = 'string';
     public $incrementing = false;
-    public $timestamps = true;
     protected $fillable = [
-        'ten_vai_tro',
+        'id_vaitro',
+        'ten_hien_thi',
         'mo_ta',
     ];
 
 
-    public function nguoiDung(): BelongsTo
+    public function nguoiDungs(): BelongsToMany
     {
-        return $this->belongsTo(NguoiDung::class, 'ma_nguoidung', 'id_nguoidung');
+        return $this->belongsToMany(
+            NguoiDung::class,
+            'nguoidung_vaitro', 
+            'ma_vaitro',
+            'ma_nguoidung',
+        )->withTimestamps();
     }
 }

@@ -21,7 +21,7 @@ const TrangChuyenHuongMacDinh: React.FC = () => {
     useEffect(() => {
         if (!dangTai) {
             if (nguoiDung) {
-                const duongDanDich = layDuongDanMacDinhTheoVaiTro(nguoiDung.vai_tro);
+                const duongDanDich = layDuongDanMacDinhTheoVaiTro(nguoiDung.vai_tros.map(vt => vt.id_vaitro));
                 chuyenhuong(duongDanDich, { replace: true }); 
             }
         }

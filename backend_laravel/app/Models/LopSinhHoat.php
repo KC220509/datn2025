@@ -25,4 +25,9 @@ class LopSinhHoat extends Model
     {
         return $this->belongsTo(Nganh::class, 'ma_nganh', 'id_nganh');
     }
+
+    public function sinhViens()
+    {
+        return $this->hasMany(SinhVien::class, 'ma_lop', 'ma_lop');
+    }
 }

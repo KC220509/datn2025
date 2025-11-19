@@ -3,14 +3,19 @@ import ketNoiAxios from "../tienichs/ketnoiAxios";
 
 import { NguoiDungContext, type NguoiDungContextKieu } from "./nguoidungContext";
 
+interface VaiTro {
+    id_vaitro: string;
+    ten_hien_thi: string;
+
+}
+
 interface NguoiDung {
     id_nguoidung: number;
     ho_ten: string;
     email: string;
-    vai_tro: string[];
+    vai_tros: VaiTro[];
 
 }
-
 
 
 export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ noiDungCon }) => {
@@ -31,7 +36,7 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
             const tokenMoi = res.data.token;
             const nguoiDungApi: NguoiDung = {
                 ...res.data.nguoi_dung,
-                vai_tro: res.data.nguoi_dung.vai_tro 
+                vai_tros: res.data.nguoi_dung.vai_tros
             };
 
             if (ghiNho) {
@@ -44,7 +49,6 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
             setNguoiDung(nguoiDungApi);
 
             return nguoiDungApi;
-            // return chuyenHuongMacDinh(nguoiDungApi.vai_tro);
         } catch (err: unknown) {
             if (err instanceof Error) {
                 throw new Error(err.message);
@@ -78,9 +82,8 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
                     const res = await ketNoiAxios.get("/nguoi-dung");
                     nguoiDungDaKhoiPhuc = {
                         ...res.data.nguoi_dung,
-                        vai_tro: res.data.nguoi_dung.vai_tro 
+                        vai_tros: res.data.nguoi_dung.vai_tros
                     } as NguoiDung;
-                    // setNguoiDung(nguoiDungDaKhoiPhuc);
                 } catch (error) {
                     console.error("Lỗi khi xác thực lại người dùng:", error);
                     localStorage.removeItem('token'); 

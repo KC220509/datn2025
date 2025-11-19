@@ -6,7 +6,8 @@ const ketNoiAxios = axios.create({
   baseURL: diaChiAPI,
   headers: {
     "Content-Type": "application/json",
-    Accept: "application/json",
+    "Accept": "application/json",
+    
   },
 });
 

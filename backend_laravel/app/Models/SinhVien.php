@@ -12,12 +12,22 @@ class SinhVien extends Model
     use HasFactory, Notifiable, HasApiTokens;
     protected $table = 'sinh_vien';
     protected $primaryKey = 'id_sinhvien';
-    public $incrementing = false;
     protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'id_sinhvien',
-        'id_malop',
+        'ma_lop',
         'msv',
     ];
+
+    public function lop()
+    {
+        return $this->belongsTo(LopSinhHoat::class, 'ma_lop', 'id_lop');
+    }
+
+    public function nguoiDung()
+    {
+        return $this->belongsTo(NguoiDung::class, 'id_sinhvien', 'id_nguoidung');
+    }
 }

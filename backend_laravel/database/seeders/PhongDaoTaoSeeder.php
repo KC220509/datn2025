@@ -21,17 +21,17 @@ class PhongDaoTaoSeeder extends Seeder
             'id_nguoidung' => $phongDaoTaoId,
             'email' => 'phongdaotao@gmail.com',
             'mat_khau' => Hash::make('pdt123'),
-            'ho_ten' => 'Phòng Đào Tạo',
+            'ho_ten' => 'Trần Khánh Song',
             'gioi_tinh' => true,
+            'trang_thai' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         // 2. Gán Vai trò (VaiTro)
-        DB::table('vai_tro')->insert([
+        DB::table('nguoidung_vaitro')->insert([
             'ma_nguoidung' => $phongDaoTaoId,
-            'ten_vai_tro' => 'PDT',
-            'mo_ta' => 'Phòng Đào Tạo',
+            'ma_vaitro' => 'PDT',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

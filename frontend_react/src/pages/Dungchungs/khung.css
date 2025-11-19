@@ -40,6 +40,7 @@
 }
 
 .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
+
     white-space: nowrap;
     overflow: hidden; 
     text-overflow: ellipsis;
@@ -175,4 +176,22 @@
 
 .chan-trang-phai{
     margin-right: 10px;
+}
+
+
+/* responsive */
+@media (max-width: 820px) {
+    .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
+        max-width: 310px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
+        max-width: 250px;
+    }
+    .tieu-de-tren .tieu-de-phai .khung-thongbao{
+        min-width: 110px;
+    }
 }

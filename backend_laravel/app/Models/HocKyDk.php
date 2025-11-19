@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class HocKyDk extends Model
 {
@@ -14,4 +15,14 @@ class HocKyDk extends Model
         'id_hocky',
         'ten_hoc_ky',
     ];
+
+
+    public function nguoiDungs(): BelongsToMany
+    {
+        return $this->belongsToMany(NguoiDung::class, 
+            'nguoidung_hocky', 
+            'ma_hocky', 
+            'ma_nguoidung',
+            )->withTimestamps();
+    }
 }

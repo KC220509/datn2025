@@ -13,8 +13,8 @@ class Nganh extends Model
 
     protected $table = 'nganh';
     protected $primaryKey = 'id_nganh';
-     public $incrementing = false;
-    // protected $keyType = 'string';
+    protected $keyType = 'string';
+    public $incrementing = false;
     protected $fillable = [
         'id_nganh',
         'ma_khoa',

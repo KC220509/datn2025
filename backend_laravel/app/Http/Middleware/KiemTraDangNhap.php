@@ -13,20 +13,25 @@ class KiemTraDangNhap
     
     public function handle(Request $request, Closure $next, $vaiTros): Response
     {
-         if (!Auth::check()) {
-            return response()->json(['message' => 'Vui lòng đăng nhập'], 401);
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Chưa đăng nhập'], 401);
         }
-
-        $nguoi_dung = NguoiDung::with('vaiTro')->find(Auth::id());
-        if (!$nguoi_dung) {
-            return response()->json(['message' => 'Người dùng không tồn tại'], 401);
+        $nguoiDung = NguoiDung::find(Auth::id());
+        if (!$nguoiDung) {
+            return response()->json(['message' => 'Người dùng không tồn tại'], 404);
         }
-
-        $tenVaiTro = $nguoi_dung->ten_vai_tro ?? ($nguoi_dung->vaiTro->ten_vai_tro ?? null);
-        if ($tenVaiTro != $vaiTros) {
-            
+        
+        $danhSachVaiTros = explode(',', $vaiTros);
+        $coQuyen = false;
+        foreach ($danhSachVaiTros as $vaiTro) {
+            if ($nguoiDung->vaiTros()->where('id_vaitro', $vaiTro)->exists()) {
+                $coQuyen = true;
+                break;
+            }
+        }
+        if (!$coQuyen) {
             return response()->json(['message' => 'Không có quyền truy cập'], 403);
         }
-        return $next($request); 
+        return $next($request);
     }
 }

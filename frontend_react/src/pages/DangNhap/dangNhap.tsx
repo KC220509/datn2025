@@ -35,7 +35,7 @@ const DangNhap: React.FC = () => {
   useEffect(() => {
     if (!dangTai && nguoiDung) {
         // Xác định trang đích mặc định của người dùng
-        const duongDanMacDinh = chuyenHuongMacDinh(nguoiDung.vai_tro)
+        const duongDanMacDinh = chuyenHuongMacDinh(nguoiDung.vai_tros.map(vt => vt.id_vaitro));
         const tuDuongDanCu = duongdan.state?.from?.pathname || duongDanMacDinh;
         
         if (duongdan.pathname !== tuDuongDanCu) {
@@ -49,7 +49,7 @@ const DangNhap: React.FC = () => {
     try {
       const nguoiDungApi = await dangNhap(email, matKhau, ghiNho);
 
-      const duongDanChuyenHuong = chuyenHuongMacDinh(nguoiDungApi.vai_tro);
+      const duongDanChuyenHuong = chuyenHuongMacDinh(nguoiDungApi.vai_tros.map(vt => vt.id_vaitro));
       window.location.replace(duongDanChuyenHuong);
     } catch (error) {
       setLoi("Thông tin đăng nhập không hợp lệ !");
