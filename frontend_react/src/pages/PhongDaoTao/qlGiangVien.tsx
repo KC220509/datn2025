@@ -2,16 +2,16 @@ import { useEffect, useState, useCallback } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
 
-const QlSinhVien = () => {
+const QlGiangVien = () => {
   
   interface HocKy {
     id_hocky: string;
     ten_hoc_ky: string;
   }
 
-  interface Lop {
-    id_lop: string;
-    ten_lop: string;
+  interface Nganh {
+    id_nganh: string;
+    ten_nganh: string;
   }
 
   
@@ -24,16 +24,17 @@ const QlSinhVien = () => {
     hoc_kys: HocKy[];
   }
   
-  interface SinhVien {
-    id_sinhvien: string;
-    msv: string;
-    lop: Lop;
+
+  interface GiangVien {
+    id_giangvien: string;
+    nganh: Nganh;
+    hoc_ham_hoc_vi: string;
     nguoi_dung: NguoiDung;
     ten_hoc_ky?: string;
   }
 
   const [dsHocKy, setDsHocKy] = useState<HocKy[]>([]);
-  const [dsSinhVien, setDsSinhVien] = useState<SinhVien[]>([]);
+  const [dsGiangVien, setDsGiangVien] = useState<GiangVien[]>([]);
 
   const fetchDsHocKy = useCallback(async () => {
     try{
@@ -46,33 +47,33 @@ const QlSinhVien = () => {
     }
   }, []);
 
-  const fetchDsSinhVien = useCallback(async () => {
+  const fetchDsGiangVien = useCallback(async () => {
     try{
-      const duLieu = await ketNoiAxios.get('/pdt/ds-sinhvien');
+      const duLieu = await ketNoiAxios.get('/pdt/ds-giangvien');
 
         if (duLieu.data.trangthai === true) {
-            const dsGoc = duLieu.data.ds_sinhvien;
+            const dsGoc = duLieu.data.ds_giangvien;
 
-            const phanTach = dsGoc.flatMap((sinhVien: SinhVien) => { 
-                const hocKys = sinhVien.nguoi_dung?.hoc_kys || []; 
+            const phanTach = dsGoc.flatMap((giangVien: GiangVien) => { 
+                const hocKys = giangVien.nguoi_dung?.hoc_kys || []; 
                 
                 return hocKys.map((hk: HocKy) => ({
-                    ...sinhVien,
+                    ...giangVien,
                     ten_hoc_ky: hk.ten_hoc_ky
                 }));
             });
             
-            setDsSinhVien(phanTach);
+            setDsGiangVien(phanTach);
         }
     } catch (error) {
-      console.error('Lỗi khi lấy danh sách sinh viên:', error);
+      console.error('Lỗi khi lấy danh sách giảng viên:', error);
     }
   }, []);
 
   useEffect(() => {
     fetchDsHocKy();
-    fetchDsSinhVien();
-  }, [fetchDsHocKy, fetchDsSinhVien]);
+    fetchDsGiangVien();
+  }, [fetchDsHocKy, fetchDsGiangVien]);
 
   
   const [trangHienTai, setTrangHienTai] = useState(1);
@@ -80,8 +81,8 @@ const QlSinhVien = () => {
 
   const indexCuoiCung = trangHienTai * phanTuMoiTrang;
   const indexDauTien = indexCuoiCung - phanTuMoiTrang;
-  const dsSinhVienHienThi = dsSinhVien.slice(indexDauTien, indexCuoiCung);
-  const tongSoTrang = Math.ceil(dsSinhVien.length / phanTuMoiTrang);
+  const dsGiangVienHienThi = dsGiangVien.slice(indexDauTien, indexCuoiCung);
+  const tongSoTrang = Math.ceil(dsGiangVien.length / phanTuMoiTrang);
   const xyLyChuyenTrang = (soTrang: number) => {
     setTrangHienTai(soTrang);
   };
@@ -169,16 +170,16 @@ const QlSinhVien = () => {
     }
   }, [tep, id_hocky]);
 
-  const taiDanhSachSinhVien = async (event: React.FormEvent<HTMLFormElement>) => {
+  const taiDanhSachGiangVien = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData();
     formData.append('id_hocky', id_hocky);
     if (tep) {
-      formData.append('file_sinhvien', tep);
+      formData.append('file_giangvien', tep);
     }
 
     try {
-      const duLieu = await ketNoiAxios.post('/pdt/dssv-tailen', formData, {
+      const duLieu = await ketNoiAxios.post('/pdt/dsgv-tailen', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -191,7 +192,7 @@ const QlSinhVien = () => {
         return;
       }
       setThongBaoThanhCong(duLieu.data.thongbao);
-      fetchDsSinhVien();
+      fetchDsGiangVien();
       setTimeout(() => {
         setThongBaoThanhCong('');
         setMoKhungTaiTep(false);
@@ -215,14 +216,14 @@ const QlSinhVien = () => {
       <div className="khung-daotao-sv flex-col">
         <div className="khung-tren flex-row">
           <div className="mo-form" onClick={xuLyMoKhungTaiTep}>
-            Tải danh sách sinh viên
+            Tải danh sách giảng viên
           </div>
           {moKhungTaiTep && (
             <div className="khung-taidulieu-sv">
-                <form method="POST" className="form-taidulieu flex-col" onSubmit={taiDanhSachSinhVien} encType="multipart/form-data">
+                <form method="POST" className="form-taidulieu flex-col" onSubmit={taiDanhSachGiangVien} encType="multipart/form-data">
                     
                     <div className="tieude-form flex-row">
-                        <h4 className="tieude-khungtai">Tải danh sách sinh viên</h4>
+                        <h4 className="tieude-khungtai">Tải danh sách giảng viên</h4>
                         <i className="dong-form bi bi-x-square" onClick={xuLyDongKhungTaiTep}></i>
                     </div>
 
@@ -244,7 +245,7 @@ const QlSinhVien = () => {
                         <input 
                             type="file" 
                             id="chonfile" 
-                            name="file_sinhvien"
+                            name="file_giangvien"
                             className="chon-file-sv an-tenfile" 
                             accept=".xlsx, .xls" 
                             onChange={xuLyTaiTep}
@@ -317,8 +318,8 @@ const QlSinhVien = () => {
                 <th className="col-stt">STT</th>
                 <th className="col-hoten">Họ tên</th>
                 <th className="col-email">Email</th>
-                <th className="col-msv">Mã Sinh viên</th>
-                <th className="col-lop">Lớp</th>
+                <th className="col-nganh">Ngành</th>
+                <th className="col-hochamhocvi">Học hàm học vị</th>
                 <th className="col-gioitinh">Giới tính</th>
                 <th className="col-sodienthoai">Số điện thoại</th>
                 <th className="col-hocky">Học kỳ</th>
@@ -326,18 +327,18 @@ const QlSinhVien = () => {
               </tr>
             </thead>
             <tbody>
-              {dsSinhVienHienThi && dsSinhVienHienThi.length > 0 ? (
-                dsSinhVienHienThi.map((sinhVienItem, index) => (
-                  <tr key={sinhVienItem.id_sinhvien + '-' + index}>
+              {dsGiangVienHienThi && dsGiangVienHienThi.length > 0 ? (
+                dsGiangVienHienThi.map((giangVienItem, index) => (
+                  <tr key={giangVienItem.id_giangvien + '-' + index}>
                     <td className="col-stt">{index + 1}</td>
-                    <td className="col-hoten">{sinhVienItem.nguoi_dung?.ho_ten}</td>
-                    <td className="col-email">{sinhVienItem.nguoi_dung?.email}</td>
-                    <td className="col-msv">{sinhVienItem.msv}</td>
-                    <td className="col-lop">{sinhVienItem.lop?.ten_lop}</td>
-                    <td className="col-gioitinh">{sinhVienItem.nguoi_dung?.gioi_tinh ? 'Nam' : 'Nữ'}</td>
-                    <td className="col-sodienthoai">{sinhVienItem.nguoi_dung?.so_dien_thoai}</td>
+                    <td className="col-hoten">{giangVienItem.nguoi_dung?.ho_ten}</td>
+                    <td className="col-email">{giangVienItem.nguoi_dung?.email}</td>
+                    <td className="col-nganh">{giangVienItem.nganh?.ten_nganh}</td>
+                    <td className="col-hochamhocvi">{giangVienItem.hoc_ham_hoc_vi}</td>
+                    <td className="col-gioitinh">{giangVienItem.nguoi_dung?.gioi_tinh ? 'Nam' : 'Nữ'}</td>
+                    <td className="col-sodienthoai">{giangVienItem.nguoi_dung?.so_dien_thoai}</td>
                     <td className="col-hocky">
-                        {sinhVienItem.ten_hoc_ky}
+                        {giangVienItem.ten_hoc_ky}
                     </td>
                     
                     <td className="col-chucnag">
@@ -349,31 +350,29 @@ const QlSinhVien = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={9} className="text-center">Chưa có dữ liệu sinh viên</td>
+                  <td colSpan={9} className="text-center">Chưa có dữ liệu giảng viên</td>
                 </tr>
               )}
             </tbody>
           </table>
-          {dsSinhVienHienThi && dsSinhVienHienThi.length > 0 ? (
-            <div className="khung-phantrang flex-row">
-              <button className={`nut-phantrang truoc ${trangHienTai === 1 ? "disabled" : ""}`}
-                onClick={() => xyLyChuyenTrang(trangHienTai > 1 ? trangHienTai - 1 : 1)}
-                disabled={trangHienTai === 1}
-              >
-                <i className="bi bi-chevron-left"></i>
-              </button>
-              {phanTrang()}
-              <button className={`nut-phantrang sau ${trangHienTai === tongSoTrang ? "disabled" : ""}`}
-                onClick={() => xyLyChuyenTrang(trangHienTai + 1)}
-                disabled={trangHienTai === tongSoTrang}
-              >
-                <i className="bi bi-chevron-right"></i>
-              </button>
-            </div>
-          ) : null}
+          <div className="khung-phantrang flex-row">
+            <button className={`nut-phantrang truoc ${trangHienTai === 1 ? "disabled" : ""}`}
+              onClick={() => xyLyChuyenTrang(trangHienTai > 1 ? trangHienTai - 1 : 1)}
+              disabled={trangHienTai === 1}
+            >
+              <i className="bi bi-chevron-left"></i>
+            </button>
+            {phanTrang()}
+            <button className={`nut-phantrang sau ${trangHienTai === tongSoTrang ? "disabled" : ""}`}
+              onClick={() => xyLyChuyenTrang(trangHienTai + 1)}
+              disabled={trangHienTai === tongSoTrang}
+            >
+              <i className="bi bi-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     </>
   )
 };
-export default QlSinhVien;
+export default QlGiangVien;

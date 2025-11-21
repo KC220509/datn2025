@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
-// use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -43,7 +42,7 @@ class SinhViensImport implements ToModel, WithHeadingRow, WithChunkReading, With
     {
         return [
             'emailsv' => 'required|email',
-            'hoten' => 'required',
+            'hoten' => 'required|string',
             'masinhvien' => 'required',
             'lop' => 'required|string', 
             'sodienthoai' => 'nullable',
@@ -64,7 +63,7 @@ class SinhViensImport implements ToModel, WithHeadingRow, WithChunkReading, With
     
     public function model(array $dong)
     {
-        logger()->info('Dòng Excel đọc được:', $dong); 
+        // logger()->info('Dòng Excel đọc được:', $dong); 
 
         $email = $dong['emailsv'] ?? null;
         $hoTen = $dong['hoten'] ?? null;

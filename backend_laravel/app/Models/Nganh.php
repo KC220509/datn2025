@@ -19,10 +19,16 @@ class Nganh extends Model
         'id_nganh',
         'ma_khoa',
         'ten_nganh',
+        'ky_hieu',
     ];
 
     public function khoa()
     {
         return $this->belongsTo(Khoa::class, 'ma_khoa', 'id_khoa');
+    }
+
+    public function giangViens()
+    {
+        return $this->hasMany(GiangVien::class, 'ma_nganhh', 'id_nganh');
     }
 }

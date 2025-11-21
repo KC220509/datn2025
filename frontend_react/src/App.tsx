@@ -16,6 +16,7 @@ import TrangQuanTriVien from './pages/QuanTriVien/trangQuanTriVien';
 import PhongDaoTao from './pages/PhongDaoTao/phongDaoTao';
 import KhungTrangDaoTao from './pages/PhongDaoTao/khungTrangDaoTao';
 import QlSinhVien from './pages/PhongDaoTao/qlSinhVien';
+import QlGiangVien from './pages/PhongDaoTao/qlGiangVien';
 
 
 
@@ -45,6 +46,7 @@ function App() {
             }>
               <Route index element={<PhongDaoTao />} />
               <Route path='ql-sinhvien' element={<QlSinhVien />} />
+              <Route path='ql-giangvien' element={<QlGiangVien />} />
           </Route>
       </Route>
 

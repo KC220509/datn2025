@@ -37,6 +37,8 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:PDT'])->prefix('pdt')->gr
     Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('pdt_dsHocKy');
     Route::post('/dssv-tailen', [DuLieuController::class, 'importDsSinhVien'])->name('pdt_importDsSinhVien');
     Route::get('/ds-sinhvien', [DuLieuController::class, 'dsSinhVien'])->name('pdt_dsSinhVien');
+    Route::post('/dsgv-tailen', [DuLieuController::class, 'importDsGiangVien'])->name('pdt_importDsGiangVien'); 
+    Route::get('/ds-giangvien', [DuLieuController::class, 'dsGiangVien'])->name('pdt_dsGiangVien');
 });
 
 

@@ -94,5 +94,10 @@ class NguoiDung extends Authenticatable
         return $this->hasOne(SinhVien::class, 'id_sinhvien', 'id_nguoidung');
     }
 
+    public function giangVien(): HasOne
+    {
+        return $this->hasOne(GiangVien::class, 'id_giangvien', 'id_nguoidung');
+    }
+
 
 }

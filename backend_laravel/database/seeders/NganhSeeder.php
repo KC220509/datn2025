@@ -17,33 +17,33 @@ class NganhSeeder extends Seeder
     {
         $duLieuNganhTheoKhoa = [
             'Cơ khí' => [
-                'Cơ khí Chế tạo',
-                'Cơ khí Ô tô',
-                'Cơ điện tử',
-                'Cơ nhiệt - Điện lạnh'
+                ['ten' => 'Cơ khí Chế tạo', 'ky_hieu' => 'CKCT'],
+                ['ten' => 'Cơ khí Ô tô', 'ky_hieu' => 'CKOT'],
+                ['ten' => 'Cơ điện tử', 'ky_hieu' => 'CĐT'],
+                ['ten' => 'Cơ nhiệt - Điện lạnh', 'ky_hieu' => 'CNĐL'],
             ],
             'Kỹ thuật Xây dựng' => [
-                'Xây dựng',
-                'Cầu đường',
-                'Kiến trúc',
+                ['ten' => 'Xây dựng', 'ky_hieu' => 'XD'],
+                ['ten' => 'Cầu đường', 'ky_hieu' => 'CĐ'],
+                ['ten' => 'Kiến trúc', 'ky_hieu' => 'KT'],
             ],
             'Điện - Điện tử' => [
-                'Tự động hóa',
-                'Điện tử Viễn thông',
-                'Hệ thống điện',
+                ['ten' => 'Tự động hóa', 'ky_hieu' => 'TĐH'],
+                ['ten' => 'Điện tử Viễn thông', 'ky_hieu' => 'ĐTVT'],
+                ['ten' => 'Hệ thống điện', 'ky_hieu' => 'HTĐ'],
             ],
             'Công nghệ Hóa học - Môi trường' => [
-                'Công nghệ Hóa học',
-                'Kỹ thuật Môi trường',
-                'Công nghệ Sinh học',
-                'Công nghệ Thực phẩm',
+                ['ten' => 'Công nghệ Hóa học', 'ky_hieu' => 'CNHH'],
+                ['ten' => 'Kỹ thuật Môi trường', 'ky_hieu' => 'KTMT'],
+                ['ten' => 'Công nghệ Sinh học', 'ky_hieu' => 'CNSH'],
+                ['ten' => 'Công nghệ Thực phẩm', 'ky_hieu' => 'CNTP'],
             ],
             'Sư phạm Công nghiệp' => [
-                'Sư phạm Kỹ thuật',
-                'Cơ sở Kỹ thuật',
+                ['ten' => 'Sư phạm Kỹ thuật', 'ky_hieu' => 'SPKT'],
+                ['ten' => 'Cơ sở Kỹ thuật', 'ky_hieu' => 'CSKT'],
             ],
             'Công nghệ số' => [
-                'Công nghệ Thông tin',
+                ['ten' => 'Công nghệ Thông tin', 'ky_hieu' => 'CNTT'],
             ],
         ];
 
@@ -55,11 +55,12 @@ class NganhSeeder extends Seeder
             $khoa = Khoa::where('ten_khoa', $tenKhoa)->first();
 
             if ($khoa) {
-                foreach ($cacNganh as $tenNganh) {
+                foreach ($cacNganh as $nganh) {
                     $data[] = [
                         'id_nganh' => (string) Str::uuid(),
                         'ma_khoa' => $khoa->id_khoa, 
-                        'ten_nganh' => $tenNganh,
+                        'ten_nganh' => $nganh['ten'],
+                        'ky_hieu' => $nganh['ky_hieu'],
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];

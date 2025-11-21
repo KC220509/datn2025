@@ -402,7 +402,7 @@
 /* Column widths */
 .col-stt { max-width: 50px; text-align: center; }
 .bang-ds-sinhvien .col-hoten { min-width: 150px;  text-align: left; }
-.bang-ds-sinhvien .col-email { width: 220px; text-align: left;}
+.bang-ds-sinhvien .col-email { min-width: 180px; text-align: left;}
 .col-msv { width: 160px; }
 .col-lop { min-width: 60px;}
 .col-gioitinh { width: 90px; text-align: center; }
