@@ -8,18 +8,21 @@
 
 
 .trang-dang-nhap .trai{
-    min-width: 450px;
+    /* min-width: 450px; */
+    flex: 1;
     min-height: max-content;
     background-color: #ffffff;
 }
 .trang-dang-nhap .phai{
-    min-width: 350px;
+    flex: 1;
+    /* min-width: 340px; */
     min-height: max-content;
     background-color: #ffffff;
 }
 
 .trang-dang-nhap .giua{
-    width: 100%;
+    flex: 1;
+    /* width: 100%; */
     background-color: #ffffff;
 }
 
@@ -29,6 +32,7 @@
 
 
 .khung-noidung .tieude-khung{
+    max-height: 45px;
     padding: 8px 20px 10px;
     text-align: center;
     font-size: 20px;
@@ -36,6 +40,9 @@
     text-transform: uppercase;
     color: #ffffff;
     background-color: #2b83ff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .khung-noidung .noi-dung-trai,
@@ -46,7 +53,8 @@
 }
 
 .khung-noidung .form-dang-nhap{
-    height: 100%;
+    min-height: max-content;
+    margin: auto;
     gap: 15px;
     justify-content: center;
     padding: 20px 15px;
@@ -157,12 +165,37 @@
 }
 
 .noi-dung-phai .lien-ket .lien-ket-ten{
+    max-height: 42px;
     font-size: 16px;
     color: #002e6f;
     font-weight: 500;
     text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
 }
 
 .noi-dung-phai .lien-ket .lien-ket-ten:hover{
     text-decoration: underline;
+}
+
+
+
+
+@media (max-width: 1080px) {
+
+    .trang-dang-nhap .phai{
+        display: none;
+    }
+}
+
+
+@media (max-width: 750px) {
+     .trang-dang-nhap{
+        flex-direction: column;
+        height: max-content;
+    }
+    .tieu-de-tren .tieu-de-phai .khung-thongbao{
+        display: none;
+    }
 }

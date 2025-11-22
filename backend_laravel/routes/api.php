@@ -42,6 +42,4 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:PDT'])->prefix('pdt')->gr
 });
 
 
-// Route::group(['prefix' => 'pdt'], function () {
-//     Route::post('/dssv-tailen', [DuLieuController::class, 'importDsSinhVien'])->name('importDsSinhVien');
-// });
+

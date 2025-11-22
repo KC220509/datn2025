@@ -140,7 +140,7 @@
     color: #ffffff;
 }
 .khung-chan-trang .chan-trang-con{
-    flex-direction: flex-start;
+    /* flex-direction: flex-start; */
     gap: 15px;
 }
 
@@ -155,9 +155,13 @@
     font-size: 17px;
     align-items: center;
     gap: 10px;
+    white-space: nowrap;
+    /* text-overflow: ellipsis; */
+    /* overflow: hidden; */
 }
 
 .chan-trang-con p span{
+    white-space: nowrap;
     font-weight: bold;
 }
 
@@ -180,18 +184,73 @@
 
 
 /* responsive */
+
+@media (max-width: 1080px) {
+    /* .khung-chan-trang .chan-trang-trai{
+        flex: 1;
+        max-width: 425px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    } */
+
+    .chan-trang-con p{
+        max-width: 425px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 950px) {
+    .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
+        max-width: 400px;
+    }
+    .khung-chan-trang {
+        flex-direction: column;
+        height: max-content;
+        gap: 30px;
+    }
+    .chan-trang-con p{
+        max-width: 520px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
 @media (max-width: 820px) {
     .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
-        max-width: 310px;
+        max-width: 270px;
+    }
+
+    .khung-chan-trang {
+        flex-direction: column;
+        height: max-content;
+        gap: 30px;
+    }
+
+    .chan-trang-con p{
+        max-width: 520px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 610px) {
     .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
         max-width: 250px;
     }
     .tieu-de-tren .tieu-de-phai .khung-thongbao{
         min-width: 110px;
+    }
+
+    .chan-trang-con p{
+        max-width: 400px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 }

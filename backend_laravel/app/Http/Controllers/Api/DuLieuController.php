@@ -10,8 +10,12 @@ use App\Imports\SinhViensImport;
 use App\Models\HocKyDk;
 use App\Services\KhoaNganhLopService;
 use App\Services\NguoiDungService;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -111,22 +115,54 @@ class DuLieuController extends Controller
         $importSinhViens = new SinhViensImport($hocKyId);
 
         try {
-            Excel::import($importSinhViens, $tep);
+            DB::transaction(function () use ($importSinhViens, $tep, $hocKyId) {
+                Excel::import($importSinhViens, $tep);
 
-            $layLois = $importSinhViens->getFailures();
-            if(count($layLois) > 0){
-                $chiTietLoi = [];
-                foreach ($layLois as $loi) {
-                    $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(", ", $loi->errors());
+                $layLois = $importSinhViens->getFailures();
+                if(count($layLois) > 0){
+                    $chiTietLoi = [];
+                    foreach ($layLois as $loi) {
+                        $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(", ", $loi->errors());
+                    }
+                    Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
+
+                    return response()->json([
+                        'trangthai' => false,
+                        'thongbao' => 'Tải tệp thất bại. Vui lòng kiểm tra lại cấu trúc và dữ liệu trong tệp.',
+                        'loi_chi_tiet' => $chiTietLoi
+                    ], 422);
                 }
-                Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
 
-                return response()->json([
-                    'trangthai' => false,
-                    'thongbao' => 'Tải tệp thất bại. Vui lòng kiểm tra lại cấu trúc và dữ liệu trong tệp.',
-                    'loi_chi_tiet' => $chiTietLoi
-                ], 422);
-            }
+                // Upload tệp lên Cloudinary
+                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME); 
+                $duoiTep = $tep->getClientOriginalExtension(); 
+                $tenHocKy = HocKyDk::where('id_hocky', $hocKyId)->value('ten_hoc_ky');
+                $newTenTep = $gocTenTep . '_' . $tenHocKy . '.' . $duoiTep; 
+
+                $duongDanTepMoi = $tep->move(
+                    sys_get_temp_dir(), 
+                    $newTenTep  
+                );
+
+                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
+                    [
+                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+                        'resource_type' => 'auto',
+                    ]
+                );
+
+                $duongDanTep = $taiLenCloud['secure_url'];
+
+                DB::table('tep_dulieu_hocky')->insert([
+                    'id_tep' => (string) Str::uuid(),
+                    'ma_hocky' => $hocKyId,
+                    'ma_phongdaotao' => Auth::user()->id_nguoidung,
+                    'ten_tep' => $tep->getClientOriginalName(),
+                    'duong_dan_tep' => $duongDanTep,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            });
 
             return response()->json([
                 'trangthai' => true,
@@ -163,27 +199,60 @@ class DuLieuController extends Controller
 
         $importGiangViens = new GiangViensImport($hocKyId);
 
+
         try {
-            Excel::import($importGiangViens, $tep);
+            DB::transaction(function () use ($importGiangViens, $tep, $hocKyId) {
+                Excel::import($importGiangViens, $tep);
 
-            $layLois = $importGiangViens->getFailures();
-            if(count($layLois) > 0){
-                $chiTietLoi = [];
-                foreach ($layLois as $loi) {
-                    $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(", ", $loi->errors());
+                $layLois = $importGiangViens->getFailures();
+                if(count($layLois) > 0){
+                    $chiTietLoi = [];
+                    foreach ($layLois as $loi) {
+                        $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(", ", $loi->errors());
+                    }
+                    Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
+
+                    return response()->json([
+                        'trangthai' => false,
+                        'thongbao' => 'Tải tệp thất bại. Vui lòng kiểm tra lại cấu trúc và dữ liệu trong tệp.',
+                        'loi_chi_tiet' => $chiTietLoi
+                    ], 422);
                 }
-                Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
+                // Upload tệp lên Cloudinary
+                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME); 
+                $duoiTep = $tep->getClientOriginalExtension(); 
+                $tenHocKy = HocKyDk::where('id_hocky', $hocKyId)->value('ten_hoc_ky');
+                $newTenTep = $gocTenTep . '_' . $tenHocKy . '.' . $duoiTep;  
 
-                return response()->json([
-                    'trangthai' => false,
-                    'thongbao' => 'Tải tệp thất bại. Vui lòng kiểm tra lại cấu trúc và dữ liệu trong tệp.',
-                    'loi_chi_tiet' => $chiTietLoi
-                ], 422);
-            }
+                $duongDanTepMoi = $tep->move(
+                    sys_get_temp_dir(), 
+                    $newTenTep  
+                );
+
+                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
+                    [
+                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+                        'resource_type' => 'auto',
+                    ]
+                );
+
+                $duongDanTep = $taiLenCloud['secure_url'];
+
+                DB::table('tep_dulieu_hocky')->insert([
+                    'id_tep' => (string) Str::uuid(),
+                    'ma_hocky' => $hocKyId,
+                    'ma_phongdaotao' => Auth::user()->id_nguoidung,
+                    'ten_tep' => $tep->getClientOriginalName(),
+                    'duong_dan_tep' => $duongDanTep,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            });
+
 
             return response()->json([
                 'trangthai' => true,
-                'thongbao' => 'Tải lên danh sách giảng viên thành công.'
+                'thongbao' => 'Tải lên danh sách giảng viên thành công.',
             ]);
         } catch (ValidationException $e) {
 
@@ -204,7 +273,8 @@ class DuLieuController extends Controller
 
             return response()->json([
                 'trangthai' => false,
-                'thongbao' => 'Tải tệp thất bại. Lỗi hệ thống: ' . $e->getMessage()
+                'thongbao' => 'Tải tệp thất bại. Lỗi hệ thống: ' . $e->getMessage(),
+                'loi_chi_tiet' => $e->getFile() . ' line ' . $e->getLine()
             ], 500);
         }
     }

@@ -68,10 +68,11 @@ return new class extends Migration
             $table->timestamps(); 
         });
 
-        Schema::create('ds_sinhvien_giangvien', function (Blueprint $table){
-            $table->uuid('id_danhsach')->primary();
+        Schema::create('tep_dulieu_hocky', function (Blueprint $table){
+            $table->uuid('id_tep')->primary();
             $table->uuid('ma_hocky');
             $table->uuid('ma_phongdaotao');
+            $table->string('ten_tep');
             $table->string('duong_dan_tep');
             $table->timestamps();
 
@@ -301,6 +302,8 @@ return new class extends Migration
             $table->uuid('id_baocao')->primary();
             $table->uuid('ma_truongbomon');
             $table->uuid('ma_phongdaotao');
+            $table->string('ten_baocao');
+            $table->string('ten_tep');
             $table->string('duong_dan_tep')->nullable();
             $table->timestamps();
 

@@ -182,6 +182,7 @@ const QlGiangVien = () => {
       const duLieu = await ketNoiAxios.post('/pdt/dsgv-tailen', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'enctype': 'multipart/form-data',
         },
       });
       if(duLieu.data.trangthai === false){
