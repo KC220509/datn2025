@@ -1,39 +1,46 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
 const TrangQuanTriVien = () => {
     interface Khoa {
-        id_khoa: number;
+        id_khoa: string;
         ten_khoa: string;
     }
 
     interface Nganh {
-        id_nganh: number;
+        id_nganh: string;
+        ma_khoa: string;
         ten_nganh: string;
-        ma_khoa: number;
+        ky_hieu: string;
     }
 
     interface Lop {
-        id_lop: number;
+        id_lop: string;
+        ma_nganh: string;
         ten_lop: string;
-        ma_nganh: number;
     }
 
     interface HocKy {
-        id_hocky: number;
+        id_hocky: string;
         ten_hoc_ky: string;
     }
 
     interface VaiTro{
         id_vaitro: string;
         ten_hien_thi: string;
+        mo_ta: string;
     }
 
     interface NguoiDung{
         id_nguoidung: string;
         email: string;
         ho_ten: string;
+        nganh: Nganh;
+        id_hocky: string; // Thêm thuộc tính này
+        ten_hoc_ky: string; // Thêm thuộc tính này
         vai_tros: VaiTro[];
+        hoc_kys?: HocKy[];
+        sinh_vien: SinhVien;
     }
 
     interface SinhVien{
@@ -43,35 +50,39 @@ const TrangQuanTriVien = () => {
         lop: Lop;
     }
 
-    // const DangTaiDuLieu = () => (
-    //     <div style={{ padding: '20px', textAlign: 'center' }}>
-    //         <p>Đang tải dữ liệu...</p>
-    //     </div>
-    // );
 
 
     const [dsKhoas, setDsKhoas] = useState<Khoa[]>([]);
     const [dsNganhs, setDsNganhs] = useState<Nganh[]>([]);
     const [dsLops, setDsLops] = useState<Lop[]>([]);
     const [dsHocKys, setDsHocKys] = useState<HocKy[]>([]);
-    const [dsSinhViens, setDsSinhViens] = useState<SinhVien[]>([]);
     const [dsNguoiDungs, setDsNguoiDungs] = useState<NguoiDung[]>([]);
 
     const [locHocKy, setLocHocKy] = useState<string | number>('');
     const [locKhoa, setLocKhoa] = useState<string | number>('');
     const [locNganh, setLocNganh] = useState<string | number>('');
     const [locLop, setLocLop] = useState<string | number>('');
-    // const [dangTaiDuLieuLoc, setDangTaiDuLieuLoc] = useState(true);
 
-    const fecthDataDanhSachNguoiDung = async () => {
+    const fecthDataDanhSachNguoiDung = useCallback(async () => {
         // Gọi API để lấy dữ liệu người dùng
         const nguoidungData = await ketNoiAxios.get('/admin/ds-nguoidung');
         if (!nguoidungData.data.trangthai) {
             console.error('Lỗi khi lấy dữ liệu người dùng');
             return;
         }
-        setDsNguoiDungs(nguoidungData.data.ds_nguoidung);
-    };
+        const dsGoc = nguoidungData.data.ds_nguoidung;
+
+        const phanTach = dsGoc.flatMap((nguoiDung: NguoiDung) => {
+            const hocKys = nguoiDung.hoc_kys && nguoiDung.hoc_kys.length > 0 ? nguoiDung.hoc_kys : [{ id_hocky: '', ten_hoc_ky: '-' }];
+
+            return hocKys.map((hk: HocKy) => ({
+                ...nguoiDung,
+                id_hocky: hk.id_hocky,
+                ten_hoc_ky: hk.ten_hoc_ky,
+            }));
+        });
+        setDsNguoiDungs(phanTach);
+    }, []);
 
     const fecthDataHocKy = async () => {
         try {
@@ -102,25 +113,12 @@ const TrangQuanTriVien = () => {
         } 
     };
 
-    const fecthDataSinhVien = async () => {
-        try{
-            const sinhvienData = await ketNoiAxios.get('/admin/ds-sinhvien');
-            if (!sinhvienData.data.trangthai) {
-                console.error('Lỗi khi lấy dữ liệu người dùng');
-                return;
-            }
-            setDsSinhViens(sinhvienData.data.ds_sinhvien);
-        } catch (error) {
-            console.error('Lỗi API Sinh viên:', error);
-        }
-    };
 
     useEffect(() => {
         fecthDataDanhSachNguoiDung();
         fecthDataHocKy();
         fecthDataKhoaNganhLop();
-        fecthDataSinhVien();
-    }, []);
+    }, [fecthDataDanhSachNguoiDung]);
 
 
     // ---  LỌC PHỤ THUỘC ---
@@ -133,7 +131,6 @@ const TrangQuanTriVien = () => {
              }
              return dsLops;
         }
-        // Lọc Lớp theo mã ngành đã chọn
         return dsLops.filter(lop => lop.ma_nganh === locNganh);
     }, [locNganh, locKhoa, dsLops, dsNganhs]);
 
@@ -159,9 +156,48 @@ const TrangQuanTriVien = () => {
         setLocLop('');
     };
 
-    // if (dangTaiDuLieuLoc) {
-    //     return <DangTaiDuLieu />;
-    // }
+
+    // --- LỌC DANH SÁCH NGƯỜI DÙNG ---
+    const dsNguoiDungDaLoc = useMemo(() => {
+        return dsNguoiDungs.filter(nd => {
+            const dieuKienHocKy = !locHocKy || nd.id_hocky == locHocKy;
+            const dieuKienKhoa = !locKhoa || (nd.nganh && nd.nganh.ma_khoa === locKhoa);
+            const dieuKienNganh = !locNganh || (nd.nganh && nd.nganh.id_nganh === locNganh);
+            const dieuKienLop = !locLop || (nd.sinh_vien && nd.sinh_vien.lop && nd.sinh_vien.lop.id_lop === locLop);
+
+            return dieuKienHocKy && dieuKienKhoa && dieuKienNganh && dieuKienLop;
+        });
+    }, [dsNguoiDungs, locHocKy, locKhoa, locNganh, locLop]);
+
+
+    // Xử lý phân trang 
+    const [trangHienTai, setTrangHienTai] = useState(1);
+    const phanTuMoiTrang = 10;
+
+    const indexCuoiCung = trangHienTai * phanTuMoiTrang;
+    const indexDauTien = indexCuoiCung - phanTuMoiTrang;
+    const dsNguoiDungHienThi = dsNguoiDungDaLoc.slice(indexDauTien, indexCuoiCung);
+    const tongSoTrang = Math.ceil(dsNguoiDungDaLoc.length / phanTuMoiTrang);
+    const xyLyChuyenTrang = (soTrang: number) => {
+        setTrangHienTai(soTrang);
+    };
+
+    const phanTrang = () => {
+        const trangSos = [];
+        for (let i = 1; i <= tongSoTrang; i++) {
+        trangSos.push(i);
+        }
+
+        return trangSos.map((trang) => (
+        <button
+            key={trang}
+            className={`nut-phantrang ${trangHienTai === trang ? 'active' : ''}`}
+            onClick={() => xyLyChuyenTrang(trang)}
+        > 
+            {trang}
+        </button>
+        ));
+    };
 
     return (
         <>
@@ -171,15 +207,29 @@ const TrangQuanTriVien = () => {
                 <div className="khungs-thongke flex-row">
                     <div className="thongke-item">
                         <h3>Người dùng</h3>
-                        <p>{dsNguoiDungs.length}</p>
+                        <p>{new Set(dsNguoiDungs.map(u => u.email)).size}</p>
                     </div>
                     <div className="thongke-item">
                         <h3>Giảng viên</h3>
-                        <p>{dsNguoiDungs.filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'GV')).length}</p>
+                        <p>
+                            {new Set(
+                                dsNguoiDungs
+                                    .filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'GV'))
+                                    .map(u => u.email)
+                                ).size
+                            }
+                        </p>
                     </div>
                     <div className="thongke-item">
                         <h3>Sinh viên</h3>
-                        <p>{dsNguoiDungs.filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'SV')).length}</p>
+                        <p>
+                            {new Set(
+                                dsNguoiDungs
+                                    .filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'SV'))
+                                    .map(u => u.email)
+                                ).size
+                            }
+                        </p>
                     </div>
                     <div className="thongke-item">
                         <h3>Đồ án tốt nghiệp</h3>
@@ -228,38 +278,62 @@ const TrangQuanTriVien = () => {
                 </div>
 
                 <div className="bang-ds-nguoidung">
-                    <h2 className="tieude-bang">Danh sách người dùng ({dsNguoiDungs.length} người)</h2>
-                    <table className="bang-ds-sinhvien">
+                    <h2 className="tieude-bang">Danh sách người dùng</h2>
+                    <table className="bang-ds-nguoidung-chitiet">
                         <thead>
                             <tr>
-                                <th>Họ tên</th>
-                                <th>Email</th>
-                                <th>Vai trò</th>
-                                <th>Chức năng</th>
+                                <th className="col-stt">STT</th>
+                                <th className="col-hoten">Họ tên</th>
+                                <th className="col-email">Email</th>
+                                <th className="col-nganh">Chuyên Ngành</th>
+                                <th className="col-lop">Lớp</th>
+                                <th className="col-hocky">Học Kỳ</th>
+                                <th className="col-vaitro">Vai trò</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {dsNguoiDungs.map((nd) => (
-                                <tr key={nd.id_nguoidung}>
-                                    <td>{nd.ho_ten}</td>
-                                    <td>{nd.email}</td>
-                                    <td>
-                                        {
-                                            (nd.vai_tros && nd.vai_tros.length > 0) 
-                                            ? nd.vai_tros.map((vaiTroItem) => vaiTroItem.id_vaitro).join(', ') 
-                                            : '-'
-                                        }
-                                    </td>
-                                    <td></td>
-                                </tr>
-                            ))}
-                            {dsNguoiDungs.length === 0 && (
+                            {dsNguoiDungHienThi && dsNguoiDungHienThi.length > 0 ? (
+                                dsNguoiDungHienThi.map((nd, index) => (
+                                    <tr key={nd.id_nguoidung + index}>
+                                        <td className="col-stt">{index + 1}</td>
+                                        <td className="col-hoten" title={nd.ho_ten}>{nd.ho_ten}</td>
+                                        <td className="col-email" title={nd.email}>{nd.email}</td>
+                                        <td className="col-nganh">{nd.nganh?.ten_nganh}</td>
+                                        <td className="col-lop">{nd.sinh_vien?.lop?.ten_lop}</td>
+                                        <td className="col-hocky">{nd.ten_hoc_ky}</td>
+                                        <td className="col-vaitro">
+                                            {
+                                                (nd.vai_tros && nd.vai_tros.length > 0) 
+                                                ? nd.vai_tros.map((vaiTroItem) => vaiTroItem.id_vaitro).join(', ') 
+                                                : '-'
+                                            }
+                                        </td>
+                                    </tr>
+                                ))
+                            ):(
                                 <tr>
-                                    <td colSpan={3} style={{ textAlign: 'center' }}>Không có người dùng nào được tìm thấy.</td>
+                                    <td colSpan={7} style={{ textAlign: 'center' }}>Không có người dùng nào được tìm thấy.</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
+                    {dsNguoiDungHienThi && dsNguoiDungHienThi.length > 0 ? (
+                        <div className="khung-phantrang flex-row">
+                        <button className={`nut-phantrang truoc ${trangHienTai === 1 ? "disabled" : ""}`}
+                            onClick={() => xyLyChuyenTrang(trangHienTai > 1 ? trangHienTai - 1 : 1)}
+                            disabled={trangHienTai === 1}
+                        >
+                            <i className="bi bi-chevron-left"></i>
+                        </button>
+                        {phanTrang()}
+                        <button className={`nut-phantrang sau ${trangHienTai === tongSoTrang ? "disabled" : ""}`}
+                            onClick={() => xyLyChuyenTrang(trangHienTai + 1)}
+                            disabled={trangHienTai === tongSoTrang}
+                        >
+                            <i className="bi bi-chevron-right"></i>
+                        </button>
+                        </div>
+                    ) : null}
                 </div>
             </div>
         </>

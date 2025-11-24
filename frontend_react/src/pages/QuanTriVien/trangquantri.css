@@ -2,12 +2,12 @@
 
 .khung-quantri {
     display: flex;
-    min-height: 100vh;
+    min-height: 50vh;
 }
 
 /* Thanh Điều Hướng  */
 .thanh-dieu-huong {
-    width: 250px; 
+    width: 250px;
     background-color: var(--mau-nen-sidebar);
     color: var(--mau-chu-sidebar);
     flex-shrink: 0; 
@@ -48,8 +48,8 @@
 
 /* Khu vực Nội dung chính */
 .khu-vuc-chinh {
+    width: calc(100% - 250px);
     flex-grow: 1; 
-    padding: 0px;
     background-color: #f4f7f6;
 }
 
@@ -57,7 +57,6 @@
 /* Khung chính cho trang thống kê */
 .trang-quantri {
     padding: 20px;
-    /* background-color: white; */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -120,16 +119,7 @@
     color: #ff9e1f;
 }
 
-/* Responsive: xếp dọc trên màn nhỏ */
-@media (max-width: 680px) {
-    .trang-quantri .khungs-thongke {
-        flex-direction: column;
-    }
 
-    .thongke-item {
-        width: 100%;
-    }
-}
 
 
 /* Khung bộ lọc (filters) */
@@ -144,7 +134,7 @@
 
 /* Mỗi mục lọc */
 .boloc-item {
-    flex: 1 1 200px;
+    flex: 1 1;
     display: flex;
     flex-direction: column;
     min-width: 180px;
@@ -186,16 +176,150 @@
     transform: translateY(-1px);
 }
 
+.trang-quantri .bang-ds-nguoidung {
+    width: 100%;
+    overflow: hidden;
+
+}
+
+.trang-quantri .bang-ds-nguoidung .tieude-bang{
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #1275ff;
+}
+
+.trang-quantri .bang-ds-nguoidung .bang-ds-nguoidung-chitiet {
+    width: 100%;
+    border: 1px solid #ccc;
+}
+.trang-quantri .bang-ds-nguoidung .bang-ds-nguoidung-chitiet tr {
+    border: 1px solid #ff1b1b;
+}
+.trang-quantri .bang-ds-nguoidung-chitiet thead th{
+
+    background-color: #787e87;
+    color: #ffffff;
+    padding: 10px 12px;
+    font-weight: 700;
+    vertical-align: middle;
+    border: 1px solid rgb(255, 255, 255);
+    text-align: center;
+}
+.bang-ds-nguoidung-chitiet th,
+.bang-ds-nguoidung-chitiet td{
+    padding: 10px 12px;
+    font-size: 13px;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid rgba(223, 223, 223, 0.585);
+    text-align: left;
+}
 
 
-/* Make filters responsive: stack vertically on small screens */
-@media (max-width: 680px) {
-    .trang-quantri .khungs-boloc {
+.bang-ds-nguoidung-chitiet .col-stt,
+.bang-ds-nguoidung-chitiet .col-lop,
+.bang-ds-nguoidung-chitiet .col-hocky,
+.bang-ds-nguoidung-chitiet .col-vaitro {
+    text-align: center;
+}
+
+
+
+.bang-ds-nguoidung .khung-phantrang{
+    margin: 20px auto 0;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang{
+    min-width: 30px;
+    padding: 6px 10px;
+    background-color: #5fa1ff;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 3px;
+}
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang:hover{
+    background-color: #0e5ecc;
+}
+
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang.active{
+    background-color: #ffb129;
+    cursor: default;
+}
+
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang.disabled{
+    background-color: #a5baa5;
+    cursor: not-allowed;
+    
+}
+
+
+
+
+/* Quản lý giảng viên */
+
+
+
+/* Responsive */
+@media (max-width: 1300px) {
+    .khung-quantri .thanh-dieu-huong {
+        width: 200px;
+    }
+
+    .khu-vuc-chinh {
+        width: calc(100% - 200px);
+    }
+    .trang-quantri .bang-ds-nguoidung .col-lop, 
+    .trang-quantri .bang-ds-nguoidung .col-hocky {
+        display: none;
+    }
+}
+
+@media (max-width: 1100px) {
+    .khu-vuc-chinh {
+        width: 100%;
+    }
+    .noi-dung-chinh .khung-quantri {
         flex-direction: column;
     }
 
-    .boloc-item {
+    .khung-quantri .thanh-dieu-huong {
         width: 100%;
-        min-width: 0;
+        box-shadow: none;
+    }
+
+    .thanh-dieu-huong .danh-sach-menu {
+        display: flex;
+        overflow: hidden;
+    }
+
+    .thanh-dieu-huong .muc-menu, .thanh-dieu-huong .muc-menu-active {
+        /* flex: 1 0 auto; */
+        min-width: 180px;
+        text-align: center;
+        border-left: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+
+  
+
+
+  
+}
+
+
+@media (max-width: 600px) {
+    .khung-quantri .thanh-dieu-huong .danh-sach-menu {
+        flex-direction: column;
     }
 }

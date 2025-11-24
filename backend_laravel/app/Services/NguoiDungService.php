@@ -27,14 +27,32 @@ class NguoiDungService
     public function layDanhSachNguoiDung()
     {
         $dsNguoiDung = $this->nguoiDungModel
-            ->with('vaiTros')
+            ->with([
+                'vaiTros',
+                'sinhVien.lop.nganh',
+                'giangVien.nganh',
+                'sinhVien.lop',
+                'hocKys',
+            ])
             ->whereDoesntHave('vaiTros', function($query){
                 $query->where('id_vaitro', 'AD');
             })
             ->get();
 
-        
+        $dsNguoiDung =  $dsNguoiDung->map(function($nguoiDung) {
+            $nganh_chung = null;
 
+
+            if ($nguoiDung->sinhVien) {
+                $nganh_chung = $nguoiDung->sinhVien->lop->nganh;
+            } elseif ($nguoiDung->giangVien) {
+                $nganh_chung = $nguoiDung->giangVien->nganh;
+            }
+
+            $nguoiDung->nganh = $nganh_chung;
+
+            return $nguoiDung;
+        });
         return $dsNguoiDung;
     }
 

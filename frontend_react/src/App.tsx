@@ -17,6 +17,8 @@ import PhongDaoTao from './pages/PhongDaoTao/phongDaoTao';
 import KhungTrangDaoTao from './pages/PhongDaoTao/khungTrangDaoTao';
 import QlSinhVien from './pages/PhongDaoTao/qlSinhVien';
 import QlGiangVien from './pages/PhongDaoTao/qlGiangVien';
+import TrangQlSinhVienAd from './pages/QuanTriVien/trangQlSinhVienAd';
+import TrangQlGiangVienAd from './pages/QuanTriVien/trangQlGiangVienAd';
 
 
 
@@ -38,6 +40,8 @@ function App() {
               <VaiTroNguoiDung trangcon={<KhungQuanTri />}  vaitros={['AD']} />
             }>
               <Route index element={<TrangQuanTriVien />} />
+              <Route path='ql-sinh-vien' element={<TrangQlSinhVienAd />} />
+              <Route path='ql-giang-vien' element={<TrangQlGiangVienAd />} />
           </Route>
 
           {/* Phòng đào tạo */}

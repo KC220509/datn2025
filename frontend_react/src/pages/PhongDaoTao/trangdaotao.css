@@ -403,12 +403,12 @@
 .col-stt { max-width: 50px; text-align: center; }
 .bang-ds-sinhvien .col-hoten { min-width: 150px;  text-align: left; }
 .bang-ds-sinhvien .col-email { min-width: 180px; text-align: left;}
-.col-msv { width: 160px; }
-.col-lop { min-width: 60px;}
-.col-gioitinh { width: 90px; text-align: center; }
-.col-sodienthoai { width: 140px; }
+.bang-ds-sinhvien .col-msv { width: 160px; }
+.bang-ds-sinhvien .col-lop { min-width: 60px;}
+.bang-ds-sinhvien .col-gioitinh { width: 90px; text-align: center; }
+.bang-ds-sinhvien .col-sodienthoai { width: 140px; }
 .bang-ds-sinhvien .col-hocky { max-width: 70px; text-align: center; }
-.col-chucnang,
+.bang-ds-sinhvien .col-chucnang,
 .bang-ds-sinhvien .col-chucnag { max-width: 70px; text-align: center; } 
 
 /* Body rows */
