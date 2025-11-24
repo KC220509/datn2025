@@ -425,7 +425,7 @@
     background-color: #fff;
 }
 
-.nut-chucnang {
+.bang-ds-sinhvien .nut-chucnang {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -438,7 +438,7 @@
     border-radius: 4px;
     transition: background-color 120ms ease, color 120ms ease;
 }
-.nut-chucnang i {
+.bang-ds-sinhvien .nut-chucnang i {
     font-size: 18px;
     line-height: 1;
 }

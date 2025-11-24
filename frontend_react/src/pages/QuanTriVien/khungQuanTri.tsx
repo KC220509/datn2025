@@ -9,7 +9,7 @@ function KhungQuanTri() {
           <ul className="danh-sach-menu">
             <li>
               <NavLink to="/quan-tri" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
-                Tổng Quan
+                Tổng Quan Người Dùng
               </NavLink>
             </li>
             <li>

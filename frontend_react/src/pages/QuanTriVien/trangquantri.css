@@ -179,6 +179,7 @@
 .trang-quantri .bang-ds-nguoidung {
     width: 100%;
     overflow: hidden;
+    gap: 20px;
 
 }
 
@@ -186,16 +187,12 @@
     text-transform: uppercase;
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 12px;
     color: #1275ff;
 }
 
 .trang-quantri .bang-ds-nguoidung .bang-ds-nguoidung-chitiet {
     width: 100%;
     border: 1px solid #ccc;
-}
-.trang-quantri .bang-ds-nguoidung .bang-ds-nguoidung-chitiet tr {
-    border: 1px solid #ff1b1b;
 }
 .trang-quantri .bang-ds-nguoidung-chitiet thead th{
 
@@ -223,21 +220,284 @@
 .bang-ds-nguoidung-chitiet .col-stt,
 .bang-ds-nguoidung-chitiet .col-lop,
 .bang-ds-nguoidung-chitiet .col-hocky,
-.bang-ds-nguoidung-chitiet .col-vaitro {
+.bang-ds-nguoidung-chitiet .col-vaitro,
+.bang-ds-nguoidung-chitiet .col-chucnang {
     text-align: center;
 }
 
 
 
-.bang-ds-nguoidung .khung-phantrang{
-    margin: 20px auto 0;
+
+
+
+/* Quản lý giảng viên, sinh viên */
+.trang-qlgiangvien-ad,
+.trang-qlsinhvien-ad {
+    height: 100%;
+    padding: 20px;
+    gap: 20px;
+}
+
+.trang-qlgiangvien-ad .tieude-trang, .trang-qlsinhvien-ad .tieude-trang {
+    font-size: 22px;
+}
+
+.trang-qlgiangvien-ad .khung-ql-chucnang, .trang-qlsinhvien-ad .khung-ql-chucnang {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.khung-ql-chucnang .khung-tao-taikhoan{
+    gap: 20px;
+    align-items: center;
+
+}
+
+.khung-tao-taikhoan .mokhung{
+    padding: 7px 10px 8px;
+    font-size: 12px;
+    background-color: #0ad000;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.khung-ds-taikhoan{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    gap: 20px;
+}
+
+.khung-ds-taikhoan .bang-ds-nguoidung-chitiet{
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.khung-ds-taikhoan .bang-ds-nguoidung-chitiet thead th{
+    background-color: #787e87;
+    color: #ffffff;
+    padding: 10px 12px;
+    font-weight: 700;
+    vertical-align: middle;
+    border: 1px solid rgb(255, 255, 255);
+    text-align: center;
+
+}
+.khung-ds-taikhoan .bang-ds-nguoidung-chitiet .col-stt{
+    width: 50px;
+}
+.khung-ds-taikhoan .bang-ds-nguoidung-chitiet .col-stt,
+.khung-ds-taikhoan .bang-ds-nguoidung-chitiet .col-lop,
+.khung-ds-taikhoan .bang-ds-nguoidung-chitiet .col-nganh,
+.khung-ds-taikhoan .bang-ds-nguoidung-chitiet .col-vaitro{
+    text-align: center;
+}
+
+.bang-ds-nguoidung-chitiet .khung-chucnang {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang {
+    padding: 4px 4px 3px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang i {
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang.khoa-tk {
+    background-color: #0095ff; 
+}
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang.khoa-tk:hover {
+    background-color: #007acc; 
+}
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang.sua {
+    background-color: #ffc107; 
+}
+
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang.sua:hover {
+    background-color: #e0a800;
+}
+
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang.xoa {
+    background-color: #ee394b; 
+}
+
+.bang-ds-nguoidung-chitiet .khung-chucnang .nut-chucnang.xoa:hover {
+    background-color: #d21d30;
+}
+
+
+
+
+
+
+
+
+/* Mở khung tạo tài khoản sinh viên */
+
+.mokhung-tao-tksinhvien {
+    position: fixed;
+    padding: 20px 80px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.mokhung-tao-tksinhvien .khung-tao-tksinhvien {
+    flex: 1;
+    height: calc(100% - 10px);
+    background-color: #fff;
+    padding: 20px 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    gap: 20px;
+}
+
+.khung-tao-tksinhvien .tieude-khungtao{
+    font-size: 24px;
+    font-weight: bold;
+    color: #1275ff;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.khung-tao-tksinhvien .khung-chon-hocky{
+    width: 100%;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.khung-tao-tksinhvien .khung-chon-hocky .nhan-chon-hocky{
+    font-size: 16px;
+    font-weight: 600;
+    /* color: #ff3e12; */
+    min-width: 150px;
+    cursor: pointer;
+}
+
+
+.khung-tao-tksinhvien .khung-chon-hocky .chon-hocky{
+    /* height: 36px; */
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #697fa4;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+    cursor: pointer;
+}
+
+.khung-tao-tksinhvien .khung-ds-sinhvien-hocky{
+    width: 100%;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+
+
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet{
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet  thead th{
+    background-color: #787e87;
+    color: #ffffff;
+    padding: 10px 12px;
+    font-weight: 700;
+    vertical-align: middle;
+    border: 1px solid rgb(255, 255, 255);
+    text-align: center;
+
+}
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet  tbody td{ 
+    padding: 10px 12px;
+    vertical-align: middle;
+    border: 1px solid rgb(234, 234, 234);
+
+}
+
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet .col-stt{
+    width: 50px;
+}
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet .col-stt,
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet .col-msv,
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet .col-lop,
+.khung-ds-sinhvien-hocky .bang-ds-svhk-chitiet .col-nganh{
+    text-align: center;
+}
+
+
+
+.khung-tao-tksinhvien .khung-hanhdong{
+    width: 100%;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+.khung-tao-tksinhvien .khung-hanhdong .nut-dongkhung,
+.khung-tao-tksinhvien .khung-hanhdong .nut-taotaikhoan{
+    padding: 8px 12px;
+    color: #ffffff;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.khung-tao-tksinhvien .khung-hanhdong .nut-dongkhung{
+    background-color: #ee394b;
+}
+.khung-tao-tksinhvien .khung-hanhdong .nut-taotaikhoan{
+    background-color: #0095ff;
+}
+
+.khung-hanhdong .nut-taotaikhoan.disabled{
+    background-color: #a5baa5;
+    cursor: not-allowed;
+}
+
+
+
+/* Phân trang */
+
+.bang-ds-nguoidung .khung-phantrang,
+.khung-ds-taikhoan .khung-phantrang{
+    margin: auto;
     gap: 10px;
     align-items: center;
     justify-content: center;
     display: flex;
 }
 
-.bang-ds-nguoidung .khung-phantrang .nut-phantrang{
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang,
+.khung-ds-taikhoan .khung-phantrang .nut-phantrang{
     min-width: 30px;
     padding: 6px 10px;
     background-color: #5fa1ff;
@@ -247,25 +507,24 @@
     font-weight: bold;
     border-radius: 3px;
 }
-.bang-ds-nguoidung .khung-phantrang .nut-phantrang:hover{
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang:hover,
+.khung-ds-taikhoan .khung-phantrang .nut-phantrang:hover{
     background-color: #0e5ecc;
 }
 
-.bang-ds-nguoidung .khung-phantrang .nut-phantrang.active{
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang.active,
+.khung-ds-taikhoan .khung-phantrang .nut-phantrang.active{
     background-color: #ffb129;
     cursor: default;
 }
 
-.bang-ds-nguoidung .khung-phantrang .nut-phantrang.disabled{
+.bang-ds-nguoidung .khung-phantrang .nut-phantrang.disabled,
+.khung-ds-taikhoan .khung-phantrang .nut-phantrang.disabled{
     background-color: #a5baa5;
     cursor: not-allowed;
     
 }
 
-
-
-
-/* Quản lý giảng viên */
 
 
 
@@ -283,6 +542,7 @@
         display: none;
     }
 }
+
 
 @media (max-width: 1100px) {
     .khu-vuc-chinh {

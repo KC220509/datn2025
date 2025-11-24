@@ -108,7 +108,6 @@ const QlSinhVien = () => {
   const [tep, setTep] = useState<File | null>(null);
 
   const [trangThaiChon, setTrangThaiChon] = useState(false);
-  // const [thongBao, setThongBao] = useState('');
   const [thongBaoThanhCong, setThongBaoThanhCong] = useState('');
   const [thongBaoThatBai, setThongBaoThatBai] = useState('');
 

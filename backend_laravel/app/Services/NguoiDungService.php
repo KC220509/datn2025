@@ -61,6 +61,7 @@ class NguoiDungService
         $dsSinhVien = $this->sinhVienModel->with([
                 'nguoiDung',
                 'lop',
+                'lop.nganh',
                 'nguoiDung.hocKys',
             ])
         ->get();

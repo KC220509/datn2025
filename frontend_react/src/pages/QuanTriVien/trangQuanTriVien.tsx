@@ -84,7 +84,7 @@ const TrangQuanTriVien = () => {
         setDsNguoiDungs(phanTach);
     }, []);
 
-    const fecthDataHocKy = async () => {
+    const fecthDataHocKy = useCallback(async () => {
         try {
             const hocKyData = await ketNoiAxios.get('/admin/ds-hocky');
             if (!hocKyData.data.trangthai) {
@@ -95,9 +95,9 @@ const TrangQuanTriVien = () => {
         } catch (error) {
             console.error('Lỗi API Học kỳ:', error);
         }
-    };
+    }, []);
 
-    const fecthDataKhoaNganhLop = async () => {
+    const fecthDataKhoaNganhLop = useCallback(async () => {
         
         try {
             const khoaNganhLopData = await ketNoiAxios.get('/admin/ds-khoanganhlop');
@@ -111,14 +111,14 @@ const TrangQuanTriVien = () => {
         } catch (error) {
              console.error('Lỗi API Khoa/Ngành/Lớp:', error);
         } 
-    };
+    }, []);
 
 
     useEffect(() => {
         fecthDataDanhSachNguoiDung();
         fecthDataHocKy();
         fecthDataKhoaNganhLop();
-    }, [fecthDataDanhSachNguoiDung]);
+    }, [fecthDataDanhSachNguoiDung, fecthDataHocKy, fecthDataKhoaNganhLop]);
 
 
     // ---  LỌC PHỤ THUỘC ---
@@ -169,6 +169,10 @@ const TrangQuanTriVien = () => {
         });
     }, [dsNguoiDungs, locHocKy, locKhoa, locNganh, locLop]);
 
+
+    useEffect(() => {
+        setTrangHienTai(1);
+    }, [locHocKy, locKhoa, locNganh, locLop]);
 
     // Xử lý phân trang 
     const [trangHienTai, setTrangHienTai] = useState(1);
@@ -277,7 +281,7 @@ const TrangQuanTriVien = () => {
                         
                 </div>
 
-                <div className="bang-ds-nguoidung">
+                <div className="bang-ds-nguoidung flex-col">
                     <h2 className="tieude-bang">Danh sách người dùng</h2>
                     <table className="bang-ds-nguoidung-chitiet">
                         <thead>
