@@ -382,6 +382,26 @@
     text-align: center;
 }
 
+.khung-tao-tksinhvien .thongbao {
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.khung-tao-tksinhvien .thongbao-thanhcong {
+    background-color: #1f7f22;
+}
+
+.khung-tao-tksinhvien .thongbao-thatbai {
+    background-color: #f44336; 
+}
+
 .khung-tao-tksinhvien .khung-chon-hocky{
     width: 100%;
     gap: 12px;

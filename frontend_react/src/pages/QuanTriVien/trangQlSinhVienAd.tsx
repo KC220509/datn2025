@@ -168,8 +168,11 @@ const TrangQlSinhVienAd = () => {
             }, 3000);
 
         } catch (error) {
-            setThongBao({ message: 'Lỗi khi tạo tài khoản sinh viên.', type: 'error' });
             console.error('Lỗi khi tạo tài khoản sinh viên:', error);
+            setThongBao({ message: 'Lỗi khi tạo tài khoản sinh viên.', type: 'error' });
+            setTimeout(() => {
+                setThongBao(null);
+            }, 3000);
         } finally {
             setDangTai(false);
         }
