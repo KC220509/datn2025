@@ -36,8 +36,8 @@ const TrangQuanTriVien = () => {
         email: string;
         ho_ten: string;
         nganh: Nganh;
-        id_hocky: string; // Thêm thuộc tính này
-        ten_hoc_ky: string; // Thêm thuộc tính này
+        id_hocky: string; 
+        ten_hoc_ky: string; 
         vai_tros: VaiTro[];
         hoc_kys?: HocKy[];
         sinh_vien: SinhVien;

@@ -366,7 +366,7 @@
 
 .mokhung-tao-tksinhvien .khung-tao-tksinhvien {
     flex: 1;
-    height: calc(100% - 10px);
+    /* height: calc(100% - 10px); */
     background-color: #fff;
     padding: 20px 50px;
     border-radius: 8px;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
 
@@ -27,7 +27,7 @@ const TrangQlSinhVienAd = () => {
         mat_khau: string;
         ho_ten: string;
         trang_thai: boolean;
-        hoc_ky: HocKy;
+        hoc_kys: HocKy[];
         
     }
 
@@ -82,19 +82,26 @@ const TrangQlSinhVienAd = () => {
 
 
 
-    const [moKhungTaoTkSinhVien, setMoKhungTaoTkSinhVien] = useState<boolean>(false);
+    const [moKhungTaoTk, setMoKhungTaoTk] = useState<boolean>(false);
 
-    const moKhungTaoTkSinhVienHandler = () => {
-        setMoKhungTaoTkSinhVien(true);
+    const moKhungTaoTkSinhVien = () => {
+        setMoKhungTaoTk(true);
     };
 
-    const dongKhungTaoTkSinhVienHandler = () => {
-        setMoKhungTaoTkSinhVien(false);
+    const dongKhungTaoTkSinhVien = () => {
+        setMoKhungTaoTk(false);
         setIdHocKy("");
     };
 
 
     const [trangThaiLoc, setTrangThaiLoc] = useState<boolean>(false);
+
+    const dsSinhVienDaLoc = useMemo(() => {
+        return dsSinhVien.filter(sv=> {
+            const dieuKienHocKy = id_hocky ? sv.nguoi_dung.hoc_kys && sv.nguoi_dung.hoc_kys.some(hk => hk.id_hocky === id_hocky) : true;
+            return dieuKienHocKy;
+        });
+    }, [dsSinhVien, id_hocky]);
 
     useEffect(() => {
         if(id_hocky){
@@ -102,37 +109,71 @@ const TrangQlSinhVienAd = () => {
         }else{
             setTrangThaiLoc(false);
         }
-    }, [id_hocky]);
+    }, [id_hocky, dsSinhVien]);
 
     // Phân trang
     
-      const [trangHienTai, setTrangHienTai] = useState(1);
-      const phanTuMoiTrang = 10;
+    const [trangHienTai, setTrangHienTai] = useState(1);
+    const phanTuMoiTrang = 10;
     
-      const indexCuoiCung = trangHienTai * phanTuMoiTrang;
-      const indexDauTien = indexCuoiCung - phanTuMoiTrang;
-      const dsSinhVienHienThi = dsSinhVien.slice(indexDauTien, indexCuoiCung);
-      const tongSoTrang = Math.ceil(dsSinhVien.length / phanTuMoiTrang);
-      const xyLyChuyenTrang = (soTrang: number) => {
+    const indexCuoiCung = trangHienTai * phanTuMoiTrang;
+    const indexDauTien = indexCuoiCung - phanTuMoiTrang;
+    const dsSinhVienHienThi = dsSinhVien.slice(indexDauTien, indexCuoiCung);
+    const tongSoTrang = Math.ceil(dsSinhVien.length / phanTuMoiTrang);
+    const xyLyChuyenTrang = (soTrang: number) => {
         setTrangHienTai(soTrang);
-      };
+    };
     
-      const phanTrang = () => {
+    const phanTrang = () => {
         const trangSos = [];
         for (let i = 1; i <= tongSoTrang; i++) {
           trangSos.push(i);
         }
-    
+
         return trangSos.map((trang) => (
-          <button
-            key={trang}
-            className={`nut-phantrang ${trangHienTai === trang ? 'active' : ''}`}
-            onClick={() => xyLyChuyenTrang(trang)}
-          > 
-            {trang}
-          </button>
+            <button
+              key={trang}
+              className={`nut-phantrang ${trangHienTai === trang ? 'active' : ''}`}
+              onClick={() => xyLyChuyenTrang(trang)}
+            > 
+              {trang}
+            </button>
         ));
-      };
+    };
+
+
+    const [thongBao, setThongBao] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [dangTai, setDangTai] = useState<boolean>(false);
+
+    const submitTaoTkSinhVien = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        // Xử lý tạo tài khoản sinh viên ở đây
+        try {
+            const  dataTaoTk = await ketNoiAxios.post('/admin/tao-ds-taikhoan-sv', {
+                id_hocky: id_hocky,
+            });
+
+            if (!dataTaoTk.data.trangthai){
+                setThongBao({ message: dataTaoTk.data.thongbao || 'Tạo tài khoản sinh viên không thành công', type: 'error' });
+                return;
+            }
+
+            setThongBao({ message: dataTaoTk.data.thongbao || 'Tạo tài khoản sinh viên thành công!', type: 'success' });
+            layDsTkSinhVien();
+
+            setTimeout(() => {
+                dongKhungTaoTkSinhVien();
+                setThongBao(null);
+            }, 3000);
+
+        } catch (error) {
+            setThongBao({ message: 'Lỗi khi tạo tài khoản sinh viên.', type: 'error' });
+            console.error('Lỗi khi tạo tài khoản sinh viên:', error);
+        } finally {
+            setDangTai(false);
+        }
+    }
 
 
     return (
@@ -141,7 +182,7 @@ const TrangQlSinhVienAd = () => {
                 <h1 className="tieude-trang">Quản lý tài khoản sinh viên</h1>
                 <div className="khung-ql-chucnang flex-row">
                     <div className="khung-tao-taikhoan flex-row">
-                        <div className="mokhung tao-dstaikhoan" onClick={moKhungTaoTkSinhVienHandler}>
+                        <div className="mokhung tao-dstaikhoan" onClick={moKhungTaoTkSinhVien}>
                             Tạo tài khoản sinh viên
                         </div>
                         <div className="mokhung them-taikhoan">
@@ -218,15 +259,20 @@ const TrangQlSinhVienAd = () => {
                         </div>
                     ) : null}
                 </div>
-                {moKhungTaoTkSinhVien &&
+                {moKhungTaoTk &&
                     <div className="mokhung-tao-tksinhvien">
-                        <form method="post" className="khung-tao-tksinhvien flex-col">
+                        <form onSubmit={submitTaoTkSinhVien} method="post" className="khung-tao-tksinhvien flex-col">
                             <h2 className="tieude-khungtao">Tạo tài khoản sinh viên</h2>
+                            {thongBao && (
+                                <div className={`thongbao ${thongBao.type === 'success' ? 'thongbao-thanhcong' : 'thongbao-thatbai'}`}>
+                                    {thongBao.message}
+                                </div>
+                            )}
                             <div className="khung-chon-hocky flex-row">
                                 <label htmlFor="hockys" className="nhan-chon-hocky">Chọn Học kỳ áp dụng</label>
                                 <select id="hockys" name="id_hocky" className="chon-hocky"
-                                value={id_hocky}
-                                onChange={(e) => setIdHocKy(e.target.value)}
+                                    value={id_hocky}
+                                    onChange={(e) => setIdHocKy(e.target.value)}
                                 >
                                 <option value="">Tất cả</option>
                                 {dsHocKy.map((hocKy) => (
@@ -247,22 +293,30 @@ const TrangQlSinhVienAd = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {dsSinhVien.map((sv, index) => (
-                                            <tr key={sv.id_sinhvien}>
-                                                <td className="col-stt">{index + 1}</td>
-                                                <td className="col-hoten">{sv.nguoi_dung.ho_ten}</td>
-                                                <td className="col-msv">{sv.msv}</td>
-                                                <td className="col-email">{sv.nguoi_dung.email}</td>
-                                                <td className="col-lop">{sv.lop.ten_lop}</td>
-                                                <td className="col-nganh">{sv.lop.nganh.ky_hieu}</td>
+                                        {dsSinhVienDaLoc && dsSinhVienDaLoc.length > 0 ? (
+                                            dsSinhVienDaLoc.map((sv, index) => (
+                                                <tr key={sv.id_sinhvien}>
+                                                    <td className="col-stt">{index + 1}</td>
+                                                    <td className="col-hoten">{sv.nguoi_dung.ho_ten}</td>
+                                                    <td className="col-msv">{sv.msv}</td>
+                                                    <td className="col-email">{sv.nguoi_dung.email}</td>
+                                                    <td className="col-lop">{sv.lop.ten_lop}</td>
+                                                    <td className="col-nganh">{sv.lop.nganh.ky_hieu}</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={6} style={{ textAlign: "center" }}>Không có sinh viên để hiển thị.</td>
                                             </tr>
-                                        ))}
+                                        )}
                                     </tbody>
                                 </table>
                             </div>  
                             <div className="khung-hanhdong flex-row">
-                                <button className="nut-dongkhung" onClick={dongKhungTaoTkSinhVienHandler}>Đóng</button>
-                                <button type="submit" className={`nut-taotaikhoan ${trangThaiLoc ? '' : 'disabled'}`} disabled={!trangThaiLoc}>Tạo tài khoản</button>
+                                <button className="nut-dongkhung" onClick={dongKhungTaoTkSinhVien}>Đóng</button>
+                                <button type="submit" className={`nut-taotaikhoan ${trangThaiLoc && !dangTai ? '' : 'disabled'}`} disabled={!trangThaiLoc || dangTai}>
+                                    {dangTai ? 'Đang xử lý...' : 'Tạo tài khoản'}
+                                </button>
                             </div>         
                         </form>
                     </div>
