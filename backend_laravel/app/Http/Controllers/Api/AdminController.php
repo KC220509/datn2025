@@ -19,7 +19,7 @@ class AdminController extends Controller
         $validatedData = $taoDsTaiKhoanSvRequest->validated();
         $idHocKy = $validatedData['id_hocky'];
 
-        $danhSachCapLaiMatKhau = [];
+        $dsSinhVien = [];
 
         DB::beginTransaction();
         try {
@@ -35,12 +35,11 @@ class AdminController extends Controller
 
             foreach ($nguoiDungs as $nguoiDung) {
                 $matKhauGoc = Str::random(8);
-                $nguoiDung->password = Hash::make($matKhauGoc);
+                $nguoiDung->mat_khau = Hash::make($matKhauGoc);
                 $nguoiDung->save();
 
                 $dsSinhVien[] = [
-                    'email' => $nguoiDung->email,
-                    'mat_khau' => $matKhauGoc,
+                    'sinhvien' => $nguoiDung,
                 ];
             }
 

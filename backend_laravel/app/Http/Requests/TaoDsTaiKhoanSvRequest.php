@@ -17,7 +17,7 @@ class TaoDsTaiKhoanSvRequest extends FormRequest
     public function rules(): array
     {
        return [
-            'id_hocky' => 'required|exists:hockys,id_hocky',
+            'id_hocky' => 'required|exists:hoc_ky_dk,id_hocky',
         ];
     }
 }

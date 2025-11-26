@@ -86,6 +86,13 @@ class DuLieuController extends Controller
             ], 404);
         }
 
+        $dsSinhVien = $dsSinhVien->map(function($sinhVien) {
+            if($sinhVien->nguoiDung) {
+                $sinhVien->nguoiDung->makeVisible(['mat_khau']);
+            }
+            return $sinhVien;
+        });
+
         return response()->json([
             'trangthai' => true,
             'ds_sinhvien' => $dsSinhVien,

@@ -39,21 +39,11 @@ class NguoiDung extends Authenticatable
         return $this->gioi_tinh ? 'Nam' : 'Nữ';
     }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'mat_khau',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
