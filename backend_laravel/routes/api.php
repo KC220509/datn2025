@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Route;
 
 
 
-// Route::post('trang-chu', [TaiKhoanController::class, 'trangChuChuaDN'])->name('trangchuNo');
 Route::post('dang-nhap', [TaiKhoanController::class, 'dangNhap'])->name('dangNhap');
 Route::middleware('auth:sanctum')->get('/nguoi-dung', [TaiKhoanController::class, 'layNguoiDung']);
 
