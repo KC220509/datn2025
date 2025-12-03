@@ -18,7 +18,6 @@ use Maatwebsite\Excel\Validators\Failure;
 class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, WithValidation, SkipsOnFailure, SkipsEmptyRows
 {
     private $hocKyId;
-    // private const VAI_TRO = 'GV';
     private $nganhs;
     private $lois = [];
     
@@ -65,7 +64,6 @@ class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
     }
     public function model(array $dong)
     {
-        logger()->info('Dòng Excel đọc được:', $dong); 
 
         $email = $dong['emailgv'] ?? null;
         $hoTen = $dong['hoten'] ?? null;

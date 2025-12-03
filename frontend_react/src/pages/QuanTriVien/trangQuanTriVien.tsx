@@ -189,17 +189,17 @@ const TrangQuanTriVien = () => {
     const phanTrang = () => {
         const trangSos = [];
         for (let i = 1; i <= tongSoTrang; i++) {
-        trangSos.push(i);
+            trangSos.push(i);
         }
 
         return trangSos.map((trang) => (
-        <button
-            key={trang}
-            className={`nut-phantrang ${trangHienTai === trang ? 'active' : ''}`}
-            onClick={() => xyLyChuyenTrang(trang)}
-        > 
-            {trang}
-        </button>
+            <button
+                key={trang}
+                className={`nut-phantrang ${trangHienTai === trang ? 'active' : ''}`}
+                onClick={() => xyLyChuyenTrang(trang)}
+            > 
+                {trang}
+            </button>
         ));
     };
 
@@ -214,17 +214,6 @@ const TrangQuanTriVien = () => {
                         <p>{new Set(dsNguoiDungs.map(u => u.email)).size}</p>
                     </div>
                     <div className="thongke-item">
-                        <h3>Giảng viên</h3>
-                        <p>
-                            {new Set(
-                                dsNguoiDungs
-                                    .filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'GV'))
-                                    .map(u => u.email)
-                                ).size
-                            }
-                        </p>
-                    </div>
-                    <div className="thongke-item">
                         <h3>Sinh viên</h3>
                         <p>
                             {new Set(
@@ -236,8 +225,26 @@ const TrangQuanTriVien = () => {
                         </p>
                     </div>
                     <div className="thongke-item">
-                        <h3>Đồ án tốt nghiệp</h3>
-                        <p>0</p>
+                        <h3>Giảng viên</h3>
+                        <p>
+                            {new Set(
+                                dsNguoiDungs
+                                    .filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'GV'))
+                                    .map(u => u.email)
+                                ).size
+                            }
+                        </p>
+                    </div>
+                    <div className="thongke-item">
+                        <h3>Trưởng Bộ Môn</h3>
+                        <p>
+                            {new Set(
+                                dsNguoiDungs
+                                    .filter(u => u.vai_tros.some(vt => vt.id_vaitro === 'TBM'))
+                                    .map(u => u.email)
+                                ).size
+                            }
+                        </p>
                     </div>
                 </div>
 

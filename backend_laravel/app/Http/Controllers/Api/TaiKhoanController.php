@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CapLaiMatKhauRequest;
 use App\Http\Requests\DangNhapRequest;
+use App\Mail\ThongBaoCapLaiMatKhau;
 use App\Models\NguoiDung;
 use App\Services\NguoiDungService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class TaiKhoanController extends Controller
 {
@@ -72,5 +77,29 @@ class TaiKhoanController extends Controller
                 'vai_tros' => $vaiTros
             ],
         ]);
+    }
+
+
+    public function capLaiMatKhau(CapLaiMatKhauRequest $capLaiMatKhauRequest){
+        $request = $capLaiMatKhauRequest->validated();
+
+        $nguoiDung = NguoiDung::where('email', $request['email'])->first();
+
+        if ($nguoiDung->mat_khau == null) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Tài khoản không tồn tại.'
+            ], 404);
+        }
+        $matKhauMoi = Str::random(8);
+        $nguoiDung->mat_khau = Hash::make($matKhauMoi);
+        $nguoiDung->save();
+
+        Mail::to($request['email'])->send(new ThongBaoCapLaiMatKhau($nguoiDung, $matKhauMoi));
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Email đã được gửi. Vui lòng kiểm tra hộp thư của bạn.'
+        ]);
+
     }
 }

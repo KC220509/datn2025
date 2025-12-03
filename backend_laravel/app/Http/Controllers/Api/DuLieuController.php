@@ -109,6 +109,13 @@ class DuLieuController extends Controller
             ], 404);
         }
 
+        $dsGiangVien = $dsGiangVien->map(function($giangVien) {
+            if($giangVien->nguoiDung) {
+                $giangVien->nguoiDung->makeVisible(['mat_khau']);
+            }
+            return $giangVien;
+        });
+
         return response()->json([
             'trangthai' => true,
             'ds_giangvien' => $dsGiangVien,
@@ -133,11 +140,7 @@ class DuLieuController extends Controller
                     }
                     Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
 
-                    return response()->json([
-                        'trangthai' => false,
-                        'thongbao' => 'Tải tệp thất bại. Vui lòng kiểm tra lại cấu trúc và dữ liệu trong tệp.',
-                        'loi_chi_tiet' => $chiTietLoi
-                    ], 422);
+                    throw ValidationException::withMessages($chiTietLoi);
                 }
 
                 // Upload tệp lên Cloudinary
@@ -175,6 +178,7 @@ class DuLieuController extends Controller
                 'trangthai' => true,
                 'thongbao' => 'Tải lên danh sách sinh viên thành công.'
             ]);
+                
         } catch (ValidationException $e) {
 
             $layLois = $e->failures();
@@ -185,7 +189,7 @@ class DuLieuController extends Controller
             Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
             return response()->json([
                 'trangthai' => false,
-                'thongbao' => 'Tải tệp thất bại. Lỗi xác thực dữ liệu:',
+                'thongbao' => 'Tải tệp thất bại. Lỗi xác thực dữ liệu.',
                 'loi_chi_tiet' => $chiTietLoi
             ], 422);
 
@@ -219,11 +223,7 @@ class DuLieuController extends Controller
                     }
                     Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
 
-                    return response()->json([
-                        'trangthai' => false,
-                        'thongbao' => 'Tải tệp thất bại. Vui lòng kiểm tra lại cấu trúc và dữ liệu trong tệp.',
-                        'loi_chi_tiet' => $chiTietLoi
-                    ], 422);
+                    throw ValidationException::withMessages($chiTietLoi);
                 }
                 // Upload tệp lên Cloudinary
                 $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME); 
@@ -256,22 +256,24 @@ class DuLieuController extends Controller
                 ]);
             });
 
-
             return response()->json([
                 'trangthai' => true,
                 'thongbao' => 'Tải lên danh sách giảng viên thành công.',
             ]);
+
         } catch (ValidationException $e) {
 
             $layLois = $e->failures();
             $chiTietLoi = [];
+            
             foreach ($layLois as $loi) {
-                 $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(', ', $loi->errors());
+                $chiTietLoi[] = "Dòng " . $loi->row() . ": " . implode(', ', $loi->errors());
             }
+            
             Log::error("Lỗi xác thực Excel sau import: " . json_encode($chiTietLoi));
             return response()->json([
                 'trangthai' => false,
-                'thongbao' => 'Tải tệp thất bại. Lỗi xác thực dữ liệu:',
+                'thongbao' => 'Tệp dữ liệu không hợp lệ',
                 'loi_chi_tiet' => $chiTietLoi
             ], 422);
 

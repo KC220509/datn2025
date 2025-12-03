@@ -200,7 +200,7 @@ const QlSinhVien = () => {
     }
     catch (error) {
       console.error('Lỗi khi tải lên tệp:', error);
-      setThongBaoThatBai('Tải tệp thất bại. Vui lòng kiểm tra lại.');
+      setThongBaoThatBai('Tệp tải lên không hợp lệ.');
       setTimeout(() => {
         setThongBaoThatBai('');
       }, 3000);

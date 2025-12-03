@@ -1,0 +1,182 @@
+
+.khung-tranggiangvien {
+    min-height: max-content;
+}
+
+
+.khung-tranggiangvien .khung-dieuhuong {
+    width: 100%;
+    height: min-content;
+
+    background-image: linear-gradient(to bottom, #158aff, rgb(78, 137, 255), #7ab8ea); 
+    
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    background-position: top; 
+
+    position: relative;
+}
+
+.khung-tranggiangvien .thanh-dieuhuong nav .danh-sach-menu {
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+}
+
+.khung-tranggiangvien .thanh-dieuhuong nav .danh-sach-menu li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.thanh-dieuhuong nav .danhsach-menu li .muc-menu,
+.thanh-dieuhuong nav .danhsach-menu li .muc-menu-active {
+    min-width: min-content;
+    padding: 12px 20px 14px;
+}
+
+
+
+
+
+.khung-tranggiangvien .thanh-dieuhuong nav .danh-sach-menu li .muc-menu:hover,
+.khung-tranggiangvien .thanh-dieuhuong nav .danh-sach-menu li .muc-menu-active {
+    color: #eeb200;
+}
+
+/* --- Giao diện trang tổng quan --- */
+.trang-giangvien {
+    padding: 20px;
+    gap: 20px;
+}
+
+.tieude-trang {
+    font-size: 24px;
+    font-weight: bold;
+    color: #158aff;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* Khung thống kê */
+.trang-giangvien .khungs-thongke {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.thongke-item {
+    flex: 1 1 200px;
+    min-width: 180px;
+    background-color: #ffffff;
+    color: #333;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(18, 117, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    border-left: 4px solid #7ab8ea;
+}
+
+.thongke-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(18, 117, 255, 0.1);
+    border-left-color: #158aff;
+}
+
+.thongke-item h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #158aff;
+    font-weight: 700;
+}
+
+.thongke-item p {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ff9e1f;
+}
+
+/* Khung nội dung chính */
+.khung-noidung-chinh {
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.tieude-noidung {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 8px;
+}
+
+.khung-hoatdong-ganday {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.danhsach-hoatdong {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 0;
+    line-height: 1.8;
+}
+
+.khung-ds-nhom {
+    flex: 2;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Kế thừa và tùy chỉnh từ trangquantri.css */
+.bang-ds {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bang-ds th, .bang-ds td {
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.bang-ds thead th {
+    background-color: #f5f8fa;
+    font-weight: bold;
+    color: #333;
+}
+
+.bang-ds tbody tr:nth-child(even) {
+    background-color: #fbfcfd;
+}
+
+.bang-ds .nut-xem {
+    padding: 5px 10px;
+    background-color: #158aff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.bang-ds .nut-xem:hover {
+    background-color: #006fe6;
+}
+
+
+/* Quản lý nhóm đồ án */

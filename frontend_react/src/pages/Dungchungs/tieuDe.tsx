@@ -10,9 +10,17 @@ function TieuDe() {
         <div className="tieu-de-duoi flex-row">
             <div className="tieu-de-trai flex-row">
                 <i className="tieu-de-xacminh bi bi-check-circle-fill"></i>
-                <h4 className="tieu-de-ten">{nguoiDung?.ho_ten} ({nguoiDung?.vai_tros.map(vt => vt.ten_hien_thi).join(', ')})</h4>
+                <h4 className="tieu-de-ten">{nguoiDung?.ho_ten} <span style={{color: "#5f85bdcc"}}>({nguoiDung?.vai_tros.map(vt => vt.ten_hien_thi).join(', ')})</span></h4>
             </div>
             <div className="tieu-de-phai flex-row">
+                
+                <div className="khung-caidat-taikhoan">
+                    <button type="button" className="nut-caidat">Thông Tin Tài Khoản</button>
+                    <ul className="caidat-chucnang flex-col">
+                        <li>Thông tin cá nhân</li>
+                        <li>Đổi mật khẩu</li>
+                    </ul>
+                </div>
                 <button className="dang-xuat" onClick={dangXuat} type="button">Đăng xuất</button>
             </div>
         </div>
@@ -31,6 +39,7 @@ function TieuDe() {
                         <i className="icon-thongbao bi bi-bell-fill"></i>
                         <span className="tieu-de-thongbao">Thông báo</span>
                     </div>
+
                     {nguoiDung ? (null) : <NavLink to="/dang-nhap" className="lienket-dang-nhap">Đăng Nhập</NavLink>}
                 </div>
             </div>

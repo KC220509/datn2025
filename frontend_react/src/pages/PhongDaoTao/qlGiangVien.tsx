@@ -191,19 +191,21 @@ const QlGiangVien = () => {
           setThongBaoThatBai('');
         }, 5000);
         return;
+      }else{
+
+        setThongBaoThanhCong(duLieu.data.thongbao);
+        fetchDsGiangVien();
+        setTimeout(() => {
+          setThongBaoThanhCong('');
+          setMoKhungTaiTep(false);
+          setIdHocKy('');
+          setTep(null);
+        }, 3000);
       }
-      setThongBaoThanhCong(duLieu.data.thongbao);
-      fetchDsGiangVien();
-      setTimeout(() => {
-        setThongBaoThanhCong('');
-        setMoKhungTaiTep(false);
-        setIdHocKy('');
-        setTep(null);
-      }, 3000);
     }
     catch (error) {
       console.error('Lỗi khi tải lên tệp:', error);
-      setThongBaoThatBai('Tải tệp thất bại. Vui lòng kiểm tra lại.');
+      setThongBaoThatBai('Tệp tải lên không hợp lệ.');
       setTimeout(() => {
         setThongBaoThatBai('');
       }, 3000);
@@ -356,21 +358,23 @@ const QlGiangVien = () => {
               )}
             </tbody>
           </table>
-          <div className="khung-phantrang flex-row">
-            <button className={`nut-phantrang truoc ${trangHienTai === 1 ? "disabled" : ""}`}
-              onClick={() => xyLyChuyenTrang(trangHienTai > 1 ? trangHienTai - 1 : 1)}
-              disabled={trangHienTai === 1}
-            >
-              <i className="bi bi-chevron-left"></i>
-            </button>
-            {phanTrang()}
-            <button className={`nut-phantrang sau ${trangHienTai === tongSoTrang ? "disabled" : ""}`}
-              onClick={() => xyLyChuyenTrang(trangHienTai + 1)}
-              disabled={trangHienTai === tongSoTrang}
-            >
-              <i className="bi bi-chevron-right"></i>
-            </button>
-          </div>
+          {dsGiangVienHienThi && dsGiangVienHienThi.length > 0 ? (
+            <div className="khung-phantrang flex-row">
+              <button className={`nut-phantrang truoc ${trangHienTai === 1 ? "disabled" : ""}`}
+                onClick={() => xyLyChuyenTrang(trangHienTai > 1 ? trangHienTai - 1 : 1)}
+                disabled={trangHienTai === 1}
+              >
+                <i className="bi bi-chevron-left"></i>
+              </button>
+              {phanTrang()}
+              <button className={`nut-phantrang sau ${trangHienTai === tongSoTrang ? "disabled" : ""}`}
+                onClick={() => xyLyChuyenTrang(trangHienTai + 1)}
+                disabled={trangHienTai === tongSoTrang}
+              >
+                <i className="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </>

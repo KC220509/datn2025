@@ -96,17 +96,24 @@
     gap: 10px;
     align-items: center;
 }
+.tieu-de-duoi .tieu-de-trai .tieu-de-xacminh{
+    color: #00ae20;
+}
 
-.tieu-de-duoi .tieu-de-trai .tieu-de-nguoidung{
+.tieu-de-duoi .tieu-de-trai .tieu-de-ten{
     font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
 
 .tieu-de-duoi .tieu-de-phai {
     font-weight: bold;
     font-size: 18px;
 }
-
+.tieu-de-duoi .tieu-de-phai .nut-caidat,
 .tieu-de-duoi .tieu-de-phai .dang-xuat{
+    font-size: 13px;
     background-color: #ff4d4f;
     color: #ffffff;
     border: none;
@@ -115,6 +122,60 @@
     cursor: pointer;
     font-weight: bold;
 }
+.tieu-de-duoi .tieu-de-phai .dang-xuat:hover {
+    background-color: #cc3a3b;
+}
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan{
+    position: relative;
+} 
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan .nut-caidat{
+    background-color: #3685f5;
+}
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan .nut-caidat:hover {
+    background-color: #0a67e9;
+}
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan:hover .caidat-chucnang{
+    
+    display: block;
+}
+
+
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan .caidat-chucnang{
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: max-content;
+    min-width: 170px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+}
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan ul li{
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan ul li:hover {
+    background-color: #f0f0f0;
+}
+
 
 
 
@@ -140,7 +201,6 @@
     color: #ffffff;
 }
 .khung-chan-trang .chan-trang-con{
-    /* flex-direction: flex-start; */
     gap: 15px;
 }
 
@@ -156,8 +216,6 @@
     align-items: center;
     gap: 10px;
     white-space: nowrap;
-    /* text-overflow: ellipsis; */
-    /* overflow: hidden; */
 }
 
 .chan-trang-con p span{
@@ -186,13 +244,6 @@
 /* responsive */
 
 @media (max-width: 1080px) {
-    /* .khung-chan-trang .chan-trang-trai{
-        flex: 1;
-        max-width: 425px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    } */
 
     .chan-trang-con p{
         max-width: 425px;
@@ -241,10 +292,15 @@
 
 @media (max-width: 610px) {
     .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
-        max-width: 250px;
+        max-width: 350px;
     }
+
     .tieu-de-tren .tieu-de-phai .khung-thongbao{
-        min-width: 110px;
+        display: none;
+    }
+
+    .tieu-de-duoi .tieu-de-phai .khung-caidat-taikhoan{
+        display: none;
     }
 
     .chan-trang-con p{

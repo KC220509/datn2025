@@ -11,6 +11,13 @@ const layDuongDanMacDinhTheoVaiTro = (vaiTros: string[]): string => {
     if (vaiTros.includes('PDT')) {
         return '/dao-tao';
     }
+    if (vaiTros.includes('SV')) {
+        return '/sinh-vien';
+    }
+    if (vaiTros.includes('GV')) {
+        return '/giang-vien';
+    }
+
     return '/trang-chu'; 
 };
 

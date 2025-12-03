@@ -9,29 +9,29 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ThongBaoTaiKhoanSinhVien extends Mailable
+class ThongBaoCapLaiMatKhau extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $nguoiDung;
-    public $matKhau;
-    public function __construct($nguoiDung, $matKhau)
+    public $matKhauMoi;
+    public function __construct($nguoiDung, $matKhauMoi)
     {
         $this->nguoiDung = $nguoiDung;
-        $this->matKhau = $matKhau;
+        $this->matKhauMoi = $matKhauMoi;
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Thông Báo Cấp Tài Khoản Sinh Viên',
+            subject: 'Thông Báo Cấp Lại Mật Khẩu',
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.cap-tai-khoan',
+            view: 'emails.cap-lai-mat-khau',
         );
     }
 

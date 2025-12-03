@@ -124,7 +124,8 @@
     flex-direction: column;
 }
 
-.form-dang-nhap .khung-chucnang .nut-dang-nhap{
+.form-dang-nhap .khung-chucnang .nut-dang-nhap,
+.form-dang-nhap .khung-chucnang .nut-gui-email{
     width:  250px;
     padding: 12px 20px;
     text-align: center;
@@ -141,17 +142,37 @@
     background-color: #0066ff;
 }
 
-.form-dang-nhap .khung-chucnang .lienket-quenmk{
+.form-dang-nhap .khung-chucnang .lienket-quenmk,
+.form-dang-nhap .khung-chucnang .lienket-dangnhap{
     font-size: 15px;
     color: #005fe5;
     text-decoration: none;
+    cursor: pointer;
 }
 
-.form-dang-nhap .khung-chucnang .lienket-quenmk:hover{
+.form-dang-nhap .khung-chucnang .lienket-quenmk:hover,
+.form-dang-nhap .khung-chucnang .lienket-dangnhap:hover{
     text-decoration: underline;
 }
 
+.form-dang-nhap .loi-dang-nhap,
+.form-dang-nhap .loi-cap-matkhau{
+    padding: 6px 10px 7px;
+    font-size: 14px;
+    font-weight: 600px;
+    text-align: center;
+    background-color: rgb(248, 61, 54);
+    color: #ffffff;
+}
 
+.form-dang-nhap .thong-bao-cap-matkhau{
+    padding: 6px 10px 7px;
+    font-size: 14px;
+    font-weight: 600px;
+    text-align: center;
+    background-color: rgb(17, 177, 73);
+    color: #ffffff;
+}
 .noi-dung-phai .lien-ket{
     gap: 10px;
     align-items: center;
@@ -191,11 +212,8 @@
 
 
 @media (max-width: 750px) {
-     .trang-dang-nhap{
+    .trang-dang-nhap{
         flex-direction: column;
         height: max-content;
-    }
-    .tieu-de-tren .tieu-de-phai .khung-thongbao{
-        display: none;
     }
 }

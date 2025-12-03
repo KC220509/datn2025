@@ -91,25 +91,9 @@ const TrangQlSinhVienAd = () => {
     const dongKhungTaoTkSinhVien = () => {
         setMoKhungTaoTk(false);
         setIdHocKy("");
+        setTrangHienTaiLoc(1);
     };
 
-
-    const [trangThaiLoc, setTrangThaiLoc] = useState<boolean>(false);
-
-    const dsSinhVienDaLoc = useMemo(() => {
-        return dsSinhVien.filter(sv=> {
-            const dieuKienHocKy = id_hocky ? sv.nguoi_dung.hoc_kys && sv.nguoi_dung.hoc_kys.some(hk => hk.id_hocky === id_hocky) : true;
-            return dieuKienHocKy;
-        });
-    }, [dsSinhVien, id_hocky]);
-
-    useEffect(() => {
-        if(id_hocky){
-            setTrangThaiLoc(true);
-        }else{
-            setTrangThaiLoc(false);
-        }
-    }, [id_hocky, dsSinhVien]);
 
     // Phân trang
     
@@ -123,6 +107,7 @@ const TrangQlSinhVienAd = () => {
     const xyLyChuyenTrang = (soTrang: number) => {
         setTrangHienTai(soTrang);
     };
+
     
     const phanTrang = () => {
         const trangSos = [];
@@ -140,6 +125,56 @@ const TrangQlSinhVienAd = () => {
             </button>
         ));
     };
+
+
+    const [trangThaiLoc, setTrangThaiLoc] = useState<boolean>(false);
+
+    const dsSinhVienDaLoc = useMemo(() => {
+        return dsSinhVien.filter(sv=> {
+            const dieuKienHocKy = id_hocky ? sv.nguoi_dung.hoc_kys && sv.nguoi_dung.hoc_kys.some(hk => hk.id_hocky === id_hocky) : true;
+            return dieuKienHocKy;
+        });
+    }, [dsSinhVien, id_hocky]);
+
+
+    
+    // Phân trang khi lọc
+    const [trangHienTaiLoc, setTrangHienTaiLoc] = useState(1);
+    const phanTuMoiTrangLoc = 8;
+    
+    const indexCuoi = trangHienTaiLoc * phanTuMoiTrangLoc;
+    const indexDau = indexCuoi - phanTuMoiTrangLoc;
+    const dsSinhVienDaLocHienThi = dsSinhVienDaLoc.slice(indexDau, indexCuoi);
+    const tongSoTrangDaLoc = Math.ceil(dsSinhVienDaLoc.length / phanTuMoiTrangLoc);
+    const xyLyChuyenTrangLoc = (soTrangLoc: number) => {
+        setTrangHienTaiLoc(soTrangLoc);
+    };
+     const phanTrangDaLoc = () => {
+        const trangSos = [];
+        for (let i = 1; i <= tongSoTrangDaLoc; i++) {
+          trangSos.push(i);
+        }
+
+        return trangSos.map((trang) => (
+            <button
+              key={trang}
+              type="button"
+              className={`nut-phantrang ${trangHienTaiLoc === trang ? 'active' : ''}`}
+              onClick={() => xyLyChuyenTrangLoc(trang)}
+            > 
+              {trang}
+            </button>
+        ));
+    };
+
+    useEffect(() => {
+        if(id_hocky){
+            setTrangThaiLoc(true);
+        }else{
+            setTrangThaiLoc(false);
+        }
+        setTrangHienTaiLoc(1);
+    }, [id_hocky, dsSinhVien]);
 
 
     const [thongBao, setThongBao] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -194,11 +229,15 @@ const TrangQlSinhVienAd = () => {
                     </div>
                     <div className="khung-timkiem">
                         <input
+                            id="timkiem-sv"
+                            name="timkiem-sv"
                             type="text"
-                            className="input-timkiem"
+                            className="nhap-timkiem"
                             placeholder="Tìm kiếm sinh viên..."
                         />
-                        <button className="nut-timkiem">Tìm kiếm</button>
+                        <button className="nut-timkiem">
+                            <i className="bi bi-search"></i>
+                        </button>
                     </div>
                 </div>
                 <div className="khung-ds-taikhoan flex-col">
@@ -297,9 +336,9 @@ const TrangQlSinhVienAd = () => {
                                     </thead>
                                     <tbody>
                                         {dsSinhVienDaLoc && dsSinhVienDaLoc.length > 0 ? (
-                                            dsSinhVienDaLoc.map((sv, index) => (
+                                            dsSinhVienDaLocHienThi.map((sv, index) => (
                                                 <tr key={sv.id_sinhvien}>
-                                                    <td className="col-stt">{index + 1}</td>
+                                                    <td className="col-stt">{indexDau + index + 1}</td>
                                                     <td className="col-hoten">{sv.nguoi_dung.ho_ten}</td>
                                                     <td className="col-msv">{sv.msv}</td>
                                                     <td className="col-email">{sv.nguoi_dung.email}</td>
@@ -315,8 +354,28 @@ const TrangQlSinhVienAd = () => {
                                     </tbody>
                                 </table>
                             </div>  
+                            {dsSinhVienDaLocHienThi && dsSinhVienDaLocHienThi.length > 0 ? (
+                                <div className="khung-phantrang flex-row">
+                                <button className={`nut-phantrang truoc ${trangHienTaiLoc === 1 ? "disabled" : ""}`}
+                                    type="button"
+                                    onClick={() => xyLyChuyenTrangLoc(trangHienTaiLoc > 1 ? trangHienTaiLoc - 1 : 1)}
+                                    disabled={trangHienTaiLoc === 1}
+                                >
+                                    <i className="bi bi-chevron-left"></i>
+                                </button>
+                                {phanTrangDaLoc()}
+                                <button className={`nut-phantrang sau ${trangHienTaiLoc === tongSoTrangDaLoc ? "disabled" : ""}`}
+                                    type="button"
+                                    onClick={() => xyLyChuyenTrangLoc(trangHienTaiLoc < tongSoTrangDaLoc ? trangHienTaiLoc + 1 : tongSoTrangDaLoc)}
+                                    disabled={trangHienTaiLoc === tongSoTrangDaLoc}
+                                >
+                                    <i className="bi bi-chevron-right"></i>
+                                </button>
+                                </div>
+                            ) : null}
+                            
                             <div className="khung-hanhdong flex-row">
-                                <button className="nut-dongkhung" onClick={dongKhungTaoTkSinhVien}>Đóng</button>
+                                <button type="button" className="nut-dongkhung" onClick={dongKhungTaoTkSinhVien}>Đóng</button>
                                 <button type="submit" className={`nut-taotaikhoan ${trangThaiLoc && !dangTai ? '' : 'disabled'}`} disabled={!trangThaiLoc || dangTai}>
                                     {dangTai ? 'Đang xử lý...' : 'Tạo tài khoản'}
                                 </button>

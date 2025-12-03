@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('dang-nhap', [TaiKhoanController::class, 'dangNhap'])->name('dangNhap');
+Route::post('/cap-lai-mat-khau', [TaiKhoanController::class, 'capLaiMatKhau']);
 Route::middleware('auth:sanctum')->get('/nguoi-dung', [TaiKhoanController::class, 'layNguoiDung']);
 
 
@@ -21,8 +22,10 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:AD'])->prefix('admin')->g
     Route::get('/ds-nguoidung', [DuLieuController::class, 'dsNguoiDung'])->name('ad_dsNguoiDung');
     Route::get('/ds-khoanganhlop', [DuLieuController::class, 'dsKhoaNganhLop'])->name('ad_dsKhoaNganhLop');
     Route::get('/ds-sinhvien', [DuLieuController::class, 'dsSinhVien'])->name('ad_dsSinhVien');
+    Route::get('/ds-giangvien', [DuLieuController::class, 'dsGiangVien'])->name('ad_dsGiangVien');
 
     Route::post('/tao-ds-taikhoan-sv', [AdminController::class, 'taoDsTaiKhoanSv'])->name('ad_taoDsTaiKhoanSv');
+    Route::post('/tao-ds-taikhoan-gv', [AdminController::class, 'taoDsTaiKhoanGv'])->name('ad_taoDsTaiKhoanGv');
 });
 
 //PDT
@@ -32,6 +35,18 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:PDT'])->prefix('pdt')->gr
     Route::get('/ds-sinhvien', [DuLieuController::class, 'dsSinhVien'])->name('pdt_dsSinhVien');
     Route::post('/dsgv-tailen', [DuLieuController::class, 'importDsGiangVien'])->name('pdt_importDsGiangVien'); 
     Route::get('/ds-giangvien', [DuLieuController::class, 'dsGiangVien'])->name('pdt_dsGiangVien');
+});
+
+
+
+Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:TBM'])->prefix('tbm')->group(function () {
+    
+});
+Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:GV'])->prefix('gv')->group(function () {
+    
+});
+Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:SV'])->prefix('sv')->group(function () {
+    
 });
 
 

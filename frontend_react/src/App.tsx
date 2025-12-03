@@ -11,15 +11,26 @@ import TrangChu from './pages/TrangChu/trangChu';
 // Quản trị viên
 import KhungQuanTri from './pages/QuanTriVien/khungQuanTri';
 import TrangQuanTriVien from './pages/QuanTriVien/trangQuanTriVien';
+import TrangQlSinhVienAd from './pages/QuanTriVien/trangQlSinhVienAd';
+import TrangQlGiangVienAd from './pages/QuanTriVien/trangQlGiangVienAd';
 
 // Phòng đào tạo
 import PhongDaoTao from './pages/PhongDaoTao/phongDaoTao';
 import KhungTrangDaoTao from './pages/PhongDaoTao/khungTrangDaoTao';
 import QlSinhVien from './pages/PhongDaoTao/qlSinhVien';
 import QlGiangVien from './pages/PhongDaoTao/qlGiangVien';
-import TrangQlSinhVienAd from './pages/QuanTriVien/trangQlSinhVienAd';
-import TrangQlGiangVienAd from './pages/QuanTriVien/trangQlGiangVienAd';
 
+// Sinh viên
+import KhungTrangSinhVien from './pages/SinhVien/khungTrangSinhVien';
+import SinhVien from './pages/SinhVien/sinhVien';
+import KhungGiangVien from './pages/GiangVien/khungTrangGiangVien';
+import GiangVien from './pages/GiangVien/giangVien';
+import PhanCongGvSv from './pages/GiangVien/phanCongGvSv';
+
+
+// Giảng viên
+
+// Trưởng bộ môn
 
 
 function App() {
@@ -51,6 +62,20 @@ function App() {
               <Route index element={<PhongDaoTao />} />
               <Route path='ql-sinhvien' element={<QlSinhVien />} />
               <Route path='ql-giangvien' element={<QlGiangVien />} />
+          </Route>
+          
+          {/* Giảng viên */}
+          <Route path='/giang-vien' element={
+              <VaiTroNguoiDung trangcon={<KhungGiangVien />} vaitros={['GV']} />
+            }>
+              <Route index element={<GiangVien />} />
+              <Route path='phan-cong-gvhd' element={<PhanCongGvSv />} />
+          </Route>
+          {/* Sinh viên */}
+          <Route path='/sinh-vien' element={
+              <VaiTroNguoiDung trangcon={<KhungTrangSinhVien />} vaitros={['SV']} />
+            }>
+              <Route index element={<SinhVien />} />
           </Route>
       </Route>
 

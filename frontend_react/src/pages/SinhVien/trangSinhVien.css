@@ -1,0 +1,48 @@
+
+.khung-trangsinhvien {
+    /* min-height: 100vh; */
+    min-height: max-content;
+}
+
+
+.khung-trangsinhvien .khung-dieuhuong {
+    width: 100%;
+    height: min-content;
+
+    background-image: linear-gradient(to bottom, #158aff, rgb(78, 137, 255), #7ab8ea); 
+    
+    background-size: 100% 100%; 
+    background-repeat: no-repeat;
+    background-position: top; 
+
+    position: relative;
+}
+
+.khung-trangsinhvien .thanh-dieuhuong nav .danhsach-menu {
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+}
+
+.khung-trangsinhvien .thanh-dieuhuong nav .danhsach-menu li {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.thanh-dieuhuong nav .danhsach-menu li .muc-menu,
+.thanh-dieuhuong nav .danhsach-menu li .muc-menu-active {
+    min-width: min-content;
+    padding: 12px 20px 14px;
+}
+
+
+
+
+
+.khung-trangsinhvien .thanh-dieuhuong nav .danhsach-menu li .muc-menu:hover,
+.khung-trangsinhvien .thanh-dieuhuong nav .danhsach-menu li .muc-menu-active {
+    color: #eeb200;
+}
