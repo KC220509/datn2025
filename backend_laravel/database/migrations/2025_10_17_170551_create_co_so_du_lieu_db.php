@@ -115,6 +115,7 @@ return new class extends Migration
         Schema::create('nganh', function (Blueprint $table) {
             $table->uuid('id_nganh')->primary(); 
             $table->uuid('ma_khoa');
+            $table->string('ma_truongbomon')->nullable();
             $table->string('ten_nganh')->unique();
             $table->string('ky_hieu')->unique();
             $table->timestamps(); 
@@ -123,6 +124,7 @@ return new class extends Migration
                 ->references('id_khoa')
                 ->on('khoa')
                 ->onDelete('cascade');
+
         });
 
         Schema::create('lop_sinh_hoat', function (Blueprint $table) {
@@ -171,14 +173,25 @@ return new class extends Migration
                 ->on('nganh')
                 ->onDelete('cascade');
         });
+        Schema::table('nganh', function (Blueprint $table) {
+            $table->unique('ma_truongbomon');
+            
+            $table->foreign('ma_truongbomon')
+                ->references('id_giangvien')
+                ->on('giang_vien')
+                ->onDelete('set null'); 
+        });
 
 
         Schema::create('phan_cong', function (Blueprint $table) {
             $table->uuid('id_phancong')->primary(); 
             $table->uuid('ma_truongbomon');
             $table->uuid('ma_giangvien');
-            $table->uuid('ma_sinhvien')->unique();
+            $table->uuid('ma_sinhvien');
+            $table->uuid('ma_hocky');
             $table->timestamps(); 
+
+            $table->unique(['ma_sinhvien', 'ma_hocky']); // 1 sinh viên chỉ được phân công trong 1 học kỳ
 
             $table->foreign('ma_truongbomon')
                 ->references('id_giangvien')
@@ -196,6 +209,11 @@ return new class extends Migration
                 ->references('id_sinhvien')
                 ->on('sinh_vien')
                 ->onDelete('cascade');
+
+            $table->foreign('ma_hocky')
+                ->references('id_hocky')
+                ->on('hoc_ky_dk')
+                ->onDelete('cascade');
         });
 
 
@@ -203,7 +221,6 @@ return new class extends Migration
             $table->uuid('id_nhom')->primary();
             $table->uuid('ma_nguoitao');
             $table->uuid('ma_sinhvien');
-            // $table->uuid('ma_thanhvien');
             $table->string('ten_nhom');
             $table->timestamps();
 
@@ -254,7 +271,7 @@ return new class extends Migration
 
         Schema::create('de_tai', function (Blueprint $table){
             $table->uuid('id_detai')->primary();
-            $table->uuid('ma_sinhvien')->unique();
+            $table->uuid('ma_sinhvien');
             $table->uuid('ma_nhom');
             $table->string('ten_detai');
             $table->text('mo_ta')->nullable();
@@ -326,6 +343,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('nganh', function (Blueprint $table) {
+            $table->dropForeign(['ma_truongbomon']);
+            $table->dropUnique(['ma_truongbomon']);
+            $table->dropColumn('ma_truongbomon');
+        });
+        
         Schema::dropIfExists('bao_cao');
         Schema::dropIfExists('ket_qua_DATN');
         Schema::dropIfExists('de_tai');
@@ -339,7 +362,7 @@ return new class extends Migration
         Schema::dropIfExists('nganh');
         Schema::dropIfExists('khoa');
         Schema::dropIfExists('nguoidung_hocky');
-        Schema::dropIfExists('ds_sinhvien_giangvien');
+        Schema::dropIfExists('tep_dulieu_hocky');
         Schema::dropIfExists('hoc_ky_dk');
         Schema::dropIfExists('bai_dang');
         Schema::dropIfExists('vai_tro');

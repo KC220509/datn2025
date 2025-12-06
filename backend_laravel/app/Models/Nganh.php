@@ -18,6 +18,7 @@ class Nganh extends Model
     protected $fillable = [
         'id_nganh',
         'ma_khoa',
+        'ma_truongbomon',
         'ten_nganh',
         'ky_hieu',
     ];

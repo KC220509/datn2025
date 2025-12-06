@@ -92,7 +92,6 @@ class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
                 ]
             );
 
-            // Cập nhật thông tin nếu User đã tồn tại
             if (!$nguoiDung->wasRecentlyCreated) {
                 $nguoiDung->update([
                     'ho_ten' => $hoTen,
@@ -116,15 +115,16 @@ class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
 
             foreach ($dsMaVaiTro as $maVaiTro) {
                 DB::table('nguoidung_vaitro')->updateOrInsert(
-                [
-                    'ma_nguoidung' => $nguoiDungId, 
-                    'ma_vaitro' => $maVaiTro,
-                ],
-                [
-                    'created_at' => now(), 
-                    'updated_at' => now(),
-                ]
-            );
+                    [
+                        'ma_nguoidung' => $nguoiDungId, 
+                        'ma_vaitro' => $maVaiTro,
+                    ],
+                    [
+                        'created_at' => now(), 
+                        'updated_at' => now(),
+                    ]
+                );
+                
             }
             
 
@@ -146,6 +146,28 @@ class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
                     'hoc_ham_hoc_vi' => $hocHamHocVi,
                 ]
             );
+
+            if (in_array('TBM', $dsMaVaiTro) && !empty($maNganh)) { 
+            
+                $idTBMCu = DB::table('nganh')
+                    ->where('id_nganh', $maNganh)
+                    ->value('ma_truongbomon');
+
+                if ($idTBMCu && $idTBMCu !== $nguoiDungId) {
+                    DB::table('nguoidung_vaitro')
+                        ->where('ma_nguoidung', $idTBMCu)
+                        ->where('ma_vaitro', 'TBM')
+                        ->delete();
+                    
+                }
+                
+                DB::table('nganh')->where('id_nganh', $maNganh)->update(
+                    [
+                        'ma_truongbomon' => $nguoiDungId, 
+                        'updated_at' => now(),
+                    ]
+                );
+            }
 
 
             return $giangVien;

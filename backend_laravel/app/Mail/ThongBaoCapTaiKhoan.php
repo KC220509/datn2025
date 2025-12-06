@@ -24,7 +24,7 @@ class ThongBaoCapTaiKhoan extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Thông Báo Cấp Tài Khoản Sinh Viên',
+            subject: 'Thông Báo Cấp Tài Khoản Người Dùng',
         );
     }
 

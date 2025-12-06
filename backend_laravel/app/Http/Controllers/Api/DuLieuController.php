@@ -35,7 +35,7 @@ class DuLieuController extends Controller
 
     public function dsHocKy()
     {
-        $dsHocKy = HocKyDk::all();
+        $dsHocKy = HocKyDk::orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'trangthai' => true,

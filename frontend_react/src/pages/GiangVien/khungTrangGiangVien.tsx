@@ -1,7 +1,7 @@
 
+import './trangGiangVien.css';
 
 import { NavLink, Outlet } from 'react-router-dom';
-import './trangGiangVien.css';
 import { useEffect, useState } from 'react';
 import { useNguoiDung } from '../../hooks/useNguoiDung';
 
@@ -39,8 +39,8 @@ const KhungGiangVien: React.FC = () => {
                             </li>
                             {ktraTBM && (
                                 <li>
-                                    <NavLink to="/giang-vien/phan-cong-gvhd" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
-                                        Phân công GVHD
+                                    <NavLink to="/giang-vien/quan-ly-phan-cong" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
+                                        Quản Lý Phân Công
                                     </NavLink>
                                 </li>
                             )}

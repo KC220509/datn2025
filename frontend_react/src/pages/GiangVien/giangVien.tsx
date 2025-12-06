@@ -28,7 +28,7 @@ const GiangVien = () => {
         <div className="khung-noidung-chinh flex-row">
             {/* Hoạt động gần đây */}
             <div className="khung-hoatdong-ganday flex-col">
-                <h2 className="tieude-noidung">Hoạt động gần đây</h2>
+                <h2 className="tieude-noidung">Danh Sách Sinh Viên Phân Công - Học Kỳ 125</h2>
                 <ul className="danhsach-hoatdong">
                     <li>Nhóm "Website bán hàng" đã nộp báo cáo tuần 5.</li>
                     <li>Bạn có tin nhắn mới từ nhóm "Ứng dụng di động".</li>
