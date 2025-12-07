@@ -288,4 +288,56 @@ class DuLieuController extends Controller
         }
     }
 
+    public function layNganhCuaTBM($idTbm)
+    {
+        $nganh = $this->nguoiDungService->layNganhCuaTBM($idTbm);
+
+        if (!$nganh) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Không tìm thấy ngành của trưởng bộ môn.'
+            ], 404);
+        }
+
+        return response()->json([
+            'trangthai' => true,
+            'nganh' => $nganh,
+        ]);
+    }
+
+
+    public function layDsGiangVienTheoNganh($maNganh)
+    {
+        $dsGiangVien = $this->nguoiDungService->layDsGiangVienTheoNganh($maNganh);
+
+        if (!$dsGiangVien) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Không tìm thấy giảng viên nào.'
+            ], 404);
+        }
+
+        return response()->json([
+            'trangthai' => true,
+            'ds_giangvien' => $dsGiangVien,
+        ]);
+    }
+
+     public function layDsSinhVienTheoNganh($maNganh)
+    {
+        $dsSinhVien = $this->nguoiDungService->layDsSinhVienTheoNganh($maNganh);
+
+        if (!$dsSinhVien) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Không tìm thấy sinh viên nào.'
+            ], 404);
+        }
+
+        return response()->json([
+            'trangthai' => true,
+            'ds_sinhvien' => $dsSinhVien,
+        ]);
+    }
+
 }

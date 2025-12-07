@@ -9,11 +9,17 @@ interface VaiTro {
 
 }
 
+interface HocKy {
+    id_hocky: string;
+    ten_hoc_ky: string;
+}
+
 interface NguoiDung {
     id_nguoidung: number;
     ho_ten: string;
     email: string;
     vai_tros: VaiTro[];
+    hoc_kys: HocKy[];
 
 }
 

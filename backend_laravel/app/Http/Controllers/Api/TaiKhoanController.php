@@ -68,13 +68,20 @@ class TaiKhoanController extends Controller
                 'ten_hien_thi' => $vt->ten_hien_thi
             ];
         });
+        $hocKys = $nguoiDung->hocKys->map(function($hk){
+            return [
+                'id_hocky' => $hk->id_hocky,
+                'ten_hoc_ky' => $hk->ten_hoc_ky
+            ];
+        });
         return response()->json([
             'trangthai' => true,
             'nguoi_dung' => [
                 'id_nguoidung' => $nguoiDung->id_nguoidung,
                 'ho_ten' => $nguoiDung->ho_ten,
                 'email' => $nguoiDung->email,
-                'vai_tros' => $vaiTros
+                'vai_tros' => $vaiTros,
+                'hoc_kys' => $hocKys
             ],
         ]);
     }

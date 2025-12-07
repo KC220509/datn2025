@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\GiangVien;
+use App\Models\Nganh;
 use App\Models\NguoiDung;
 use App\Models\SinhVien;
 
@@ -12,11 +13,14 @@ class NguoiDungService
     protected $sinhVienModel;
     protected $giangVienModel;
 
-    public function __construct(NguoiDung $nguoiDungModel, SinhVien $sinhVienModel, GiangVien $giangVienModel)
+    protected $nganhModel;
+
+    public function __construct(NguoiDung $nguoiDungModel, SinhVien $sinhVienModel, GiangVien $giangVienModel, Nganh $nganhModel)
     {
         $this->nguoiDungModel = $nguoiDungModel;
         $this->sinhVienModel = $sinhVienModel;
         $this->giangVienModel = $giangVienModel;
+        $this->nganhModel = $nganhModel;
     }
 
     public function layNguoiDungTheoId($id)
@@ -81,6 +85,40 @@ class NguoiDungService
         return $dsGiangVien;
     }
 
+    public function layNganhCuaTBM($idTbm){
+        $nganh = $this->nganhModel->where('ma_truongbomon', $idTbm)->first();
+        if($nganh){
+            return $nganh;
+        }
+        return null;
+    }
+
+
+    public function layDsGiangVienTheoNganh($maNganh){
+        $dsGiangVien = $this->giangVienModel->with([
+                'nguoiDung',
+                'nganh',
+                'nguoiDung.hocKys',
+            ])
+            ->where('ma_nganh', $maNganh)
+            ->get();
+
+        return $dsGiangVien;
+    }
+    public function layDsSinhVienTheoNganh($maNganh){
+        $dsSinhVien = $this->sinhVienModel->with([
+                'nguoiDung',
+                'lop',
+                'lop.nganh',
+                'nguoiDung.hocKys',
+            ])
+            ->whereHas('lop', function($query) use ($maNganh){
+                $query->where('ma_nganh', $maNganh);
+            })
+            ->get();
+
+        return $dsSinhVien;
+    }
 }
 
 

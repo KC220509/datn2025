@@ -103,7 +103,7 @@
 .tieu-de-duoi .tieu-de-trai .tieu-de-ten{
     font-size: 16px;
     white-space: nowrap;
-    overflow: hidden; 
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
@@ -121,6 +121,7 @@
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    white-space: nowrap;
 }
 .tieu-de-duoi .tieu-de-phai .dang-xuat:hover {
     background-color: #cc3a3b;
@@ -273,6 +274,10 @@
 @media (max-width: 820px) {
     .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
         max-width: 270px;
+    }
+
+    .tieu-de-duoi .tieu-de-trai .tieu-de-ten{
+        max-width: 200px;
     }
 
     .khung-chan-trang {

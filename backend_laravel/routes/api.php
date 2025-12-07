@@ -40,10 +40,14 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:PDT'])->prefix('pdt')->gr
 
 
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:TBM'])->prefix('tbm')->group(function () {
-    Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('tbm_dsHocKy');
+    Route::get('/nganh/{id_tbm}', [DuLieuController::class, 'layNganhCuaTBM'])->name('tbm_layNganhCuaTBM');
+    Route::get('/ds-giangvien/{maNganh}', [DuLieuController::class, 'layDsGiangVienTheoNganh'])->name('tbm_dsGiangVienTheoNganh');
+    Route::get('/ds-sinhvien/{maNganh}', [DuLieuController::class, 'layDsSinhVienTheoNganh'])->name('tbm_dsSinhVienTheoNganh');
+    // Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('tbm_dsHocKy');
+
 });
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:GV'])->prefix('gv')->group(function () {
-    Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('gv_dsHocKy');
+    // Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('gv_dsHocKy');
    
 });
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:SV'])->prefix('sv')->group(function () {

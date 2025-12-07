@@ -1,24 +1,25 @@
 
 import './trangGiangVien.css';
 
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNguoiDung } from '../../hooks/useNguoiDung';
 
 const KhungGiangVien: React.FC = () => {
-    const { nguoiDung } = useNguoiDung();
-
     const [ktraTBM, setKtraTBM] = useState<boolean>(false);
-
+    
+    const { nguoiDung } = useNguoiDung();
+    const chuyenhuong = useNavigate();
     useEffect(() => {
         if(nguoiDung){
             if (nguoiDung.vai_tros.some(vt => vt.id_vaitro === 'TBM')) {
                 setKtraTBM(true);
             } else {
-                setKtraTBM(false);
+                
+                chuyenhuong('/giang-vien', { replace: true });
             }
         }
-    }, [nguoiDung]);
+    }, [nguoiDung, chuyenhuong]);
 
 
     return(
