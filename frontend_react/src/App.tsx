@@ -20,22 +20,23 @@ import KhungTrangDaoTao from './pages/PhongDaoTao/khungTrangDaoTao';
 import QlSinhVien from './pages/PhongDaoTao/qlSinhVien';
 import QlGiangVien from './pages/PhongDaoTao/qlGiangVien';
 
-// Sinh viên
-import KhungTrangSinhVien from './pages/SinhVien/khungTrangSinhVien';
-import SinhVien from './pages/SinhVien/sinhVien';
-import KhungGiangVien from './pages/GiangVien/khungTrangGiangVien';
-import GiangVien from './pages/GiangVien/giangVien';
+// Trưởng bộ môn
 import PhanCongGvSv from './pages/TruongBoMon/phanCongGvSv';
 import QuanLyPhanCong from './pages/TruongBoMon/quanLyPhanCong';
 import DanhSachPhanCong from './pages/TruongBoMon/danhSachPhanCong';
-import QuanLyNhomDoAn from './pages/GiangVien/quanLyNhomDoAn';
+
+// Giảng viên
+import GiangVien from './pages/GiangVien/giangVien';
+import KhungGiangVien from './pages/GiangVien/khungTrangGiangVien';
+import QuanLySinhVien from './pages/GiangVien/quanLySinhVien';
 import DanhSachNhom from './pages/GiangVien/danhSachNhom';
 import DanhSachSinhVienPc from './pages/GiangVien/danhSachSinhVienPc';
 
+// Sinh viên
+import KhungTrangSinhVien from './pages/SinhVien/khungTrangSinhVien';
+import SinhVien from './pages/SinhVien/sinhVien';
+import NhomDoAn from './pages/SinhVien/nhomDoAn';
 
-// Giảng viên
-
-// Trưởng bộ môn
 
 
 function App() {
@@ -74,7 +75,7 @@ function App() {
               <VaiTroNguoiDung trangcon={<KhungGiangVien />} vaitros={['GV']} />
             }>
               <Route index element={<GiangVien />} />
-              <Route path='quan-ly-nhom-do-an' element={<QuanLyNhomDoAn />} >
+              <Route path='sinh-vien-phan-cong' element={<QuanLySinhVien />} >
                 <Route index element={<DanhSachSinhVienPc />} />
                 <Route path='danhsach-nhom' element={<DanhSachNhom />} />
               </Route>
@@ -90,6 +91,9 @@ function App() {
               <VaiTroNguoiDung trangcon={<KhungTrangSinhVien />} vaitros={['SV']} />
             }>
               <Route index element={<SinhVien />} />
+              <Route path='ds-nhom-doan' element={<Outlet />} >
+                <Route index element={<NhomDoAn />} />
+              </Route>
           </Route>
       </Route>
 

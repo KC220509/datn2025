@@ -88,7 +88,7 @@ class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
                     'so_dien_thoai' => $soDienThoai,
                     'dia_chi' => $diaChi,
                     'gioi_tinh' => true,
-                    'trang_thai' => true,
+                    'trang_thai' => false,
                 ]
             );
 

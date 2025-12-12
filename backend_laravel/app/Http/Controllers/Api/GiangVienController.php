@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\NhomDoAn;
 use App\Models\PhanCong;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GiangVienController extends Controller
 {
-    public function layDanhSachNhom($id_giangvien)
+    public function layDanhSachNhom()
     {
+        $id_giangvien = Auth::id();
         $danhSachNhom = NhomDoAn::where('ma_nguoitao', $id_giangvien)->get();
 
 
@@ -27,8 +29,9 @@ class GiangVienController extends Controller
     }
 
 
-    public function layDanhSachSinhVienPc($id_giangvien)
+    public function layDanhSachSinhVienPc()
     {
+        $id_giangvien = Auth::id();
         $danhSachSvPc = PhanCong::with(['sinhVien', 'nguoiDungSinhVien', 'hocKy'])
             ->where('ma_giangvien', $id_giangvien)
             ->get();

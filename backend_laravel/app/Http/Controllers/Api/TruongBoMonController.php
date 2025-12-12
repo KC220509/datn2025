@@ -7,6 +7,7 @@ use App\Http\Requests\PhanCongNgauNhienRequest;
 use App\Models\HocKyDk;
 use App\Models\PhanCong;
 use App\Models\PhanCongHuongDan;
+use App\Services\NguoiDungService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -14,6 +15,27 @@ use Illuminate\Support\Str;
 
 class TruongBoMonController extends Controller
 {
+    protected $nguoiDungService;
+    public function __construct(NguoiDungService $nguoiDungService)
+    {
+        $this->nguoiDungService = $nguoiDungService;
+    }
+    public function layNganhCuaTBM()
+    {
+        $nganh = $this->nguoiDungService->layNganhCuaTBM(Auth::id());
+
+        if (!$nganh) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Không tìm thấy ngành của trưởng bộ môn.'
+            ], 404);
+        }
+
+        return response()->json([
+            'trangthai' => true,
+            'nganh' => $nganh,
+        ]);
+    }
     public function phanCongNgauNhien(PhanCongNgauNhienRequest $request)
     {
         $idHocKy = $request->id_hocky;
@@ -32,7 +54,6 @@ class TruongBoMonController extends Controller
 
         DB::beginTransaction();
         try {
-            // Xóa các phân công cũ của các sinh viên này trong học kỳ hiện tại để tránh trùng lặp
             PhanCong::where('ma_hocky', $idHocKy)
                 ->whereIn('ma_sinhvien', $dssv_id)
                 ->delete();
@@ -72,8 +93,9 @@ class TruongBoMonController extends Controller
         }
     }
 
-    public function layDsPhanCongTheoTBM($id_tbm)
+    public function layDsPhanCongTheoTBM()
     {
+        $id_tbm = Auth::id();
         $dsPhanCong = PhanCong::with(['sinhVien', 'giangVien', 'hocKy', 'nguoiDungSinhVien', 'nguoiDungGiangVien'])
             ->where('ma_truongbomon', $id_tbm)
             ->get();

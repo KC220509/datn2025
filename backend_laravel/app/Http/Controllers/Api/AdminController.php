@@ -41,6 +41,7 @@ class AdminController extends Controller
                 if ($nguoiDung->mat_khau == null) {
                     $matKhauGoc = Str::random(8);
                     $nguoiDung->mat_khau = Hash::make($matKhauGoc);
+                    $nguoiDung->trang_thai = true;
                     $nguoiDung->save();
 
                     // Gửi email thông báo tài khoản và mật khẩu cho sinh viên
@@ -89,6 +90,7 @@ class AdminController extends Controller
                 if ($nguoiDung->mat_khau == null) {
                     $matKhauGoc = Str::random(8);
                     $nguoiDung->mat_khau = Hash::make($matKhauGoc);
+                    $nguoiDung->trang_thai = true;
                     $nguoiDung->save();
 
                     // Gửi email thông báo tài khoản và mật khẩu cho sinh viên

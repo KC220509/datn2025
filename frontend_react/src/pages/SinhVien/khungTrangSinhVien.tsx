@@ -10,12 +10,12 @@ const KhungTrangSinhVien: React.FC = () => {
                         <ul className="danhsach-menu flex-row">
                             <li>
                                 <NavLink to="/sinh-vien" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
-                                    Tổng Quan
+                                    Thông tin cơ bản
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/sinh-vien/ql-sinhvien" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
-                                    Danh Sách Sinh Viên
+                                <NavLink to="/sinh-vien/ds-nhom-doan" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
+                                    Nhóm Đồ Án Tốt Nghiệp
                                 </NavLink>
                             </li>
                             <li>

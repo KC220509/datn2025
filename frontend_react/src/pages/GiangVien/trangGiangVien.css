@@ -142,40 +142,6 @@
 }
 
 
-.bang-ds {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.bang-ds th, .bang-ds td {
-    padding: 12px 15px;
-    border: 1px solid #e0e0e0;
-    text-align: left;
-}
-
-.bang-ds thead th {
-    background-color: #f5f8fa;
-    font-weight: bold;
-    color: #333;
-}
-
-.bang-ds tbody tr:nth-child(even) {
-    background-color: #fbfcfd;
-}
-
-.bang-ds .nut-xem {
-    padding: 5px 10px;
-    background-color: #158aff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.bang-ds .nut-xem:hover {
-    background-color: #006fe6;
-}
 
 
 /* Quản lý nhóm đồ án */
@@ -184,7 +150,7 @@
 
 .khung-ql-nhom-doan{
     height: max-content;
-    padding: 10px 0;
+    padding: 20px 0;
     gap: 15px;
 }
 
@@ -237,6 +203,8 @@
     background-color: #ffffff;
     box-shadow: 0 6px 18px rgba(18, 117, 255, 0.06);
     border-radius: 4px;
+    overflow: hidden;
+
 }
 
 
@@ -316,9 +284,12 @@
 }
 
 .khung-ds-nhom-doan .danhsach-nhom-doan .bang-ds-nhom tr td{
-    flex: 1 1;
+    /* flex: 1 1; */
     padding: 12px 15px;
     border: 1px solid #e0e0e0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 
@@ -339,13 +310,6 @@
     align-items: center;
     justify-content: center;
 }
-
-
-
-
-
-
-
 
 
 
@@ -401,7 +365,7 @@
         padding: 10px 14px;
     }
    
-    .khung-ql-phancong .menu-ql-phancong .tieude-menu{
+    .khung-ql-nhom-doan .menu-ql-nhom-doan .tieude-menu{
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

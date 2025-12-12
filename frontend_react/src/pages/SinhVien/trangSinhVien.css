@@ -46,3 +46,109 @@
 .khung-trangsinhvien .thanh-dieuhuong nav .danhsach-menu li .muc-menu-active {
     color: #eeb200;
 }
+
+
+
+/* Nội dung trang sinh viên */
+.tong-quan-sinhvien {
+    padding: 20px 0;
+    gap: 20px;
+    height: 100%;
+}
+
+.tong-quan-sinhvien .thong-tin {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px 30px;
+    flex: 1;
+    gap: 30px;
+}
+
+.tong-quan-sinhvien .thong-tin .tieude-muc {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    color: #505050;
+}
+
+
+.thong-tin .ds-giangvien-hk{
+    gap: 10px;
+    flex-direction: column;
+}
+.thong-tin .khung-giangvien-hk{
+    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #b0c4de;
+}
+
+.thong-tin .khung-giangvien-hk .dong-ten-hocky{
+    flex: 1;
+    padding: 0 20px 0 0;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.thong-tin .khung-giangvien-hk .ten-giangvien{
+    flex: 2;
+}
+
+
+.thong-tin .khung-giangvien-hk .nut-mo-thongtin,
+.thong-tin .khung-giangvien-hk .nut-dong-thongtin {
+    font-size: 14px;
+    color: #707070;
+    cursor: pointer;
+}
+
+.thong-tin .khung-giangvien-hk .nut-mo-thongtin{
+    display: inline-block;
+    transition: transform 0.3s ease-in-out;
+}
+.thong-tin .khung-giangvien-hk .nut-mo-thongtin.active{
+    transform: rotate(180deg);
+}
+.thong-tin .khung-giangvien-hk.active{
+    background-color: #e7effa;
+}
+
+
+.tong-quan-sinhvien .thong-tin .khung-thongtin{
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.khung-thongtin .thongtin-trai,
+.khung-thongtin .thongtin-phai {
+    gap: 10px;
+}
+
+.khung-thongtin .dong-thongtin{
+    gap: 10px;
+    align-items: center;
+}
+
+.khung-thongtin .dong-thongtin .tieu-de-dong {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+.khung-thongtin .dong-thongtin .noi-dung-dong {
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.ds-giangvien-hk .khung-thongtin{
+    padding: 10px;
+    border: 1px solid #d3d3d3;
+}

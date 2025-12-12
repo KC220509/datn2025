@@ -40,19 +40,20 @@ interface PhanCong {
 
 
 const DanhSachSinhVienPc = () => {
+
     const { nguoiDung } = useNguoiDung();
 
     const [danhSachSvPc, setDanhSachSvPc] = useState<PhanCong[]>([]);
 
     useEffect(() => {
-        if (nguoiDung?.id_nguoidung) {
-            layDanhSachSvPc(String(nguoiDung.id_nguoidung));
+        if(nguoiDung){
+            layDanhSachSvPc();
         }
     }, [nguoiDung]);
 
-    const layDanhSachSvPc = async (id_giangvien: string) => {
+    const layDanhSachSvPc = async () => {
         try {
-            const phanhoi = await ketNoiAxios.get(`/gv/ds-sinhvien-pc/${id_giangvien}`);
+            const phanhoi = await ketNoiAxios.get('/gv/ds-sinhvien-pc');
             
             if(phanhoi.data.trangthai){
 

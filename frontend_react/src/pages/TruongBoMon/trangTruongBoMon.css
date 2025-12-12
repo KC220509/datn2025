@@ -3,20 +3,20 @@
 
 
 /* Quản lý phân công */
+
+
+
+.khung-ql-phancong{
+    height: max-content;
+    padding: 20px 0;
+    gap: 15px;
+}
 .khung-ql-phancong .noidung-ql-phancong{
     flex: 1;
     padding: 20px;
     background-color: #ffffff;
     box-shadow: 0 6px 18px rgba(18, 117, 255, 0.06);
     border-radius: 4px;
-}
-
-
-
-.khung-ql-phancong{
-    height: max-content;
-    padding: 10px 0;
-    gap: 15px;
 }
 
 .khung-ql-phancong .menu-ql-phancong{
@@ -312,16 +312,19 @@
     border-radius: 4px;
     outline: none;
 }
+.danh-sach-phan-cong .khung-danhsach .bang-ds {
+    width: 100%;
+    border-collapse: collapse;
+}
 .danh-sach-phan-cong .khung-danhsach .bang-ds tr{
     font-size: 13px;
 }
 
-.danh-sach-phan-cong .khung-danhsach .bang-ds tr th{
-    text-align: center;
-    padding: 8px 10px;
-}
+.danh-sach-phan-cong .khung-danhsach .bang-ds tr th,
 .danh-sach-phan-cong .khung-danhsach .bang-ds tr td{
+    padding: 8px 12px;
     text-align: center;
+    border: 1px solid #e0e0e0;
 }
 .danh-sach-phan-cong .khung-dieukhien{
     justify-content: space-between;
@@ -367,7 +370,6 @@
         width: 100%;
         min-width: unset;
         flex-direction: row;
-        /* overflow-x: auto; */
     }
 
     .khung-ql-phancong .menu-ql-phancong .tieude-menu{

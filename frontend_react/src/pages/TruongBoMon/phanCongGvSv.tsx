@@ -58,9 +58,9 @@ const PhanCongGvSv = () => {
     const [ds_hockyTBM, setDsHocKyTBM] = useState<HocKy[]>([]);
     const [maNganh, setMaNganh] = useState<string>('');
 
-    const layNganhCuaTBM = async (id_tbm: string) => {
+    const layNganhCuaTBM = async () => {
         try{
-            const dulieu = await ketNoiAxios.get(`/tbm/nganh/${id_tbm}`);
+            const dulieu = await ketNoiAxios.get('/tbm/nganh');
             if(dulieu.data.nganh){
                 setMaNganh(dulieu.data.nganh.id_nganh);
             }
@@ -68,7 +68,7 @@ const PhanCongGvSv = () => {
             console.log(error);
         }
     }
-
+    
     const [dsGvNganh, setDsGvNganh] = useState<GiangVien[]>([]);
     const [dsSvNganh, setDsSvNganh] = useState<SinhVien[]>([]);
 
@@ -89,11 +89,10 @@ const PhanCongGvSv = () => {
             console.error('Lỗi khi lấy DS GV/SV theo ngành:', error);
         }
     }
-    const [idHocKy, setIdHocKy] = useState<string>('');
     
     useEffect(() => {
-        if (nguoiDung?.id_nguoidung) {
-            layNganhCuaTBM(String(nguoiDung.id_nguoidung));
+        if (nguoiDung) {
+            layNganhCuaTBM();
         }
         if (nguoiDung && nguoiDung.hoc_kys) {
             setDsHocKyTBM(nguoiDung.hoc_kys);
@@ -108,6 +107,8 @@ const PhanCongGvSv = () => {
         }
     }, [maNganh]); 
 
+    
+    const [idHocKy, setIdHocKy] = useState<string>('');
     const dsGvDaLoc = useMemo(() => {
         if (!idHocKy) return dsGvNganh;
         return dsGvNganh.filter((gv) => 

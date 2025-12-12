@@ -54,16 +54,16 @@ const DanhSachPhanCong = () => {
 
     useEffect(() => {
         if (nguoiDung?.id_nguoidung) {
-            layDsPhanCong(String(nguoiDung.id_nguoidung));
+            layDsPhanCong();
             if (nguoiDung.hoc_kys) {
                 setDsHocKy(nguoiDung.hoc_kys);
             }
         }
     }, [nguoiDung]);
 
-    const layDsPhanCong = async (id_tbm: string) => {
+    const layDsPhanCong = async () => {
         try {
-            const response = await ketNoiAxios.get(`/tbm/ds-phancong/${id_tbm}`);
+            const response = await ketNoiAxios.get('/tbm/ds-phancong');
             if (response.data.ds_phancong) {
                 setDsPhanCong(response.data.ds_phancong);
             }
@@ -112,7 +112,6 @@ const DanhSachPhanCong = () => {
             HocKy: pc.hoc_ky.ten_hoc_ky
         }));
 
-        // Điền STT
         data.forEach((item, index) => {
             item.STT = (index + 1).toString();
         });
