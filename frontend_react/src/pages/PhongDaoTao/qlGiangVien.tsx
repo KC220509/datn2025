@@ -1,37 +1,34 @@
 import { useEffect, useState, useCallback } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
+interface HocKy {
+  id_hocky: string;
+  ten_hoc_ky: string;
+}
+
+interface Nganh {
+  id_nganh: string;
+  ten_nganh: string;
+}
+
+interface NguoiDung{
+  id_nguoidung: string;
+  ho_ten: string;
+  email: string;
+  gioi_tinh: boolean;
+  so_dien_thoai: string;
+  hoc_kys: HocKy[];
+}
+
+interface GiangVien {
+  id_giangvien: string;
+  nganh: Nganh;
+  hoc_ham_hoc_vi: string;
+  nguoi_dung: NguoiDung;
+  ten_hoc_ky?: string;
+}
 
 const QlGiangVien = () => {
-  
-  interface HocKy {
-    id_hocky: string;
-    ten_hoc_ky: string;
-  }
-
-  interface Nganh {
-    id_nganh: string;
-    ten_nganh: string;
-  }
-
-  
-  interface NguoiDung{
-    id_nguoidung: string;
-    ho_ten: string;
-    email: string;
-    gioi_tinh: boolean;
-    so_dien_thoai: string;
-    hoc_kys: HocKy[];
-  }
-  
-
-  interface GiangVien {
-    id_giangvien: string;
-    nganh: Nganh;
-    hoc_ham_hoc_vi: string;
-    nguoi_dung: NguoiDung;
-    ten_hoc_ky?: string;
-  }
 
   const [dsHocKy, setDsHocKy] = useState<HocKy[]>([]);
   const [dsGiangVien, setDsGiangVien] = useState<GiangVien[]>([]);
@@ -49,10 +46,10 @@ const QlGiangVien = () => {
 
   const fetchDsGiangVien = useCallback(async () => {
     try{
-      const duLieu = await ketNoiAxios.get('/pdt/ds-giangvien');
+      const phanhoi = await ketNoiAxios.get('/pdt/ds-giangvien');
 
-        if (duLieu.data.trangthai === true) {
-            const dsGoc = duLieu.data.ds_giangvien;
+        if (phanhoi.data.trangthai === true) {
+            const dsGoc = phanhoi.data.ds_giangvien;
 
             const phanTach = dsGoc.flatMap((giangVien: GiangVien) => { 
                 const hocKys = giangVien.nguoi_dung?.hoc_kys || []; 
@@ -109,7 +106,7 @@ const QlGiangVien = () => {
   const [tep, setTep] = useState<File | null>(null);
 
   const [trangThaiChon, setTrangThaiChon] = useState(false);
-  // const [thongBao, setThongBao] = useState('');
+
   const [thongBaoThanhCong, setThongBaoThanhCong] = useState('');
   const [thongBaoThatBai, setThongBaoThatBai] = useState('');
 
@@ -172,6 +169,7 @@ const QlGiangVien = () => {
 
   const taiDanhSachGiangVien = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const formData = new FormData();
     formData.append('id_hocky', id_hocky);
     if (tep) {
@@ -179,21 +177,21 @@ const QlGiangVien = () => {
     }
 
     try {
-      const duLieu = await ketNoiAxios.post('/pdt/dsgv-tailen', formData, {
+      const phanhoi = await ketNoiAxios.post('/pdt/dsgv-tailen', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'enctype': 'multipart/form-data',
         },
       });
-      if(duLieu.data.trangthai === false){
-        setThongBaoThatBai(duLieu.data.thongbao);
+      if(phanhoi.data.trangthai === false){
+        setThongBaoThatBai(phanhoi.data.thongbao);
         setTimeout(() => {
           setThongBaoThatBai('');
         }, 5000);
         return;
       }else{
 
-        setThongBaoThanhCong(duLieu.data.thongbao);
+        setThongBaoThanhCong(phanhoi.data.thongbao);
         fetchDsGiangVien();
         setTimeout(() => {
           setThongBaoThanhCong('');

@@ -1,5 +1,5 @@
 
-import './trangGiangVien.css';
+import './trangTruongBoMon.css';
 
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -13,6 +13,11 @@ const QuanLyPhanCong = () => {
                     <li>
                         <NavLink to="/giang-vien/quan-ly-phan-cong" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                             Phân Công Giảng Viên
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/giang-vien/quan-ly-phan-cong/danh-sach" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
+                            Danh Sách Phân Công
                         </NavLink>
                     </li>
                     <li>

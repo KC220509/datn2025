@@ -220,7 +220,7 @@ return new class extends Migration
         Schema::create('nhom_do_an', function (Blueprint $table){
             $table->uuid('id_nhom')->primary();
             $table->uuid('ma_nguoitao');
-            $table->uuid('ma_sinhvien');
+            $table->uuid('ma_hocky');
             $table->string('ten_nhom');
             $table->timestamps();
 
@@ -230,11 +230,32 @@ return new class extends Migration
                 ->onDelete('cascade');
 
 
+            $table->foreign('ma_hocky')
+                ->references('id_hocky')
+                ->on('hoc_ky_dk')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('thanh_vien_nhom', function (Blueprint $table){
+            $table->uuid(column: 'id_thanhviennhom')->primary(); 
+            $table->uuid('ma_nhom');
+            $table->uuid('ma_sinhvien');
+            $table->timestamps();
+
+            $table->unique(['ma_nhom', 'ma_sinhvien']); 
+
+            // Khóa ngoại
+            $table->foreign('ma_nhom')
+                ->references('id_nhom')
+                ->on('nhom_do_an')
+                ->onDelete('cascade');
+
             $table->foreign('ma_sinhvien')
                 ->references('id_sinhvien')
                 ->on('sinh_vien')
                 ->onDelete('cascade');
         });
+
 
 
         Schema::create('nhiem_vu', function (Blueprint $table) {
@@ -278,6 +299,8 @@ return new class extends Migration
             $table->string('duong_dan_tep')->nullable();
             $table->enum('trang_thai', ['chờ duyệt','không duyệt','đã duyệt','đang thực hiện','chờ bảo vệ','đã bảo vệ'])->default('chờ duyệt');
             $table->timestamps();
+
+            $table->unique(['ma_sinhvien', 'ma_nhom']); // Mỗi sinh viên trong nhóm chỉ được làm 1 đề tài
 
             $table->foreign('ma_sinhvien')
                 ->references('id_sinhvien')
@@ -354,6 +377,7 @@ return new class extends Migration
         Schema::dropIfExists('de_tai');
         Schema::dropIfExists('tin_nhan_nhom');
         Schema::dropIfExists('nhiem_vu');
+        Schema::dropIfExists('thanh_vien_nhom');
         Schema::dropIfExists('nhom_do_an');
         Schema::dropIfExists('phan_cong');
         Schema::dropIfExists('giang_vien');

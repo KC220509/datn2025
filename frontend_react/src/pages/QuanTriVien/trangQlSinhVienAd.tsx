@@ -1,44 +1,42 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
+interface HocKy{
+    id_hocky: string;
+    ten_hoc_ky: string;
+}
+
+interface Nganh{
+    id_nganh: string;
+    ten_nganh: string;
+    ky_hieu: string;
+}
+
+interface Lop{
+    id_lop: string;
+    ten_lop: string;
+    nganh: Nganh;
+}
+
+interface NguoiDung{
+    id_nguoidung: string;
+    email: string;
+    mat_khau: string;
+    ho_ten: string;
+    trang_thai: boolean;
+    hoc_kys: HocKy[];
+    
+}
+
+interface SinhVien{
+    id_sinhvien: string;
+    msv: string;
+    lop: Lop;
+    nguoi_dung: NguoiDung;
+}
 
 const TrangQlSinhVienAd = () => {
-    interface HocKy{
-        id_hocky: string;
-        ten_hoc_ky: string;
-    }
-
-    interface Nganh{
-        id_nganh: string;
-        ten_nganh: string;
-        ky_hieu: string;
-    }
-
-    interface Lop{
-        id_lop: string;
-        ten_lop: string;
-        nganh: Nganh;
-    }
-
-
-    interface NguoiDung{
-        id_nguoidung: string;
-        email: string;
-        mat_khau: string;
-        ho_ten: string;
-        trang_thai: boolean;
-        hoc_kys: HocKy[];
-        
-    }
-
-    interface SinhVien{
-        id_sinhvien: string;
-        msv: string;
-        lop: Lop;
-        nguoi_dung: NguoiDung;
-    }
-
-
+    
     const [dsSinhVien, setDsSinhVien] = useState<SinhVien[]>([]);
 
     const layDsTkSinhVien = useCallback(async () => {

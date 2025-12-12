@@ -2,35 +2,35 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
 
+interface HocKy{
+    id_hocky: string;
+    ten_hoc_ky: string;
+}
+
+interface Nganh{
+    id_nganh: string;
+    ten_nganh: string;
+    ky_hieu: string;
+}
+
+interface NguoiDung{
+    id_nguoidung: string;
+    email: string;
+    mat_khau: string;
+    ho_ten: string;
+    trang_thai: boolean;
+    hoc_kys: HocKy[];
+    
+}
+
+interface GiangVien{
+    id_giangvien: string;
+    hoc_ham_hoc_vi: string;
+    nganh: Nganh;
+    nguoi_dung: NguoiDung;
+}
+
 const TrangQlGiangVienAd = () => {
-
-    interface HocKy{
-        id_hocky: string;
-        ten_hoc_ky: string;
-    }
-
-    interface Nganh{
-        id_nganh: string;
-        ten_nganh: string;
-        ky_hieu: string;
-    }
-
-    interface NguoiDung{
-        id_nguoidung: string;
-        email: string;
-        mat_khau: string;
-        ho_ten: string;
-        trang_thai: boolean;
-        hoc_kys: HocKy[];
-        
-    }
-
-    interface GiangVien{
-        id_giangvien: string;
-        hoc_ham_hoc_vi: string;
-        nganh: Nganh;
-        nguoi_dung: NguoiDung;
-    }
 
     const [dsGiangVien, setDsGiangVien] = useState<GiangVien[]>([]);
 
@@ -265,7 +265,7 @@ const TrangQlGiangVienAd = () => {
                             ) : (
                                 <tr>
                                     <td colSpan={8} style={{ textAlign: "center" }}>
-                                        Không có sinh viên để hiển thị.
+                                        Không có giảng viên để hiển thị.
                                     </td>
                                 </tr>
                             )}

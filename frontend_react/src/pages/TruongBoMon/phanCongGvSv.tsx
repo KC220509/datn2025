@@ -1,59 +1,61 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
-import './trangGiangVien.css';
+import './trangTruongBoMon.css';
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 import { useNguoiDung } from "../../hooks/useNguoiDung";
+import { useNavigate } from "react-router-dom";
+
+interface HocKy {
+    id_hocky: string;
+    ten_hoc_ky: string;
+}
+
+interface Nganh {
+    id_nganh: string;
+    ma_truongbomon: string;
+    ten_nganh: string;
+    ky_hieu: string;
+}
+
+interface NguoiDung {
+    id_nguoidung: string;
+    ho_ten: string;
+    email: string;
+    trang_thai: boolean;
+    hoc_kys?: HocKy[];
+}
+
+interface GiangVien {
+    id_giangvien: string;
+    nganh: Nganh;
+    hoc_ham_hoc_vi: string;
+    nguoi_dung: NguoiDung;
+}
+
+interface SinhVien {
+    id_sinhvien: string;
+    msv: string;
+    nguoi_dung: NguoiDung;
+    lop: Lop;
+}
+
+interface Lop {
+    id_lop: string;
+    ten_lop: string;
+    nganh: Nganh;
+}
+
 
 const PhanCongGvSv = () => {
-
-    interface HocKy{
-        id_hocky: string;
-        ten_hoc_ky: string;
-    }
-
-    interface Lop{
-        id_lop: string;
-        ten_lop: string;
-        nganh: Nganh;
-    }
-
-    interface Nganh{
-        id_nganh: string;
-        ma_truongbomon: string;
-        ten_nganh: string;
-        ky_hieu: string;
-    }
-
-    interface NguoiDung{
-        id_nguoidung: string;
-        ho_ten: string;
-        email: string;
-        trang_thai: boolean;
-        hoc_kys?: HocKy[];
-    }
-
-    interface GiangVien{
-        id_giangvien: string;
-        nganh: Nganh;
-        hoc_ham_hoc_vi: string;
-        nguoi_dung: NguoiDung;
-    }
-
-    interface SinhVien{
-        id_sinhvien: string;
-        msv: string;
-        nguoi_dung: NguoiDung;
-        lop: Lop;
-    }
+    const navigate = useNavigate();
 
     const [loaiPhanCong, setLoaiPhanCong] = useState<boolean>(true);
     const xuLyChonLoaiPhanCong = (loai: boolean) => {
         setLoaiPhanCong(loai);
     }
 
-    const [ds_hockyTBM, setDsHocKyTBM] = useState<HocKy[]>([]);
-
     const { nguoiDung } = useNguoiDung();
+    const [ds_hockyTBM, setDsHocKyTBM] = useState<HocKy[]>([]);
     const [maNganh, setMaNganh] = useState<string>('');
 
     const layNganhCuaTBM = async (id_tbm: string) => {
@@ -88,8 +90,7 @@ const PhanCongGvSv = () => {
         }
     }
     const [idHocKy, setIdHocKy] = useState<string>('');
-    const [ktraChonHocKy, setKtraChonHocKy] = useState<boolean>(false);
-
+    
     useEffect(() => {
         if (nguoiDung?.id_nguoidung) {
             layNganhCuaTBM(String(nguoiDung.id_nguoidung));
@@ -107,36 +108,51 @@ const PhanCongGvSv = () => {
         }
     }, [maNganh]); 
 
-    
-    const [dsGvDaLoc, setDsGvDaLoc] = useState<GiangVien[]>([]);
-    const [dsSvDaLoc, setDsSvDaLoc] = useState<SinhVien[]>([]);
-
-    useEffect(() => {
-
-        let gvLoc = dsGvNganh;
-        let svLoc = dsSvNganh;
-        if(idHocKy){
-            gvLoc = dsGvNganh.filter((gv) => 
+    const dsGvDaLoc = useMemo(() => {
+        if (!idHocKy) return dsGvNganh;
+        return dsGvNganh.filter((gv) => 
                 gv.nguoi_dung.hoc_kys?.some((hk) => hk.id_hocky === idHocKy)
             );
-            setDsGvDaLoc(gvLoc);
+    }, [idHocKy, dsGvNganh]);
 
-            svLoc = dsSvNganh.filter((sv) => 
+    const dsSvDaLoc = useMemo(() => {
+        if (!idHocKy) return dsSvNganh;
+        return dsSvNganh.filter((sv) => 
                 sv.nguoi_dung.hoc_kys?.some((hk) => hk.id_hocky === idHocKy)
             );
-            setDsSvDaLoc(svLoc);
+    }, [idHocKy, dsSvNganh]);
 
-            setKtraChonHocKy(true);
+    const ktraChonHocKy = !!idHocKy;
 
+    const xuLyPhanCongNgauNhien = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-        } else {
-            setKtraChonHocKy(false);
-            setDsGvDaLoc(dsGvNganh); 
-            setDsSvDaLoc(dsSvNganh);
+        if (!ktraChonHocKy || dsGvDaLoc.length === 0) {
+            alert("Vui lòng chọn học kỳ và đảm bảo có giảng viên trong danh sách.");
+            return;
         }
-    }, [idHocKy, dsGvNganh, dsSvNganh]);
 
-    
+        const dsgv_id = dsGvDaLoc.map(gv => gv.id_giangvien);
+        const dssv_id = dsSvDaLoc.map(sv => sv.id_sinhvien);
+        try {
+            const phanhoi = await ketNoiAxios.post('/tbm/phan-cong-ngau-nhien', {
+                id_hocky: idHocKy,
+                dsgv_id,
+                dssv_id
+            });
+            
+            if (phanhoi.data.trangthai) {
+                alert(phanhoi.data.thongbao);
+                setTimeout(() => {
+                    navigate('/giang-vien/quan-ly-phan-cong/danh-sach');
+                }, 1000);
+            } else {
+                alert(phanhoi.data.thongbao);
+            }
+        } catch (error) {
+            console.error("Lỗi khi phân công ngẫu nhiên:", error);
+        }
+    }
 
     return (
         <div className="trang-phancong-gvsv flex-col">
@@ -146,7 +162,7 @@ const PhanCongGvSv = () => {
             </div>
             <div className="khung-phancong-gvsv flex-row">
                 {loaiPhanCong ? (
-                    <form className="khung-phancong-ngaunhien flex-row">
+                    <form className="khung-phancong-ngaunhien flex-row" onSubmit={xuLyPhanCongNgauNhien}>
                         <div className="khung-ds-nguoidung flex-row">
                             <div className="khung-ds ds-giangvien flex-col">
                                 <div className="tieude-menu flex-row">

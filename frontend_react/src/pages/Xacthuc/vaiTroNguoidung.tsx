@@ -7,7 +7,6 @@ interface Props {
   vaitros?: string[]; 
 }
 
-// Đổi tên biến để đúng theo quy tắc đặt tên component
 const VaiTroNguoiDung: React.FC<Props> = ({ trangcon, vaitros }) => {
   const { nguoiDung, dangTai } = useNguoiDung(); 
   const location = useLocation();

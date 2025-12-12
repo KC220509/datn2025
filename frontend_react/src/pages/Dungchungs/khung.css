@@ -40,7 +40,7 @@
 }
 
 .tieu-de-tren .tieu-de-trai .tieu-de-hethong{
-
+    outline: none;
     white-space: nowrap;
     overflow: hidden; 
     text-overflow: ellipsis;

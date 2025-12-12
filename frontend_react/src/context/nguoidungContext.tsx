@@ -23,7 +23,7 @@ export interface NguoiDungContextKieu {
     token: string | null;
     dangNhap: (email: string, matKhau: string, ghiNho: boolean) => Promise<NguoiDung>;
     dangXuat: () => void;
-    dangTai: boolean; // Trạng thái tải ban đầu
+    dangTai: boolean; 
 }
 
 

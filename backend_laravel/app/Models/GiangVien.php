@@ -28,4 +28,15 @@ class GiangVien extends Model
         return $this->belongsTo(Nganh::class, 'ma_nganh', 'id_nganh');
     }
 
+
+    public function phanCongs()
+    {
+        return $this->hasMany(PhanCong::class, 'ma_giangvien', 'id_giangvien');
+    }
+
+    public function tbmPhanCong()
+    {
+        return $this->hasMany(PhanCong::class, 'ma_truongbomon', 'id_giangvien');
+    }
+
 }

@@ -1,57 +1,55 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
+interface Khoa {
+    id_khoa: string;
+    ten_khoa: string;
+}
+
+interface Nganh {
+    id_nganh: string;
+    ma_khoa: string;
+    ten_nganh: string;
+    ky_hieu: string;
+}
+
+interface Lop {
+    id_lop: string;
+    ma_nganh: string;
+    ten_lop: string;
+}
+
+interface HocKy {
+    id_hocky: string;
+    ten_hoc_ky: string;
+}
+
+interface VaiTro{
+    id_vaitro: string;
+    ten_hien_thi: string;
+    mo_ta: string;
+}
+
+interface NguoiDung{
+    id_nguoidung: string;
+    email: string;
+    ho_ten: string;
+    nganh: Nganh;
+    id_hocky: string; 
+    ten_hoc_ky: string; 
+    vai_tros: VaiTro[];
+    hoc_kys?: HocKy[];
+    sinh_vien: SinhVien;
+}
+
+interface SinhVien{
+    id_sinhvien: string;
+    msv: string;
+    nguoidung: NguoiDung;
+    lop: Lop;
+}
+
 const TrangQuanTriVien = () => {
-    interface Khoa {
-        id_khoa: string;
-        ten_khoa: string;
-    }
-
-    interface Nganh {
-        id_nganh: string;
-        ma_khoa: string;
-        ten_nganh: string;
-        ky_hieu: string;
-    }
-
-    interface Lop {
-        id_lop: string;
-        ma_nganh: string;
-        ten_lop: string;
-    }
-
-    interface HocKy {
-        id_hocky: string;
-        ten_hoc_ky: string;
-    }
-
-    interface VaiTro{
-        id_vaitro: string;
-        ten_hien_thi: string;
-        mo_ta: string;
-    }
-
-    interface NguoiDung{
-        id_nguoidung: string;
-        email: string;
-        ho_ten: string;
-        nganh: Nganh;
-        id_hocky: string; 
-        ten_hoc_ky: string; 
-        vai_tros: VaiTro[];
-        hoc_kys?: HocKy[];
-        sinh_vien: SinhVien;
-    }
-
-    interface SinhVien{
-        id_sinhvien: string;
-        msv: string;
-        nguoidung: NguoiDung;
-        lop: Lop;
-    }
-
-
-
     const [dsKhoas, setDsKhoas] = useState<Khoa[]>([]);
     const [dsNganhs, setDsNganhs] = useState<Nganh[]>([]);
     const [dsLops, setDsLops] = useState<Lop[]>([]);

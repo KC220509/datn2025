@@ -34,7 +34,7 @@ const KhungGiangVien: React.FC = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/giang-vien/ql-nhom-do-an" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
+                                <NavLink to="/giang-vien/quan-ly-nhom-do-an" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                                     Quản lý Nhóm Đồ Án
                                 </NavLink>
                             </li>

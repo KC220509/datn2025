@@ -2,36 +2,34 @@ import { useEffect, useState, useCallback } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
 
+interface HocKy {
+  id_hocky: string;
+  ten_hoc_ky: string;
+}
+
+interface Lop {
+  id_lop: string;
+  ten_lop: string;
+}
+
+interface NguoiDung{
+  id_nguoidung: string;
+  ho_ten: string;
+  email: string;
+  gioi_tinh: boolean;
+  so_dien_thoai: string;
+  hoc_kys: HocKy[];
+}
+
+interface SinhVien {
+  id_sinhvien: string;
+  msv: string;
+  lop: Lop;
+  nguoi_dung: NguoiDung;
+  ten_hoc_ky?: string;
+}
+
 const QlSinhVien = () => {
-  
-  interface HocKy {
-    id_hocky: string;
-    ten_hoc_ky: string;
-  }
-
-  interface Lop {
-    id_lop: string;
-    ten_lop: string;
-  }
-
-  
-  interface NguoiDung{
-    id_nguoidung: string;
-    ho_ten: string;
-    email: string;
-    gioi_tinh: boolean;
-    so_dien_thoai: string;
-    hoc_kys: HocKy[];
-  }
-  
-  interface SinhVien {
-    id_sinhvien: string;
-    msv: string;
-    lop: Lop;
-    nguoi_dung: NguoiDung;
-    ten_hoc_ky?: string;
-  }
-
   const [dsHocKy, setDsHocKy] = useState<HocKy[]>([]);
   const [dsSinhVien, setDsSinhVien] = useState<SinhVien[]>([]);
 
@@ -48,10 +46,10 @@ const QlSinhVien = () => {
 
   const fetchDsSinhVien = useCallback(async () => {
     try{
-      const duLieu = await ketNoiAxios.get('/pdt/ds-sinhvien');
+      const phanhoi = await ketNoiAxios.get('/pdt/ds-sinhvien');
 
-        if (duLieu.data.trangthai === true) {
-            const dsGoc = duLieu.data.ds_sinhvien;
+        if (phanhoi.data.trangthai === true) {
+            const dsGoc = phanhoi.data.ds_sinhvien;
 
             const phanTach = dsGoc.flatMap((sinhVien: SinhVien) => { 
                 const hocKys = sinhVien.nguoi_dung?.hoc_kys || []; 

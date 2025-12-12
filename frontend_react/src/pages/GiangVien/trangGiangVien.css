@@ -46,7 +46,6 @@
     color: #eeb200;
 }
 
-/* --- Giao diện trang tổng quan --- */
 .trang-giangvien {
     padding: 20px;
     gap: 20px;
@@ -142,7 +141,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Kế thừa và tùy chỉnh từ trangquantri.css */
+
 .bang-ds {
     width: 100%;
     border-collapse: collapse;
@@ -183,17 +182,13 @@
 
 
 
-
-
-/* Quản lý phân công */
-
-.khung-ql-phancong{
+.khung-ql-nhom-doan{
     height: max-content;
     padding: 10px 0;
     gap: 15px;
 }
 
-.khung-ql-phancong .menu-ql-phancong{
+.khung-ql-nhom-doan .menu-ql-nhom-doan{
     width: 220px;
     min-width: 180px;
     padding: 10px;
@@ -202,7 +197,7 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.khung-ql-phancong .menu-ql-phancong .tieude-menu{
+.khung-ql-nhom-doan .menu-ql-nhom-doan .tieude-menu{
     padding: 8px 10px;
     color: #ffffff;
     border-bottom: 2px solid #ffefef;
@@ -211,7 +206,7 @@
     text-transform: uppercase;
 }
 
-.khung-ql-phancong .menu-ql-phancong ul {
+.khung-ql-nhom-doan .menu-ql-nhom-doan ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -219,16 +214,16 @@
 }
 
 
-.khung-ql-phancong .menu-ql-phancong ul li .muc-menu,
-.khung-ql-phancong .menu-ql-phancong ul li .muc-menu-active {
+.khung-ql-nhom-doan .menu-ql-nhom-doan ul li .muc-menu,
+.khung-ql-nhom-doan .menu-ql-nhom-doan ul li .muc-menu-active {
     padding: 10px 12px;
     font-weight: 500;
     font-size: 13px;
     color: white;
 }
 
-.khung-ql-phancong .menu-ql-phancong ul li .muc-menu:hover,
-.khung-ql-phancong .menu-ql-phancong ul li .muc-menu-active {
+.khung-ql-nhom-doan .menu-ql-nhom-doan ul li .muc-menu:hover,
+.khung-ql-nhom-doan .menu-ql-nhom-doan ul li .muc-menu-active {
     background-color: #f5f5f5;
     color: #eeb200;
     border-radius: 4px;
@@ -236,7 +231,7 @@
 
 
 
-.khung-ql-phancong .noidung-ql-phancong{
+.khung-ql-nhom-doan .noidung-ql-nhom-doan{
     flex: 1;
     padding: 20px;
     background-color: #ffffff;
@@ -245,243 +240,142 @@
 }
 
 
-
-/* Nội dung phân công */
-.noidung-ql-phancong .trang-phancong-gvsv {
-    gap: 30px;
-}
-
-.trang-phancong-gvsv .chon-loai-phancong {
-    margin: auto;
-    /* gap: 20px; */
-    align-items: center;
-    background-color: #a3a19d;
-
-}
-
-.trang-phancong-gvsv .chon-loai-phancong .chon{
-    width: 175px;
-    font-size: 13px;
-    padding: 7px 16px 8px;
-    text-align: center;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.trang-phancong-gvsv .chon-loai-phancong .chon:hover {
-    background-color: #4cec43;
-}
-
-.trang-phancong-gvsv .chon-loai-phancong .phancong-ngaunhien,
-.trang-phancong-gvsv .chon-loai-phancong .phancong-thucong{
-    background-color: #0ad000;
-}
-
-
-.trang-phancong-gvsv .khung-phancong-gvsv {
+.noidung-ql-nhom-doan .khung-ds-nhom-doan{
     gap: 20px;
-
 }
 
-.khung-phancong-gvsv .khung-phancong-ngaunhien,
-.khung-phancong-gvsv .khung-phancong-thucong {
-    width: 100%;
+
+.khung-ds-nhom-doan .khung-chucnang-top{
+    padding: 5px 2px 10px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
 }
 
-.khung-phancong-gvsv .khung-phancong-ngaunhien,
-.khung-phancong-gvsv .khung-phancong-thucong{
-    gap: 30px;
-}
-
-.khung-phancong-ngaunhien .khung-ds-nguoidung,
-.khung-phancong-thucong .khung-ds-nguoidung{
-    flex: 1;
+.khung-ds-nhom-doan .khung-chucnang-top .khung-timkiem{
     gap: 15px;
-    justify-content: space-between;
-}
-
-.khung-ds-nguoidung .khung-ds{
-    flex: 1;
-    border: 1px solid #ccc;
-
-}
-
-
-.khung-ds-nguoidung .khung-ds .tieude-menu{
-    padding: 8px 10px;
-    background-color: #0ad000;
-    color: #ffffff;
-    justify-content: space-between;
-    align-items: center;
-    text-transform: uppercase;
-    font-size: 12px;
-}
-
-.khung-ds-nguoidung .khung-ds .tieude-menu span{
-    font-weight: bold;
-}
-
-.khung-ds-nguoidung .khung-ds .ds-nguoidung{
-    height: 100%;
-}
-
-.khung-ds-nguoidung .khung-ds .ds-nguoidung tr{
-    width: 100%;
-    display: flex;
-    table-layout: fixed;
-}
-.khung-ds-nguoidung .khung-ds .ds-nguoidung tr th,
-.khung-ds-nguoidung .khung-ds .ds-nguoidung tr td{
-    padding: 8px 12px;
-    border-bottom: 1px solid #eee;
-    font-size: 13px;
-}
-
-.khung-ds-nguoidung .khung-ds .ds-nguoidung tr th{
-    background-color: #f5f5f5;
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
-}
-
-.khung-ds .ds-nguoidung tbody tr:hover{
-    background-color: #d7dce0;
-}
-
-.khung-ds .ds-nguoidung tr .cot-stt{
-    width: 50px;
-    text-align: center;
-}
-
-.khung-ds .ds-nguoidung tr .cot-chon{
-    width: 50px;
-    gap: 5px;
-    align-items: center;
-    text-align: left;
-    cursor: pointer;
-}
-
-.khung-ds .ds-nguoidung tr .cot-chon input[type="checkbox"],
-.khung-ds .ds-nguoidung tr .cot-chon label{
-    cursor: pointer;
-}
-
-
-.khung-ds .ds-nguoidung tr .cot-ten{
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.khung-ds .ds-nguoidung tr .cot-hhhv,
-.khung-ds .ds-nguoidung tr .cot-msv{
-    flex: 1;
-    text-align: right;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-.khung-ds-nguoidung .khung-ds .ds-nguoidung ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 8px;
-}
-
-
-
-.khung-phancong-ngaunhien .khung-chucnang-phancong,
-.khung-phancong-thucong .khung-chucnang-phancong{
-    gap: 20px;
-    align-items: flex-end;
-}
-
-.khung-phancong-ngaunhien .khung-chon-hocky,
-.khung-phancong-thucong .khung-chon-hocky{
-    gap: 10px;
     align-items: center;
     font-size: 14px;
 }
-.khung-chon-hocky label{
-    color: #fb5d4e;
-    cursor: pointer;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 13px;
-    white-space: nowrap;
-}
-.khung-chon-hocky .chon-hocky-phancong{
-    width: 80px;
-    text-align: center;
-    padding: 5px 10px;
-    font-size: 13px;
-    outline: none;
-    cursor: pointer;
-    border: 1px solid #ccc;
+
+.khung-chucnang-top .khung-timkiem label{
+    font-weight: 500;
+    color: #575757;
 }
 
-.khung-phancong-ngaunhien .khung-tienhanh-phancong .nut-phancong,
-.khung-phancong-thucong .khung-tienhanh-phancong .nut-phancong{
-    padding: 8px 14px;
-    background-color: #158aff;
-    color: white;
+.khung-chucnang-top .khung-timkiem input{
+    min-width: 250px;
+    min-height: 30px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     font-size: 13px;
-    font-weight: 600;
+    outline: none;
+    color: #575757;
+}
+
+
+.khung-chucnang-top .nut-tao-nhom{
+    min-height: 30px;
+    padding: 5px 12px 7px;
+    background-color: #00e73a;
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
 }
 
-.khung-phancong-ngaunhien .khung-tienhanh-phancong .nut-phancong:hover,
-.khung-phancong-thucong .khung-tienhanh-phancong .nut-phancong:hover{
-    background-color: #006fe6;
+.khung-chucnang-top .khung-taonhom .nut-tao-nhom:hover{
+    background-color: #00c233;
 }
-.khung-phancong-ngaunhien .khung-tienhanh-phancong .nut-phancong.disabled,
-.khung-phancong-thucong .khung-tienhanh-phancong .nut-phancong.disabled{
-    cursor: not-allowed;
-    background-color: #a0cfff;
+
+
+.khung-ds-nhom-doan .danhsach-nhom-doan{
+    width: 100%;
 }
+
+.khung-ds-nhom-doan .danhsach-nhom-doan .bang-ds-nhom{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.khung-ds-nhom-doan .danhsach-nhom-doan .bang-ds-nhom tr{
+    width: 100%;
+}
+
+.khung-ds-nhom-doan .danhsach-nhom-doan .bang-ds-nhom tr th{
+    text-align: center;
+    padding: 8px 10px ;
+    background-color: #f5f8fa;
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #e0e0e0;
+}
+
+.khung-ds-nhom-doan .danhsach-nhom-doan .bang-ds-nhom tr td{
+    flex: 1 1;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+}
+
+
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-stt,
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-soluong{
+    text-align: center;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-tennhom{
+    min-width: 300px;
+    text-align: center;
+}
+
+
+.danhsach-nhom-doan .bang-ds-nhom .cot-chucnang{
+    /* max-width: 100px; */
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+
+
+
+
 
 
 
 /* Responsive Design */
 
 @media (max-width: 1200px) {
-    .khung-ql-phancong {
+    .khung-ql-nhom-doan {
         flex-direction: column;
     }
 
-    .khung-ql-phancong .menu-ql-phancong {
+    .khung-ql-nhom-doan .menu-ql-nhom-doan {
         width: 100%;
         min-width: unset;
         flex-direction: row;
-        overflow-x: auto;
     }
-
-     .khung-ql-phancong .menu-ql-phancong .tieude-menu{
+     .khung-ql-nhom-doan .menu-ql-nhom-doan .tieude-menu {
         border-bottom: none;
         border-right: 2px solid #ffefef;
      }
 
-    .khung-ql-phancong .menu-ql-phancong ul {
+    .khung-ql-nhom-doan .menu-ql-nhom-doan ul {
         flex-direction: row;
     }
 
-    .khung-ql-phancong .menu-ql-phancong ul li .muc-menu,
-    .khung-ql-phancong .menu-ql-phancong ul li .muc-menu-active {
+    .khung-ql-nhom-doan .menu-ql-nhom-doan ul li .muc-menu,
+    .khung-ql-nhom-doan .menu-ql-nhom-doan ul li .muc-menu-active {
         white-space: nowrap;
     }
 
-    .khung-phancong-ngaunhien,
-    .khung-phancong-thucong {
-        width: 100%;
-        flex-direction: column;
-    }
 
 }
 
@@ -520,13 +414,13 @@
 
 
 @media (max-width: 510px) {
-    .khung-ql-phancong .menu-ql-phancong{
+    .khung-ql-nhom-doan .menu-ql-nhom-doan{
         flex-direction: column;
     }
-    .khung-ql-phancong .menu-ql-phancong ul{
+    .khung-ql-nhom-doan .menu-ql-nhom-doan ul{
         flex-direction: column;
     }
-    .khung-ql-phancong .menu-ql-phancong .tieude-menu{
+    .khung-ql-nhom-doan .menu-ql-nhom-doan .tieude-menu{
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

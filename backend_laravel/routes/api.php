@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\DuLieuController;
+use App\Http\Controllers\Api\GiangVienController;
 use App\Http\Controllers\Api\TaiKhoanController;
+use App\Http\Controllers\Api\TruongBoMonController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -43,11 +45,14 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:TBM'])->prefix('tbm')->gr
     Route::get('/nganh/{id_tbm}', [DuLieuController::class, 'layNganhCuaTBM'])->name('tbm_layNganhCuaTBM');
     Route::get('/ds-giangvien/{maNganh}', [DuLieuController::class, 'layDsGiangVienTheoNganh'])->name('tbm_dsGiangVienTheoNganh');
     Route::get('/ds-sinhvien/{maNganh}', [DuLieuController::class, 'layDsSinhVienTheoNganh'])->name('tbm_dsSinhVienTheoNganh');
-    // Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('tbm_dsHocKy');
+    
+    Route::post('/phan-cong-ngau-nhien', [TruongBoMonController::class, 'phanCongNgauNhien'])->name('tbm_phanCongNgauNhien');
+    Route::get('/ds-phancong/{id_tbm}', [TruongBoMonController::class, 'layDsPhanCongTheoTBM'])->name('tbm_layDsPhanCongTheoTBM');
 
 });
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:GV'])->prefix('gv')->group(function () {
-    // Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('gv_dsHocKy');
+    Route::get('/ds-nhom/{id_giangvien}', [GiangVienController::class, 'layDanhSachNhom'])->name('gv_layDsNhom');
+    Route::get('/ds-sinhvien-pc/{id_giangvien}', [GiangVienController::class, 'layDanhSachSinhVienPc'])->name('gv_layDsSinhVienPc');
    
 });
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:SV'])->prefix('sv')->group(function () {
