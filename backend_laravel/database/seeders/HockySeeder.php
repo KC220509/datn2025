@@ -33,9 +33,11 @@ class HockySeeder extends Seeder
             $data[] = [
                 'id_hocky' => (string) Str::uuid(),
                 'ten_hoc_ky' => $tenHocKy,
-                'created_at' => $now,
-                'updated_at' => $now,
+                'created_at' => $now->copy(),
+                'updated_at' => $now->copy(),
             ];
+
+            $now->addMinutes(1);
         }
         
 

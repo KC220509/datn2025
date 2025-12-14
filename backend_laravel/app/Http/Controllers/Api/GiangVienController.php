@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaoNhomRequest;
 use App\Models\NhomDoAn;
 use App\Models\PhanCong;
+use App\Models\ThanhVienNhom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class GiangVienController extends Controller
 {
     public function layDanhSachNhom()
     {
         $id_giangvien = Auth::id();
-        $danhSachNhom = NhomDoAn::where('ma_nguoitao', $id_giangvien)->get();
+        $danhSachNhom = NhomDoAn::with(['hocKy', 'nguoiTao', 'sinhViens'])
+            ->where('ma_nguoitao', $id_giangvien)
+            ->get();
 
 
         if ($danhSachNhom->isEmpty()) {
@@ -46,6 +51,43 @@ class GiangVienController extends Controller
         return response()->json([
             'trangthai' => true,
             'ds_sinhvien_pc' => $danhSachSvPc
+        ]);
+    }
+
+
+    public function taoNhomDoAn(TaoNhomRequest $taoNhomRequest){
+        $duLieu = $taoNhomRequest->validated();
+        
+        $sinhVienIds = $duLieu['sinh_vien_ids'] ?? [];
+        $maNguoiTao = Auth::id();
+
+
+        $nhomMoi = NhomDoAn::create([
+            'id_nhom' => Str::uuid(),
+            'ten_nhom' => $duLieu['ten_nhom'],
+            'ma_nguoitao' => $maNguoiTao,
+            'ma_hocky' => $duLieu['ma_hocky'],
+        ]);
+
+        if(!empty($sinhVienIds)){
+            $duLieuThanhVien = [];
+            foreach($sinhVienIds as $idSV){
+                $duLieuThanhVien[] = [
+                    'id_thanhviennhom' => Str::uuid(),
+                    'ma_nhom' => $nhomMoi->id_nhom,
+                    'ma_sinhvien' => $idSV,
+                ];
+            }
+            
+            ThanhVienNhom::insert($duLieuThanhVien);
+        }
+
+
+        
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Tạo nhóm đồ án thành công.',
+            'id_nhom' => $nhomMoi->id_nhom,
         ]);
     }
 }

@@ -82,7 +82,7 @@ const DanhSachSinhVienPc = () => {
                         <tr>
                             <th className='cot-stt'>STT</th>
                             <th className='cot-tennhom'>Họ Tên</th>
-                            <th className="cot-detai">Đề Tài Đồ Án</th>
+                            <th className="cot-detai">Đề Tài</th>
                             <th className='cot-soluong'>Mã Sinh Viên</th>
                             <th className="cot-hocky">Học Kỳ</th>
                             <th className='cot-chucnang'>Chức Năng</th>

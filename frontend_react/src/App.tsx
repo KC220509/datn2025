@@ -31,6 +31,7 @@ import KhungGiangVien from './pages/GiangVien/khungTrangGiangVien';
 import QuanLySinhVien from './pages/GiangVien/quanLySinhVien';
 import DanhSachNhom from './pages/GiangVien/danhSachNhom';
 import DanhSachSinhVienPc from './pages/GiangVien/danhSachSinhVienPc';
+import KhungNhomChat from './pages/NhomChat/khungNhomChat';
 
 // Sinh viên
 import KhungTrangSinhVien from './pages/SinhVien/khungTrangSinhVien';
@@ -85,6 +86,11 @@ function App() {
                 <Route path='danh-sach' element={<DanhSachPhanCong />} />
               </Route>
           </Route>
+
+          {/* Chi tiết nhóm - Trang riêng không có khung chung */}
+          <Route path='nhom-chat/chi-tiet-nhom/:id_nhom' element={
+              <VaiTroNguoiDung trangcon={<KhungNhomChat />} vaitros={['GV']} />
+          } />
 
           {/* Sinh viên */}
           <Route path='/sinh-vien' element={

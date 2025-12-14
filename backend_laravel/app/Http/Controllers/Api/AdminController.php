@@ -47,10 +47,11 @@ class AdminController extends Controller
                     // Gửi email thông báo tài khoản và mật khẩu cho sinh viên
                     Mail::to($nguoiDung->email)->send(new ThongBaoCapTaiKhoan($nguoiDung, $matKhauGoc));
 
-                    $dsSinhVien[] = [
-                        'sinhvien' => $nguoiDung,
-                    ];
                 }
+                
+                $dsSinhVien[] = [
+                    'sinhvien' => $nguoiDung,
+                ];
             }
 
             DB::commit();
@@ -96,10 +97,13 @@ class AdminController extends Controller
                     // Gửi email thông báo tài khoản và mật khẩu cho sinh viên
                     Mail::to($nguoiDung->email)->send(new ThongBaoCapTaiKhoan($nguoiDung, $matKhauGoc));
 
-                    $dsGiangVien[] = [
-                        'giangvien' => $nguoiDung,
-                    ];
+                    // $dsGiangVien[] = [
+                    //     'giangvien' => $nguoiDung,
+                    // ];
                 }
+                $dsGiangVien[] = [
+                    'giangvien' => $nguoiDung,
+                ];
             }
 
             DB::commit();

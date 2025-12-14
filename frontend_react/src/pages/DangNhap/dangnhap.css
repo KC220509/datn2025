@@ -1,28 +1,31 @@
 
 .trang-dang-nhap{
     width: 100%;
-    height: 550px;
+    min-height: 550px;
+    height: auto;
     justify-content: space-between;
-    gap: 20px;
+    gap: clamp(15px, 2vw, 20px);
+    /* padding: clamp(10px, 2vw, 20px); */
+    box-sizing: border-box;
 }
 
 
 .trang-dang-nhap .trai{
-    /* min-width: 450px; */
-    flex: 1;
+    flex: 1 1 400px;
+    min-width: 400px;
     min-height: max-content;
     background-color: #ffffff;
 }
 .trang-dang-nhap .phai{
-    flex: 1;
-    /* min-width: 340px; */
+    flex: 1 1 350px;
+    min-width: 340px;
     min-height: max-content;
     background-color: #ffffff;
 }
 
 .trang-dang-nhap .giua{
-    flex: 1;
-    /* width: 100%; */
+    flex: 1 1 100%;
+    min-width: 280px;
     background-color: #ffffff;
 }
 
@@ -58,12 +61,12 @@
     gap: 15px;
     justify-content: center;
     padding: 20px 15px;
-    /* background-color: #68a7ff; */
 }
 
 
 .form-dang-nhap .khung-nhap{
-    width: 325px;
+    width: 100%;
+    max-width: 400px;
     margin: 0 auto;
     padding: 5px 12px;
     gap: 10px;
@@ -71,6 +74,7 @@
     border: 1px solid #0050c0;
     background-color: #ffffff;
     border-radius: 3px;
+    box-sizing: border-box;
 }
 
 
@@ -95,7 +99,8 @@
 }
 
 .form-dang-nhap .khung-nho-tai-khoan{
-    width: 325px;
+    width: min(325px, 90%);
+    max-width: 400px;
     margin: 5px auto 0;
     gap: 10px;
     align-items: center;
@@ -116,7 +121,8 @@
 }
 
 .form-dang-nhap .khung-chucnang{
-    width: 325px;
+    width: min(325px, 90%);
+    max-width: 400px;
     margin: 10px auto 0;
     padding: 5px 0;
     gap: 10px;
@@ -126,16 +132,17 @@
 
 .form-dang-nhap .khung-chucnang .nut-dang-nhap,
 .form-dang-nhap .khung-chucnang .nut-gui-email{
-    width:  250px;
-    padding: 12px 20px;
+    width: min(250px, 85%);
+    padding: clamp(10px, 2vw, 12px) 20px;
     text-align: center;
-    font-size: 18px;
+    font-size: clamp(16px, 3vw, 18px);
     font-weight: bold;
     color: #ffffff;
     background-color: #2294ff;
     border: 1px solid #ffffff;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .form-dang-nhap .khung-chucnang .nut-dang-nhap:hover{
@@ -203,17 +210,143 @@
 
 
 
-@media (max-width: 1080px) {
+/* Large tablets and small desktops */
+@media (max-width: 1200px) {
+    .trang-dang-nhap {
+        gap: 15px;
+    }
 
-    .trang-dang-nhap .phai{
-        display: none;
+    .trang-dang-nhap .trai,
+    .trang-dang-nhap .phai {
+        flex: 1 1 45%;
+        min-width: 280px;
     }
 }
 
+/* Tablets */
+@media (max-width: 992px) {
+    .trang-dang-nhap .phai {
+        display: none;
+    }
 
-@media (max-width: 750px) {
-    .trang-dang-nhap{
+    .trang-dang-nhap .trai {
+        flex: 1 1 100%;
+    }
+
+    .khung-noidung .tieude-khung {
+        font-size: clamp(16px, 4vw, 20px);
+        padding: 8px 15px 10px;
+    }
+}
+
+/* Mobile and small tablets */
+@media (max-width: 768px) {
+    .trang-dang-nhap {
         flex-direction: column;
+        min-height: auto;
         height: max-content;
+        gap: 15px;
+    }
+
+    .trang-dang-nhap .trai,
+    .trang-dang-nhap .giua {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .khung-noidung .noi-dung-trai,
+    .khung-noidung .noi-dung-phai {
+        gap: 20px;
+        padding: 15px 12px;
+    }
+
+    .form-dang-nhap .khung-nhap,
+    .form-dang-nhap .khung-nho-tai-khoan,
+    .form-dang-nhap .khung-chucnang {
+        width: 90%;
+        max-width: 100%;
+    }
+
+    .form-dang-nhap .khung-chucnang .nut-dang-nhap,
+    .form-dang-nhap .khung-chucnang .nut-gui-email {
+        width: 90%;
+    }
+}
+
+/* Small mobile screens */
+@media (max-width: 576px) {
+    .trang-dang-nhap {
+        gap: 10px;
+    }
+
+    .khung-noidung .tieude-khung {
+        font-size: 16px;
+        padding: 8px 10px;
+    }
+
+    .khung-noidung .noi-dung-trai,
+    .khung-noidung .noi-dung-phai {
+        gap: 15px;
+        padding: 15px 10px;
+    }
+
+    .form-dang-nhap {
+        padding: 15px 10px;
+        gap: 12px;
+    }
+
+    .form-dang-nhap .khung-nhap {
+        width: 95%;
+        padding: 5px 10px;
+    }
+
+    .form-dang-nhap .khung-nhap input {
+        font-size: 14px;
+        padding: 7px 0 5px;
+    }
+
+    .form-dang-nhap .khung-nhap label i {
+        font-size: 17px;
+    }
+
+    .form-dang-nhap .khung-nho-tai-khoan {
+        width: 95%;
+    }
+
+    .form-dang-nhap .khung-nho-tai-khoan label {
+        font-size: 14px;
+    }
+
+    .form-dang-nhap .khung-chucnang {
+        width: 95%;
+    }
+
+    .form-dang-nhap .khung-chucnang .nut-dang-nhap,
+    .form-dang-nhap .khung-chucnang .nut-gui-email {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 16px;
+    }
+
+    .form-dang-nhap .khung-chucnang .lienket-quenmk,
+    .form-dang-nhap .khung-chucnang .lienket-dangnhap {
+        font-size: 14px;
+    }
+
+    .form-dang-nhap .loi-dang-nhap,
+    .form-dang-nhap .loi-cap-matkhau,
+    .form-dang-nhap .thong-bao-cap-matkhau {
+        padding: 6px 8px 7px;
+        font-size: 13px;
+    }
+
+    .noi-dung-phai .lien-ket .lien-ket-anh {
+        width: 40px;
+        height: 40px;
+        margin-right: 8px;
+    }
+
+    .noi-dung-phai .lien-ket .lien-ket-ten {
+        font-size: 14px;
     }
 }

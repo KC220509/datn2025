@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('ho_ten');
             $table->string('so_dien_thoai', 20)->nullable(); 
             $table->string('dia_chi')->nullable(); 
-            $table->boolean('gioi_tinh')->default(true); // true: Nam, false: Nữ
+            $table->boolean('gioi_tinh')->default(true); 
             $table->boolean('trang_thai')->default(true);
             $table->timestamps(); 
         });
@@ -239,7 +239,7 @@ return new class extends Migration
         Schema::create('thanh_vien_nhom', function (Blueprint $table){
             $table->uuid(column: 'id_thanhviennhom')->primary(); 
             $table->uuid('ma_nhom');
-            $table->uuid('ma_sinhvien');
+            $table->uuid('ma_sinhvien');    
             $table->timestamps();
 
             $table->unique(['ma_nhom', 'ma_sinhvien']); 

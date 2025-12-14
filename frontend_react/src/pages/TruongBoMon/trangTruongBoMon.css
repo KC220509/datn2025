@@ -64,7 +64,7 @@
 
 .khung-ql-phancong .noidung-ql-phancong{
     flex: 1;
-    padding: 20px;
+    padding: 30px;
     background-color: #ffffff;
     box-shadow: 0 6px 18px rgba(18, 117, 255, 0.06);
     border-radius: 4px;
@@ -74,50 +74,58 @@
 
 /* Nội dung phân công */
 .noidung-ql-phancong .trang-phancong-gvsv {
-    gap: 30px;
+    gap: clamp(15px, 3vw, 30px);
+    /* padding: clamp(10px, 2vw, 20px); */
+    box-sizing: border-box;
 }
 
 .trang-phancong-gvsv .chon-loai-phancong {
     margin: auto;
     /* gap: 20px; */
     align-items: center;
-    background-color: #a3a19d;
+    background-color: #b3b0ab;
 
 }
 
 .trang-phancong-gvsv .chon-loai-phancong .chon{
-    width: 175px;
-    font-size: 13px;
-    padding: 7px 16px 8px;
+    min-width: 140px;
+    flex: 1;
+    max-width: 200px;
+    font-size: clamp(12px, 2.2vw, 14px);
+    padding: 7px 12px 8px;
     text-align: center;
     color: white;
     font-weight: 600;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .trang-phancong-gvsv .chon-loai-phancong .chon:hover {
-    background-color: #33ce2b;
+    background-color: #ca9e1a;
 }
 
 .trang-phancong-gvsv .chon-loai-phancong .phancong-ngaunhien,
 .trang-phancong-gvsv .chon-loai-phancong .phancong-thucong{
-    background-color: #28a745;
+    background-color: #ffc61d;
 }
 
 
 .trang-phancong-gvsv .khung-phancong-gvsv {
-    gap: 20px;
-
+    gap: clamp(12px, 2.5vw, 20px);
+    overflow-x: auto;
 }
 
 .khung-phancong-gvsv .khung-phancong-ngaunhien,
 .khung-phancong-gvsv .khung-phancong-thucong {
     width: 100%;
+    min-width: 0;
 }
 
 .khung-phancong-gvsv .khung-phancong-ngaunhien,
 .khung-phancong-gvsv .khung-phancong-thucong{
-    gap: 30px;
+    gap: clamp(15px, 3vw, 30px);
 }
 
 .khung-phancong-ngaunhien .khung-ds-nguoidung,
@@ -136,7 +144,7 @@
 
 .khung-ds-nguoidung .khung-ds .tieude-menu{
     padding: 8px 10px;
-    background-color: #707a72;
+    background-color: #7a7a7a;
     color: #ffffff;
     justify-content: space-between;
     align-items: center;
@@ -159,9 +167,9 @@
 }
 .khung-ds-nguoidung .khung-ds .ds-nguoidung tr th,
 .khung-ds-nguoidung .khung-ds .ds-nguoidung tr td{
-    padding: 8px 12px;
+    padding: clamp(6px, 1.5vw, 12px);
     border-bottom: 1px solid #eee;
-    font-size: 13px;
+    font-size: clamp(11px, 2.2vw, 13px);
 }
 
 .khung-ds-nguoidung .khung-ds .ds-nguoidung tr th{
@@ -223,29 +231,32 @@
 
 .khung-phancong-ngaunhien .khung-chucnang-phancong,
 .khung-phancong-thucong .khung-chucnang-phancong{
-    gap: 20px;
+    gap: clamp(12px, 2.5vw, 20px);
     align-items: flex-end;
+    flex-wrap: wrap;
 }
 
 .khung-phancong-ngaunhien .khung-chon-hocky,
 .khung-phancong-thucong .khung-chon-hocky{
-    gap: 10px;
+    gap: clamp(8px, 2vw, 10px);
     align-items: center;
-    font-size: 14px;
+    font-size: clamp(12px, 2.2vw, 14px);
+    /* flex: 1 1 auto; */
+    min-width: 200px;
 }
 .khung-chon-hocky label{
     color: #fb5d4e;
     cursor: pointer;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 13px;
+    font-size: clamp(11px, 2vw, 13px);
     white-space: nowrap;
 }
 .khung-chon-hocky .chon-hocky-phancong{
-    width: 80px;
+    min-width: 70px;
     text-align: center;
-    padding: 5px 10px;
-    font-size: 13px;
+    padding: 5px 8px;
+    font-size: clamp(11px, 2vw, 13px);
     outline: none;
     cursor: pointer;
     border: 1px solid #ccc;
@@ -286,43 +297,54 @@
 
 .danh-sach-phan-cong .khung-chucnang .khung-chon-hocky,
 .danh-sach-phan-cong .khung-chucnang .khung-timkiem{
-    gap: 10px;
+    gap: clamp(8px, 2vw, 10px);
     align-items: center;
-    font-size: 14px;
+    font-size: clamp(12px, 2.2vw, 14px);
+    /* flex: 1 1 auto; */
 }
 
 .danh-sach-phan-cong .khung-chucnang .khung-chon-hocky label,
 .danh-sach-phan-cong .khung-chucnang .khung-timkiem label{
     white-space: nowrap;
     font-weight: 600;
+    font-size: clamp(11px, 2vw, 13px);
 }
 
 .danh-sach-phan-cong .khung-chucnang .khung-chon-hocky select{
     padding: 6px 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
     outline: none;
     cursor: pointer;
+    font-size: clamp(11px, 2vw, 13px);
+    min-width: 120px;
 }
 
 .danh-sach-phan-cong .khung-chucnang .khung-timkiem input{
-    min-width: 250px;
+    min-width: 230px;
+    /* flex: 1 1 auto; */
+    max-width: 300px;
     padding: 6px 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
     outline: none;
+    font-size: clamp(11px, 2vw, 13px);
 }
+.danh-sach-phan-cong .khung-danhsach {
+    overflow-x: auto;
+    min-width: 0;
+}
+
 .danh-sach-phan-cong .khung-danhsach .bang-ds {
     width: 100%;
     border-collapse: collapse;
+    min-width: 700px;
 }
 .danh-sach-phan-cong .khung-danhsach .bang-ds tr{
-    font-size: 13px;
+    font-size: clamp(11px, 2.2vw, 13px);
 }
 
 .danh-sach-phan-cong .khung-danhsach .bang-ds tr th,
 .danh-sach-phan-cong .khung-danhsach .bang-ds tr td{
-    padding: 8px 12px;
+    padding: clamp(6px, 1.5vw, 12px);
     text-align: center;
     border: 1px solid #e0e0e0;
 }
@@ -351,7 +373,7 @@
 .danh-sach-phan-cong .khung-dieukhien .nut-xuat-excel{
     padding: 8px 12px;
     font-size: 12px;
-    background-color: #28a745;
+    background-color: #158aff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -361,6 +383,7 @@
 
 
 
+/* Large tablets and desktops */
 @media (max-width: 1200px) {
     .khung-ql-phancong {
         flex-direction: column;
@@ -369,6 +392,7 @@
     .khung-ql-phancong .menu-ql-phancong {
         width: 100%;
         min-width: unset;
+        display: flex;
         flex-direction: row;
     }
 
@@ -378,6 +402,7 @@
      }
 
     .khung-ql-phancong .menu-ql-phancong ul {
+        display: flex;
         flex-direction: row;
     }
 
@@ -391,11 +416,30 @@
         width: 100%;
         flex-direction: column;
     }
-
+    
+    .danh-sach-phan-cong .khung-chucnang {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
 }
 
+/* Tablets */
+@media (max-width: 992px) {
+    .khung-ds-nguoidung .khung-ds {
+        min-width: 0;
+    }
+    
+    .danh-sach-phan-cong .khung-danhsach .bang-ds {
+        min-width: 600px;
+    }
+}
 
+/* Tablets and mobile */
 @media (max-width: 768px) {
+    .trang-phancong-gvsv .chon-loai-phancong {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
    
     .khung-ql-phancong .menu-ql-phancong .tieude-menu{
         white-space: nowrap;
@@ -406,10 +450,26 @@
     .khung-ds-nguoidung {
         flex-direction: column;
     }
+    
+    .khung-phancong-ngaunhien .khung-chucnang-phancong,
+    .khung-phancong-thucong .khung-chucnang-phancong {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .danh-sach-phan-cong .khung-chucnang {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .danh-sach-phan-cong .khung-chucnang .khung-timkiem input {
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
-
-@media (max-width: 510px) {
+/* Small mobile screens */
+@media (max-width: 576px) {
     .khung-ql-phancong .menu-ql-phancong{
         flex-direction: column;
     }
@@ -422,5 +482,15 @@
         text-overflow: ellipsis;
         border-bottom: 2px solid #ffefef;
         border-right: none;
+    }
+    
+    .trang-phancong-gvsv .chon-loai-phancong .chon {
+        min-width: 120px;
+        max-width: 100%;
+    }
+    
+    .danh-sach-phan-cong .khung-danhsach .bang-ds {
+        min-width: 500px;
+        font-size: 11px;
     }
 }

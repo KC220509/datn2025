@@ -20,6 +20,9 @@
   flex-direction: row;
 }
 
+ul, ol {
+    padding-inline-start: 0;
+}
 
 @media (prefers-color-scheme: light) {
   :root {

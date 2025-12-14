@@ -30,4 +30,21 @@ class SinhVien extends Model
     {
         return $this->belongsTo(NguoiDung::class, 'id_sinhvien', 'id_nguoidung');
     }
+
+    public function phanCongs()
+    {
+        return $this->hasMany(PhanCong::class, 'ma_sinhvien', 'id_sinhvien');
+    }
+
+    public function nhomDoAns()
+    {
+        return $this->belongsToMany(
+            NhomDoAn::class, 
+            'thanh_vien_nhom', 
+            'ma_sinhvien', 
+            'ma_nhom', 
+            'id_sinhvien', 
+            'id_nhom'
+        );
+    }
 }

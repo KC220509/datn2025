@@ -1,7 +1,7 @@
 
 import './trangGiangVien.css';
 
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNguoiDung } from '../../hooks/useNguoiDung';
 
@@ -10,17 +10,19 @@ const KhungGiangVien: React.FC = () => {
     
     const { nguoiDung } = useNguoiDung();
     const chuyenhuong = useNavigate();
+    const duongdan = useLocation();
+    
     useEffect(() => {
         if(nguoiDung){
             if (nguoiDung.vai_tros.some(vt => vt.id_vaitro === 'TBM')) {
                 setKtraTBM(true);
             } else {
-                
-                chuyenhuong('/giang-vien', { replace: true });
+                if(duongdan.pathname === '/giang-vien/quan-ly-phan-cong'){
+                    chuyenhuong('/giang-vien');
+                }
             }
         }
-    }, [nguoiDung, chuyenhuong]);
-
+    }, [nguoiDung, chuyenhuong, duongdan]);
 
     return(
         <div className="khung-tranggiangvien flex-col">
