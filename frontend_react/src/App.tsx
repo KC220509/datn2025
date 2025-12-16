@@ -37,13 +37,13 @@ import KhungNhomChat from './pages/NhomChat/khungNhomChat';
 import KhungTrangSinhVien from './pages/SinhVien/khungTrangSinhVien';
 import SinhVien from './pages/SinhVien/sinhVien';
 import NhomDoAn from './pages/SinhVien/nhomDoAn';
+import NhomChat from './pages/NhomChat/nhomChat';
 
 
 
 function App() {
   return (
-   <Routes>
-      {/* ROUTE CHA CHUNG LAYOUT KHUNG */}
+    <Routes>
       <Route element={<Khung trangcon={<Outlet />} />}> 
 
           {/* Không yêu cầu xác thực */}
@@ -87,10 +87,6 @@ function App() {
               </Route>
           </Route>
 
-          {/* Chi tiết nhóm - Trang riêng không có khung chung */}
-          <Route path='nhom-chat/chi-tiet-nhom/:id_nhom' element={
-              <VaiTroNguoiDung trangcon={<KhungNhomChat />} vaitros={['GV']} />
-          } />
 
           {/* Sinh viên */}
           <Route path='/sinh-vien' element={
@@ -100,6 +96,15 @@ function App() {
               <Route path='ds-nhom-doan' element={<Outlet />} >
                 <Route index element={<NhomDoAn />} />
               </Route>
+          </Route>
+
+             {/* Chi tiết nhóm - Trang riêng không có khung chung */}
+          <Route path='nhom-chat/chi-tiet-nhom/:id_nhom' element={
+              <VaiTroNguoiDung trangcon={<KhungNhomChat />} vaitros={['GV']} />
+          } >
+            
+            <Route index element={<NhomChat />} />
+            
           </Route>
       </Route>
 

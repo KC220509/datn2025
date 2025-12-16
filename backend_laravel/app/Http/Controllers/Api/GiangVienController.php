@@ -67,6 +67,8 @@ class GiangVienController extends Controller
             'ten_nhom' => $duLieu['ten_nhom'],
             'ma_nguoitao' => $maNguoiTao,
             'ma_hocky' => $duLieu['ma_hocky'],
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         if(!empty($sinhVienIds)){
@@ -76,6 +78,8 @@ class GiangVienController extends Controller
                     'id_thanhviennhom' => Str::uuid(),
                     'ma_nhom' => $nhomMoi->id_nhom,
                     'ma_sinhvien' => $idSV,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
             }
             

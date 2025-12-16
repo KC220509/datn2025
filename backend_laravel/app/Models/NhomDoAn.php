@@ -8,7 +8,6 @@ class NhomDoAn extends Model
 {
     protected $table = 'nhom_do_an';
     protected $primaryKey = 'id_nhom';
-    public $timestamps = false;
     protected $keyType = 'string';
     public $incrementing = false;
 

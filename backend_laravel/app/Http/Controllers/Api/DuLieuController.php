@@ -8,6 +8,7 @@ use App\Http\Requests\ImportDanhSachSvRequest;
 use App\Imports\GiangViensImport;
 use App\Imports\SinhViensImport;
 use App\Models\HocKyDk;
+use App\Models\NhomDoAn;
 use App\Services\KhoaNganhLopService;
 use App\Services\NguoiDungService;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
@@ -306,7 +307,7 @@ class DuLieuController extends Controller
         ]);
     }
 
-     public function layDsSinhVienTheoNganh($maNganh)
+    public function layDsSinhVienTheoNganh($maNganh)
     {
         $dsSinhVien = $this->nguoiDungService->layDsSinhVienTheoNganh($maNganh);
 
@@ -323,4 +324,31 @@ class DuLieuController extends Controller
         ]);
     }
 
+
+    public function layChiTietNhom($id_nhom)
+    {
+        $nguoidung_id = Auth::id();
+
+        $nhom = NhomDoAn::where('id_nhom', $id_nhom)
+                        ->where(function($query) use ($nguoidung_id) {
+                            $query->where('ma_nguoitao', $nguoidung_id) 
+                                ->orWhereHas('sinhViens', function($q) use ($nguoidung_id) {
+                                    $q->where('id_sinhvien', $nguoidung_id);
+                                });
+                        })
+                        ->with(['nguoiTao.nguoiDung', 'sinhViens.nguoiDung'])
+                        ->first();
+
+        if (!$nhom) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Bạn không có quyền truy cập nhóm này hoặc nhóm không tồn tại.'
+            ], 403);
+        }
+
+        return response()->json([
+            'trangthai' => true,
+            'nhom' => $nhom,
+        ]);
+    }
 }

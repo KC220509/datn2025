@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\GiangVienController;
 use App\Http\Controllers\Api\SinhVienController;
 use App\Http\Controllers\Api\TaiKhoanController;
 use App\Http\Controllers\Api\TruongBoMonController;
+use App\Http\Controllers\FirebaseAuthController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -51,12 +52,17 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:TBM'])->prefix('tbm')->gr
     Route::get('/ds-phancong', [TruongBoMonController::class, 'layDsPhanCongTheoTBM'])->name('tbm_layDsPhanCongTheoTBM');
 
 });
+
+
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:GV'])->prefix('gv')->group(function () {
     Route::get('/ds-nhom', [GiangVienController::class, 'layDanhSachNhom'])->name('gv_layDsNhom');
     Route::get('/ds-sinhvien-pc', [GiangVienController::class, 'layDanhSachSinhVienPc'])->name('gv_layDsSinhVienPc');
    
     Route::post('/tao-nhom', [GiangVienController::class, 'taoNhomDoAn'])->name('gv_taoNhomDoAn');
 });
+
+
+
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:SV'])->prefix('sv')->group(function () {
     Route::get('/thong-tin-sv', [SinhVienController::class, 'layThongTinSV'])->name('sv_layThongTinSV');
     Route::get('/ds-giangvien-hd', [SinhVienController::class, 'layDanhSachGiangVienHd'])->name('sv_layDsGiangVienHd');
@@ -64,3 +70,8 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:SV'])->prefix('sv')->grou
 
 
 
+Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
+    Route::get('/chi-tiet/{idNhom}', [DuLieuController::class, 'layChiTietNhom'])->name('layChiTietNhom');
+});
+
+Route::post('/auth/firebase', [FirebaseAuthController::class, 'verifyToken']);
