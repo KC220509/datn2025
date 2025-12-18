@@ -224,12 +224,25 @@
     border-bottom: 1px solid #d0d0d0;
 }
 
-.tieude-phan {
-    margin: 0 0 10px 0;
+.phan-tieude{
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: space-between;
+    /* padding: 0 2px; */
+}
+
+.phan-tieude .tieude-phan {
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
     color: #34495e;
+}
+
+.phan-tieude i{
+    font-size: 16px;
+    color: #00d192;
+    cursor: pointer;
+    margin-right: 5px;
 }
 
 /* Thông tin item */
@@ -336,7 +349,17 @@
     margin: 0;
     font-size: 12px;
     color: #95a5a6;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+.item-thanh-vien .nut-xoa-thanhvien{
+    color: #e74c3c;
+    margin: auto;
+    cursor: pointer;
+}
+
 
 .sidebar-trai::-webkit-scrollbar,
 .khung-noi-dung-chat::-webkit-scrollbar,
@@ -726,4 +749,88 @@
     .avatar-thanh-vien {
         font-size: 20px;
     }
+}
+
+/* Modal thêm thành viên */
+.lop-phu-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.khung-modal-them-tv {
+    background-color: white;
+    width: 600px;
+    max-width: 90%;
+    max-height: 80vh;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.khung-modal-them-tv h4 {
+    margin-top: 0;
+    color: #2b84ff;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.ds-sinhvien-modal {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+}
+
+.bang-ds-sv-modal {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bang-ds-sv-modal th, .bang-ds-sv-modal td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 13px;
+}
+
+.bang-ds-sv-modal th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.khung-nut-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.nut-modal {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.nut-modal.huy {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.nut-modal.them {
+    background-color: #2ecc71;
+    color: white;
 }

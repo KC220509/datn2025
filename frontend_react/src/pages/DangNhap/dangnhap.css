@@ -55,6 +55,79 @@
     align-content: flex-start;
 }
 
+.khung-thong-bao .noi-dung-trai{
+    gap: 20px;
+}
+
+.khung-noidung .noi-dung-trai .khung-thong-bao{
+    gap: 10px;
+    font-size: 14px;
+}
+
+.noi-dung-trai .khung-thong-bao .thoigian-thongbao{
+    width: 60px;
+    min-width: 60px;
+    align-items: center;
+    font-size: 14px;
+    color: #1570f0;
+    font-weight: bold;
+    background-color: #1570f0;
+    border: 1px solid #1570f0;
+}
+
+.khung-thong-bao .thoigian-thongbao .ngay-tao,
+.khung-thong-bao .thoigian-thongbao .nam-tao{
+    flex: 1;
+    width: 100%;
+    text-align: center;
+    line-height: 2;
+}
+.khung-thong-bao .thoigian-thongbao .ngay-tao{
+    
+    font-size: 15px;
+    color: #ffffff;
+}
+
+.khung-thong-bao .thoigian-thongbao .nam-tao{
+    background-color: #ffffff;
+}
+
+
+.noi-dung-trai .khung-thong-bao .noidung-thongbao{
+    flex: 1;
+    gap: 8px;
+}
+
+.khung-thong-bao .noidung-thongbao .tieude-thongbao{
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 600;
+    color: #002e6f;
+    cursor: pointer;
+}
+
+.khung-thong-bao .noidung-thongbao .tieude-thongbao:hover{
+    text-decoration: underline;
+}
+
+.khung-thong-bao .noidung-thongbao .mota-thongbao{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    color: #2a313f;
+    text-align: justify;
+
+}
+
+
+
 .khung-noidung .form-dang-nhap{
     min-height: max-content;
     margin: auto;

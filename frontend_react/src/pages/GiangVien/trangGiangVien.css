@@ -206,7 +206,6 @@
 .khung-ql-nhom-doan .noidung-ql-nhom-doan{
     flex: 1;
     min-width: 0;
-    /* padding: clamp(15px, 3vw, 20px); */
     background-color: #ffffff;
     box-shadow: 0 6px 18px rgba(18, 117, 255, 0.06);
     overflow: hidden;

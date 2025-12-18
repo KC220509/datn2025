@@ -47,11 +47,7 @@ interface NhomDoAn{
     sinh_viens: SinhVien[];
 }
 
-// interface ThanhVienNhom{
-//     id_thanhviennhom: string;
-//     nhom_do_an: NhomDoAn;
-//     sinh_vien: SinhVien;
-// }
+
 
 
 const DanhSachNhom = () => {
@@ -146,7 +142,7 @@ const DanhSachNhom = () => {
         });
     };
 
-     const lamMoiKhungTao = () => {
+    const lamMoiKhungTao = () => {
         setHienThiFormTaoNhom(false);
         setTenNhomMoi('');
         setIdHocKyDuocChon(null);
@@ -201,7 +197,24 @@ const DanhSachNhom = () => {
     const tongSoTrang = Math.ceil(danhSachSvPcDaLoc.length / phanTuMoiTrang); 
 
 
-   
+    const xuLyXoaNhom = (id_nhom: string) => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa nhóm này?')) {
+            ketNoiAxios.delete(`/gv/xoa-nhom/${id_nhom}`)
+                .then(phanhoi => {
+                    if (phanhoi.data.trangthai) {
+                        alert(phanhoi.data.thongbao);
+                        layDsNhom();
+                    } else {
+                        alert(`Xóa nhóm thất bại: ${phanhoi.data.thongbao || 'Lỗi không xác định'}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi khi xóa nhóm:', error);
+                    alert('Đã xảy ra lỗi khi xóa nhóm. Vui lòng thử lại.');
+                });
+        }
+    };
+
 
     return (
         
@@ -343,12 +356,17 @@ const DanhSachNhom = () => {
                                     <td className='cot-soluong'>{nhom.sinh_viens.length}</td>
                                     <td className='cot-hocky'>{nhom.hoc_ky.ten_hoc_ky}</td>
                                     <td className='cot-chucnang chuc-nang-nhom flex-row'>
-                                        <span 
-                                            className="nut-chuc-nang xem-nhom" 
+                                        <span className="nut-chuc-nang xem-nhom" 
                                             onClick={() => navigate(`/nhom-chat/chi-tiet-nhom/${nhom.id_nhom}`)}
                                             style={{ cursor: 'pointer' }}
                                         >
-                                            Chi tiết nhóm
+                                            Xem
+                                        </span>
+                                        <span className="nut-chuc-nang sua-nhom">Sửa</span>
+                                        <span className="nut-chuc-nang xoa-nhom"
+                                            onClick={() => xuLyXoaNhom(nhom.id_nhom)}
+                                        >
+                                            Xóa
                                         </span>
                                     </td>
                                 </tr>

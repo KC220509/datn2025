@@ -24,8 +24,8 @@ const KhungTrangDaoTao: React.FC = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/dao-tao/ql-baidang" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
-                                    Quản Lý Bài Đăng
+                                <NavLink to="/dao-tao/ql-thongbao" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
+                                    Quản Lý Thông Báo
                                 </NavLink>
                             </li>
                         </ul>

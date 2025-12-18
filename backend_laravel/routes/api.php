@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('dang-nhap', [TaiKhoanController::class, 'dangNhap'])->name('dangNhap');
+
 Route::post('/cap-lai-mat-khau', [TaiKhoanController::class, 'capLaiMatKhau']);
 Route::middleware('auth:sanctum')->get('/nguoi-dung', [TaiKhoanController::class, 'layNguoiDung']);
 
@@ -59,6 +60,9 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:GV'])->prefix('gv')->grou
     Route::get('/ds-sinhvien-pc', [GiangVienController::class, 'layDanhSachSinhVienPc'])->name('gv_layDsSinhVienPc');
    
     Route::post('/tao-nhom', [GiangVienController::class, 'taoNhomDoAn'])->name('gv_taoNhomDoAn');
+    Route::post('/nhom/them-thanh-vien/{idNhom}', [GiangVienController::class, 'themSinhVienVaoNhom'])->name('gv_themSinhVienVaoNhom');
+    Route::delete('/nhom/xoa-thanh-vien/{id_nhom}/{id_sinhvien}', [GiangVienController::class, 'xoaThanhVienKhoiNhom'])->name('gv_xoaThanhVienKhoiNhom');
+    Route::delete('/xoa-nhom/{id_nhom}', [GiangVienController::class, 'xoaNhomDoAn'])->name('gv_xoaNhomDoAn');
 });
 
 

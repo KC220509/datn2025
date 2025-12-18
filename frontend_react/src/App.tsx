@@ -38,6 +38,9 @@ import KhungTrangSinhVien from './pages/SinhVien/khungTrangSinhVien';
 import SinhVien from './pages/SinhVien/sinhVien';
 import NhomDoAn from './pages/SinhVien/nhomDoAn';
 import NhomChat from './pages/NhomChat/nhomChat';
+import QuanLyThongBao from './pages/PhongDaoTao/qlThongBao';
+import DanhSachThongBao from './pages/PhongDaoTao/danhSachThongBao';
+import DangThongBao from './pages/PhongDaoTao/dangThongBao';
 
 
 
@@ -69,6 +72,11 @@ function App() {
               <Route index element={<PhongDaoTao />} />
               <Route path='ql-sinhvien' element={<QlSinhVien />} />
               <Route path='ql-giangvien' element={<QlGiangVien />} />
+              <Route path='ql-thongbao' element={<QuanLyThongBao />} 
+              >
+                <Route index element={<DanhSachThongBao />} />
+                <Route path='dang-bai' element={<DangThongBao />} />
+              </Route>
           </Route>
           
           {/* Giảng viên */}

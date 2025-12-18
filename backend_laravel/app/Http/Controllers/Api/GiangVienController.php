@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaoNhomRequest;
+use App\Http\Requests\ThemSinhVienNhomRequest;
 use App\Models\NhomDoAn;
 use App\Models\PhanCong;
 use App\Models\ThanhVienNhom;
@@ -92,6 +93,80 @@ class GiangVienController extends Controller
             'trangthai' => true,
             'thongbao' => 'Tạo nhóm đồ án thành công.',
             'id_nhom' => $nhomMoi->id_nhom,
+        ]);
+    }
+
+    public function themSinhVienVaoNhom(ThemSinhVienNhomRequest $request, $id_nhom){
+        $nhom = NhomDoAn::find($id_nhom);
+        if(!$nhom){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Nhóm đồ án không tồn tại.'
+            ], 404);
+        }
+
+        $sinhVienIds = $request->input('sinh_vien_ids', []);
+        if(empty($sinhVienIds)){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Danh sách sinh viên rỗng.'
+            ], 400);
+        }
+
+        $duLieuThanhVien = [];
+        foreach($sinhVienIds as $idSV){
+            $duLieuThanhVien[] = [
+                'id_thanhviennhom' => Str::uuid(),
+                'ma_nhom' => $id_nhom,
+                'ma_sinhvien' => $idSV,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+        
+        ThanhVienNhom::insert($duLieuThanhVien);
+
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Thêm sinh viên vào nhóm đồ án thành công.'
+        ]);
+    }
+
+    public function xoaNhomDoAn($id_nhom){
+        $nhom = NhomDoAn::find($id_nhom);
+        if(!$nhom){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Nhóm đồ án không tồn tại.'
+            ], 404);
+        }
+
+        ThanhVienNhom::where('ma_nhom', $id_nhom)->delete();
+
+        // Xóa nhóm đồ án
+        $nhom->delete();
+
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Xóa nhóm đồ án thành công.'
+        ]);
+    }
+
+    public function xoaThanhVienKhoiNhom($id_nhom, $id_sinhvien){
+        $thanhVien = ThanhVienNhom::where('ma_nhom', $id_nhom)
+            ->where('ma_sinhvien', $id_sinhvien)
+            ->first();
+            
+        if(!$thanhVien){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Thành viên không tồn tại trong nhóm.'
+            ], 404);
+        }
+        $thanhVien->delete();
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Xóa thành viên khỏi nhóm thành công.'
         ]);
     }
 }

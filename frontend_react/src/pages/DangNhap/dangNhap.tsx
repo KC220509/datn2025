@@ -8,6 +8,16 @@ import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
 
 const DangNhap: React.FC = () => {
+
+  const DANH_SACH_LIEN_KET = [
+    { ten: "Bộ Giáo dục và Đào tạo", link: "http://moet.gov.vn/", anh: "v1761665186/bo_gd_dt.png" },
+    { ten: "Trường Đại học Bách Khoa - ĐHĐN", link: "https://dut.udn.vn/", anh: "v1761665369/logo-dh-bk_yjbwal.png" },
+    { ten: "Trường Đại học Kinh tế - ĐHĐN", link: "http://due.udn.vn/", anh: "v1761665551/logo-dh-kt_c29xsr.png" },
+    { ten: "Trường Đại học Sư phạm - ĐHĐN", link: "http://ued.udn.vn/", anh: "v1761665554/logo-dh-sp_fdbeon.png" },
+    { ten: "Trường Đại học Ngoại ngữ - ĐHĐN", link: "http://ufl.udn.vn/", anh: "v1761665552/logo-dh-nn_bpim2c.png" },
+  ];
+
+
   const [xemMatKhau, setXemMatKhau] = useState(false);
   const toggleXemMatKhau = () => {
     setXemMatKhau(!xemMatKhau);
@@ -23,19 +33,11 @@ const DangNhap: React.FC = () => {
   const [loi, setLoi] = useState("");
 
   const chuyenHuongMacDinh = (vaiTros: string[]): string => {
-      if (vaiTros.includes('AD')) {
-        return '/quan-tri';
-    }
-    if (vaiTros.includes('PDT')) {
-        return '/dao-tao';
-    }
-    if (vaiTros.includes('SV')) {
-        return '/sinh-vien';
-    }
-    if (vaiTros.includes('GV')) {
-        return '/giang-vien';
-    }
-      return '/trang-chu'; 
+    if (vaiTros.includes('AD')) return '/quan-tri';
+    if (vaiTros.includes('PDT')) return '/dao-tao';
+    if (vaiTros.includes('SV')) return '/sinh-vien';
+    if (vaiTros.includes('GV')) return '/giang-vien';
+    return '/trang-chu';
   };
 
   const { nguoiDung, dangTai, dangNhap } = useNguoiDung();
@@ -117,13 +119,23 @@ const DangNhap: React.FC = () => {
           <p className="tieude-khung">Thông tin - Thông báo</p>
           <div className="noi-dung-trai flex-col">
             <div className="khung-thong-bao flex-row">
-              <div className="thgian-thongbao flex-col">
+              <div className="thoigian-thongbao flex-col">
                 <p className="ngay-tao">12/12</p>
-                <p className="thoigian-tao">70:20</p>
+                <p className="nam-tao">2025</p>
               </div>
               <div className="noidung-thongbao flex-col">
                 <p className="tieude-thongbao">Thông báo lịch nghỉ Tết Dương Lịch 2024</p>
-                <p className="mota-thongbao">Căn cứ theo quy định của nhà nước về việc nghỉ lễ, Tết năm 2024, Trường Đại học ...</p>
+                <p className="mota-thongbao">Căn cứ theo quy định của nhà nước về việc ng Căn cứ theo quy định của nhà nước về việc ngCăn cứ theo quy định của nhà nước về việc nghỉ lễ, Tết năm 2024, Trường Đại học ...</p>
+              </div>
+            </div>
+            <div className="khung-thong-bao flex-row">
+              <div className="thoigian-thongbao flex-col">
+                <p className="ngay-tao">12/12</p>
+                <p className="nam-tao">2025</p>
+              </div>
+              <div className="noidung-thongbao flex-col">
+                <p className="tieude-thongbao">Thông báo lịch nghỉ Tết Dương Lịch 2024</p>
+                <p className="mota-thongbao">Căn cứ theo quy định của nhà nước về việc ng Căn cứ theo quy định của nhà nước về việc ngCăn cứ theo quy định của nhà nước về việc nghỉ lễ, Tết năm 2024, Trường Đại học ...</p>
               </div>
             </div>
           </div>
@@ -206,26 +218,12 @@ const DangNhap: React.FC = () => {
         <div className="khung-noidung phai flex-col">
           <p className="tieude-khung">Liên Kết</p>
           <div className="noi-dung-phai flex-col">
-            <div className="lien-ket flex-row">
-              <img className="lien-ket-anh" src="https://res.cloudinary.com/dpkysexsr/image/upload/v1761665186/bo_gd_dt.png" alt="Bộ Giáo dục và Đào tạo" />
-              <a className="lien-ket-ten" href="http://moet.gov.vn/">Bộ Giáo dục và Đào tạo</a>
-            </div>
-            <div className="lien-ket flex-row">
-              <img className="lien-ket-anh" src="https://res.cloudinary.com/dpkysexsr/image/upload/v1761665369/logo-dh-bk_yjbwal.png" alt="Trường Đại học Bách Khoa" />
-              <a className="lien-ket-ten" href="https://dut.udn.vn/">Trường Đại học Bách Khoa - Đại học Đà Nẵng</a>
-            </div>
-            <div className="lien-ket flex-row">
-              <img className="lien-ket-anh" src="https://res.cloudinary.com/dpkysexsr/image/upload/v1761665551/logo-dh-kt_c29xsr.png" alt="Trường Đại học Kinh tế" />
-              <a className="lien-ket-ten" href="http://moet.gov.vn/">Trường Đại học Kinh tế - Đại học Đà Nẵng</a>
-            </div>
-            <div className="lien-ket flex-row">
-              <img className="lien-ket-anh" src="https://res.cloudinary.com/dpkysexsr/image/upload/v1761665554/logo-dh-sp_fdbeon.png" alt="Trường Đại học Sư phạm" />
-              <a className="lien-ket-ten" href="http://moet.gov.vn/">Trường Đại học Sư phạm - Đại học Đà Nẵng</a>
-            </div>
-            <div className="lien-ket flex-row">
-              <img className="lien-ket-anh" src="https://res.cloudinary.com/dpkysexsr/image/upload/v1761665552/logo-dh-nn_bpim2c.png" alt="Trường Đại học Ngoại ngữ" />
-              <a className="lien-ket-ten" href="http://moet.gov.vn/">Trường Đại học Ngoại ngữ - Đại học Đà Nẵng</a>
-            </div>
+            {DANH_SACH_LIEN_KET.map((lk, index) => (
+              <div key={index} className="lien-ket flex-row">
+                <img className="lien-ket-anh" src={`https://res.cloudinary.com/dpkysexsr/image/upload/${lk.anh}`} alt={lk.ten} />
+                <a className="lien-ket-ten" href={lk.link} target="_blank" rel="noreferrer">{lk.ten}</a>
+              </div>
+            ))}
           </div>
         </div>
     </div>

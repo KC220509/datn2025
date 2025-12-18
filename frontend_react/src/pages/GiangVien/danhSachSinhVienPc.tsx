@@ -73,7 +73,6 @@ const DanhSachSinhVienPc = () => {
                     <label htmlFor="timKiemSv">Tìm kiếm</label>
                     <input type="text" id="timKiemSv" placeholder="Nhập từ khóa muốn tìm..." />
                 </div>
-                {/* <span className="nut-tao-nhom">Thêm Nhóm Mới</span> */}
             </div>
 
             <div className="danhsach-nhom-doan">
