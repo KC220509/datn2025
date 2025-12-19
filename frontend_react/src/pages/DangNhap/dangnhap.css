@@ -48,15 +48,18 @@
     white-space: nowrap;
 }
 
-.khung-noidung .noi-dung-trai,
 .khung-noidung .noi-dung-phai{
     gap: 25px;
     padding: 20px 15px 20px 12px;
-    align-content: flex-start;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
-.khung-thong-bao .noi-dung-trai{
+.khung-noidung .noi-dung-trai{
+    padding: 20px 15px 20px 12px;
+    max-height: 500px;
     gap: 20px;
+    overflow-y: auto;
 }
 
 .khung-noidung .noi-dung-trai .khung-thong-bao{

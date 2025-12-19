@@ -90,4 +90,8 @@ class NguoiDung extends Authenticatable
     }
 
 
+    public function baiDangs(): HasMany
+    {
+        return $this->hasMany(BaiDang::class, 'ma_phongdaotao', 'id_nguoidung');
+    }
 }

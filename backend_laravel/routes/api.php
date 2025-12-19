@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\DaoTaoController;
 use App\Http\Controllers\Api\DuLieuController;
 use App\Http\Controllers\Api\GiangVienController;
 use App\Http\Controllers\Api\SinhVienController;
@@ -36,10 +37,14 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:AD'])->prefix('admin')->g
 //PDT
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:PDT'])->prefix('pdt')->group(function () {
     Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('pdt_dsHocKy');
-    Route::post('/dssv-tailen', [DuLieuController::class, 'importDsSinhVien'])->name('pdt_importDsSinhVien');
+    Route::post('/dssv-tailen', [DaoTaoController::class, 'importDsSinhVien'])->name('pdt_importDsSinhVien');
     Route::get('/ds-sinhvien', [DuLieuController::class, 'dsSinhVien'])->name('pdt_dsSinhVien');
-    Route::post('/dsgv-tailen', [DuLieuController::class, 'importDsGiangVien'])->name('pdt_importDsGiangVien'); 
+    Route::post('/dsgv-tailen', [DaoTaoController::class, 'importDsGiangVien'])->name('pdt_importDsGiangVien'); 
     Route::get('/ds-giangvien', [DuLieuController::class, 'dsGiangVien'])->name('pdt_dsGiangVien');
+
+    Route::post('/dang-bai', [DaoTaoController::class, 'dangBai'])->name('pdt_dangBai');
+    Route::delete('/xoa-bai/{id_baidang}', [DaoTaoController::class, 'xoaBaiDang'])->name('pdt_xoaBai');
+    Route::post('/sua-bai/{id_baidang}', [DaoTaoController::class, 'capNhatBaiDang'])->name('pdt_suaBai');
 });
 
 
@@ -79,3 +84,6 @@ Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
 });
 
 Route::post('/auth/firebase', [FirebaseAuthController::class, 'verifyToken']);
+
+Route::get('/ds-thongbao', [DuLieuController::class, 'layDsThongBao'])->name('layDsThongBao');
+Route::get('/ds-thongbao/chi-tiet/{id_baidang}', [DuLieuController::class, 'layChiTietThongBao'])->name('layChiTietThongBao');

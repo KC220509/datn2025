@@ -5,9 +5,38 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useNguoiDung } from "../../hooks/useNguoiDung";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
-
+interface BaiDang{
+    id_baidang: string;
+    tieu_de: string;
+    noi_dung: string;
+    duong_dan_tep: string;
+    created_at: Date;
+    updated_at: Date;
+}
 
 const DangNhap: React.FC = () => {
+
+  const [dsThongBao, setDsThongBao] = useState<BaiDang[]>([]);
+
+  useEffect(() => {
+    const layDsThongBao = async () => {
+        try{
+            const phanhoi = await ketNoiAxios.get('ds-thongbao');
+            if(phanhoi.data.trangthai){
+                setDsThongBao(phanhoi.data.ds_thongbao);
+            }
+        }
+        catch(error){
+            console.log('Lỗi kết nối API lấy danh sách thông báo: ' + error);
+        }
+    };
+
+    layDsThongBao();
+  }, []);
+
+  const xuLyXemThongBao = (id_baidang: BaiDang) => {
+    console.log("Xem chi tiết thông báo:", id_baidang); 
+  }
 
   const DANH_SACH_LIEN_KET = [
     { ten: "Bộ Giáo dục và Đào tạo", link: "http://moet.gov.vn/", anh: "v1761665186/bo_gd_dt.png" },
@@ -113,35 +142,33 @@ const DangNhap: React.FC = () => {
   }
 
 
+
+
   return (
     <div className="trang-dang-nhap flex-row">
         <div className="khung-noidung trai flex-col">
           <p className="tieude-khung">Thông tin - Thông báo</p>
           <div className="noi-dung-trai flex-col">
-            <div className="khung-thong-bao flex-row">
-              <div className="thoigian-thongbao flex-col">
-                <p className="ngay-tao">12/12</p>
-                <p className="nam-tao">2025</p>
-              </div>
-              <div className="noidung-thongbao flex-col">
-                <p className="tieude-thongbao">Thông báo lịch nghỉ Tết Dương Lịch 2024</p>
-                <p className="mota-thongbao">Căn cứ theo quy định của nhà nước về việc ng Căn cứ theo quy định của nhà nước về việc ngCăn cứ theo quy định của nhà nước về việc nghỉ lễ, Tết năm 2024, Trường Đại học ...</p>
-              </div>
-            </div>
-            <div className="khung-thong-bao flex-row">
-              <div className="thoigian-thongbao flex-col">
-                <p className="ngay-tao">12/12</p>
-                <p className="nam-tao">2025</p>
-              </div>
-              <div className="noidung-thongbao flex-col">
-                <p className="tieude-thongbao">Thông báo lịch nghỉ Tết Dương Lịch 2024</p>
-                <p className="mota-thongbao">Căn cứ theo quy định của nhà nước về việc ng Căn cứ theo quy định của nhà nước về việc ngCăn cứ theo quy định của nhà nước về việc nghỉ lễ, Tết năm 2024, Trường Đại học ...</p>
-              </div>
-            </div>
+            {dsThongBao.length > 0 ? (
+              dsThongBao.map((tb) => (
+                <div className="khung-thong-bao flex-row" key={tb.id_baidang}>
+                  <div className="thoigian-thongbao flex-col">
+                    <p className="ngay-tao">{new Date(tb.created_at).getDate()}/{new Date(tb.created_at).getMonth() + 1}</p>
+                    <p className="nam-tao">{new Date(tb.created_at).getFullYear()}</p>
+                  </div>
+                  <div className="noidung-thongbao flex-col">
+                    <p className="tieude-thongbao">{tb.tieu_de}</p>
+                    <p className="mota-thongbao">{tb.noi_dung}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{textAlign: "center"}}>Không có thông báo nào.</p>
+            )}
           </div>
         </div>
-        <div className="khung-noidung giua flex-col">
 
+        <div className="khung-noidung giua flex-col">
           {!moKhungLayMatKhau ? (
             <>
               <p className="tieude-khung">Đăng nhập hệ thống</p>
