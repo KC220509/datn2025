@@ -106,6 +106,7 @@ const QlSinhVien = () => {
   const [tep, setTep] = useState<File | null>(null);
 
   const [trangThaiChon, setTrangThaiChon] = useState(false);
+  const [dangTai, setDangTai] = useState(false);
   const [thongBaoThanhCong, setThongBaoThanhCong] = useState('');
   const [thongBaoThatBai, setThongBaoThatBai] = useState('');
 
@@ -168,6 +169,9 @@ const QlSinhVien = () => {
 
   const taiDanhSachSinhVien = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setDangTai(true);
+
     const formData = new FormData();
     formData.append('id_hocky', id_hocky);
     if (tep) {
@@ -202,6 +206,8 @@ const QlSinhVien = () => {
       setTimeout(() => {
         setThongBaoThatBai('');
       }, 3000);
+    }finally{
+      setDangTai(false);
     }
   }
 
@@ -273,9 +279,9 @@ const QlSinhVien = () => {
                       
                       
                       <div className="nut-hanhdong-khungtai flex-row">
-                          <button type="submit" className={`nut-xacnhan-tai  ${trangThaiChon ? '' : 'disabled'}`} disabled={!trangThaiChon}>
+                          <button type="submit" className={`nut-xacnhan-tai  ${trangThaiChon ? '' : 'disabled'}`} disabled={dangTai}>
                             <i className="bi bi-upload"></i>
-                            Tải lên
+                            {dangTai ? 'Đang tải...' : 'Tải lên'}
                           </button>
                       </div>
                       {thongBaoThanhCong && <p className="thongbao-thanhcong-taifile">{thongBaoThanhCong}</p>}

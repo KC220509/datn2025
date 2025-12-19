@@ -253,6 +253,10 @@
     background-color: #a5baa5;
     cursor: not-allowed;
 }
+.noidung-khungtai .nut-hanhdong-khungtai .nut-xacnhan-tai:disabled{
+    background-color: #a5baa5;
+    cursor: not-allowed;
+}
 
 .noidung-khungtai .thongbao-thanhcong-taifile{
     color: #ffffff;

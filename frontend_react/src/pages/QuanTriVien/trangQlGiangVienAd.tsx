@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
 
@@ -140,7 +141,8 @@ const TrangQlGiangVienAd = () => {
     const xyLyChuyenTrangLoc = (soTrangLoc: number) => {
         setTrangHienTaiLoc(soTrangLoc);
     };
-     const phanTrangDaLoc = () => {
+
+    const phanTrangDaLoc = () => {
         const trangSos = [];
         for (let i = 1; i <= tongSoTrangDaLoc; i++) {
           trangSos.push(i);
@@ -157,6 +159,7 @@ const TrangQlGiangVienAd = () => {
             </button>
         ));
     };
+
     useEffect(() => {
         if(id_hocky){
             setTrangThaiLoc(true);
@@ -174,6 +177,7 @@ const TrangQlGiangVienAd = () => {
         e.preventDefault();
         
         // Xử lý tạo tài khoản giảng viên ở đây
+        setDangTai(true);
         try {
             const  dataTaoTk = await ketNoiAxios.post('/admin/tao-ds-taikhoan-gv', {
                 id_hocky: id_hocky,
@@ -202,6 +206,77 @@ const TrangQlGiangVienAd = () => {
             setDangTai(false);
         }
     }
+
+    const xuLyXoaTkGiangVien = async (id_giangvien: string) => {
+
+        if(!window.confirm('Bạn có chắc chắn muốn xóa tài khoản giảng viên này không?')){
+            return;
+        }
+        try{
+            const phanhoi = await ketNoiAxios.delete(`/admin/xoa-taikhoan-gv/${id_giangvien}`);
+
+            if (!phanhoi.data.trangthai){
+                alert('Xóa tài khoản giảng viên không thành công');
+                return;
+            }else{
+                alert(phanhoi.data.thongbao);
+                layDsTkGiangVien();
+
+            }
+
+        } catch (error) {
+            console.error('Lỗi khi xóa tài khoản giảng viên:', error);
+        }
+    }
+
+    // Xử lý khóa tài khoản
+    const xuLyKhoaTkGiangVien = async (id_nguoidung: string) => {
+
+        if(!window.confirm('Bạn có chắc chắn muốn khóa tài khoản giảng viên này không?')){
+            return;
+        }
+        try{
+            const phanhoi = await ketNoiAxios.put(`/admin/khoa-taikhoan/${id_nguoidung}`);
+            if (!phanhoi.data.trangthai){
+                alert('Khóa tài khoản giảng viên không thành công');
+                return;
+            }else{
+                alert(phanhoi.data.thongbao);
+                layDsTkGiangVien();
+            }
+
+        }
+        catch (error) {
+            console.error('Lỗi khi khóa tài khoản giảng viên:', error);
+        }
+    }
+
+    
+    //Xử lý mở khóa tài khoản
+    const xuLyMoKhoaTkGiangVien = async (id_nguoidung: string) => {
+
+        if(!window.confirm('Bạn muốn mở khóa tài khoản cho giảng viên này không?')){
+            return;
+        }
+        try{
+            const phanhoi = await ketNoiAxios.put(`/admin/mo-khoa-taikhoan/${id_nguoidung}`);
+            if (!phanhoi.data.trangthai){
+                alert('Mở khóa tài khoản sinh viên không thành công');
+                return;
+            }else{
+                alert(phanhoi.data.thongbao);
+                layDsTkGiangVien();
+            }
+
+        }
+        catch (error) {
+            if (axios.isAxiosError(error)) {
+                alert(error.response?.data?.thongbao || "Lỗi hệ thống");
+            }
+            console.error('Lỗi khi mở khóa tài khoản giảng viên:', error);
+        }
+    }
+
 
 
     return (
@@ -255,9 +330,17 @@ const TrangQlGiangVienAd = () => {
                                         <td className="col-nganh">{gv.nganh.ky_hieu}</td>
                                         <td className="col-chucnang">
                                             <div className="khung-chucnang">
-                                                <button className="nut-chucnang khoa-tk"><i className="bi bi-person-lock"></i></button>
+                                                {gv.nguoi_dung.trang_thai ? (
+                                                    <button onClick={() => xuLyKhoaTkGiangVien(gv.id_giangvien)} className="nut-chucnang khoa-tk">
+                                                        <i className="bi bi-person-lock"></i>
+                                                    </button>
+                                                ) : (
+                                                    <button onClick={() => xuLyMoKhoaTkGiangVien(gv.id_giangvien)} className="nut-chucnang mo-khoa-tk">
+                                                        <i className="bi bi-person-slash"></i>
+                                                    </button>
+                                                )}
                                                 <button className="nut-chucnang sua"><i className="bi bi-pencil-square"></i></button>
-                                                <button className="nut-chucnang xoa"><i className="bi bi-x-square"></i></button>
+                                                <button onClick={() => xuLyXoaTkGiangVien(gv.id_giangvien)} className="nut-chucnang xoa"><i className="bi bi-x-square"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -290,8 +373,8 @@ const TrangQlGiangVienAd = () => {
                     ) : null}
                 </div>
                 {moKhungTaoTk &&
-                    <div className="mokhung-tao-tksinhvien">
-                        <form onSubmit={submitTaoTkGiangVien} method="post" className="khung-tao-tksinhvien flex-col">
+                    <div className="mokhung-tao-tk">
+                        <form onSubmit={submitTaoTkGiangVien} method="post" className="khung-tao-tk flex-col">
                             <h2 className="tieude-khungtao">Tạo tài khoản giảng viên</h2>
                             {thongBao && (
                                 <div className={`thongbao ${thongBao.type === 'success' ? 'thongbao-thanhcong' : 'thongbao-thatbai'}`}>
@@ -310,8 +393,8 @@ const TrangQlGiangVienAd = () => {
                                 ))}
                                 </select>
                             </div>  
-                            <div className="khung-ds-sinhvien-hocky">
-                                <table className="bang-ds-svhk-chitiet">
+                            <div className="khung-ds-hocky">
+                                <table className="bang-ds-ndhk-chitiet">
                                     <thead>
                                         <tr>
                                             <th className="col-stt">STT</th>

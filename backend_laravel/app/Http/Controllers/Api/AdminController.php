@@ -97,9 +97,7 @@ class AdminController extends Controller
                     // Gửi email thông báo tài khoản và mật khẩu cho sinh viên
                     Mail::to($nguoiDung->email)->send(new ThongBaoCapTaiKhoan($nguoiDung, $matKhauGoc));
 
-                    // $dsGiangVien[] = [
-                    //     'giangvien' => $nguoiDung,
-                    // ];
+                    
                 }
                 $dsGiangVien[] = [
                     'giangvien' => $nguoiDung,
@@ -118,6 +116,122 @@ class AdminController extends Controller
             DB::rollBack();
             Log::error('Lỗi khi tạo tài khoản hàng loạt cho giảng viên: ' . $e->getMessage());
             return response()->json(['message' => 'Đã xảy ra lỗi trong quá trình xử lý.'], 500);
+        }
+    }
+
+
+    public function xoaTkGiangVien($idGiangVien)
+    {
+        DB::beginTransaction();
+        try {
+            $giangVien = GiangVien::find($idGiangVien);
+            $nguoiDung = NguoiDung::find($idGiangVien);
+
+            if (!$giangVien || !$nguoiDung) {
+                return response()->json(['message' => 'Không tìm thấy dữ liệu.'], 404);
+            }
+
+            $giangVien->delete();
+            $nguoiDung->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Xóa tài khoản giảng viên thành công.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi xóa tài khoản giảng viên: ' . $e->getMessage());
+            return response()->json(['message' => 'Lỗi: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function xoaTkSinhVien($idSinhVien)
+    {
+        DB::beginTransaction();
+        try {
+            $sinhVien = SinhVien::find($idSinhVien);
+            $nguoiDung = NguoiDung::find($idSinhVien);
+
+            if (!$sinhVien || !$nguoiDung) {
+                return response()->json(['message' => 'Không tìm thấy dữ liệu.'], 404);
+            }
+
+            $sinhVien->delete();
+            $nguoiDung->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Xóa tài khoản giảng viên thành công.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi xóa tài khoản giảng viên: ' . $e->getMessage());
+            return response()->json(['message' => 'Lỗi: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function khoaTaiKhoan($idNguoiDung)
+    {
+        DB::beginTransaction();
+        try {
+            $nguoiDung = NguoiDung::find($idNguoiDung);
+
+            if (!$nguoiDung) {
+                return response()->json(['message' => 'Không tìm thấy dữ liệu.'], 404);
+            }
+
+            $nguoiDung->trang_thai = false;
+            $nguoiDung->save();
+
+            DB::commit();
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Khóa tài khoản người dùng thành công.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi khóa tài khoản người dùng: ' . $e->getMessage());
+            return response()->json(['message' => 'Lỗi: ' . $e->getMessage()], 500);
+        }
+    }
+    public function moKhoaTaiKhoan($idNguoiDung)
+    {
+        DB::beginTransaction();
+        try {
+            $nguoiDung = NguoiDung::find($idNguoiDung);
+
+            if (!$nguoiDung) {
+                return response()->json(['thongbao' => 'Không tìm thấy dữ liệu.'], 404);
+            }
+
+            if($nguoiDung->mat_khau == null){
+                return response()->json(['thongbao' => 'Tài khoản người dùng chưa được cấp.'], 400);
+            }else{
+
+                $nguoiDung->trang_thai = true;
+                $nguoiDung->save();
+            }
+
+
+            DB::commit();
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Mở khóa tài khoản người dùng thành công.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi mở khóa tài khoản người dùng: ' . $e->getMessage());
+            return response()->json(['thongbao' => 'Lỗi: ' . $e->getMessage()], 500);
         }
     }
 }

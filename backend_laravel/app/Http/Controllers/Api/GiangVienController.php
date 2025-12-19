@@ -19,6 +19,7 @@ class GiangVienController extends Controller
         $id_giangvien = Auth::id();
         $danhSachNhom = NhomDoAn::with(['hocKy', 'nguoiTao', 'sinhViens'])
             ->where('ma_nguoitao', $id_giangvien)
+            ->orderBy('created_at', 'desc')
             ->get();
 
 

@@ -109,6 +109,8 @@ const PhanCongGvSv = () => {
 
     
     const [idHocKy, setIdHocKy] = useState<string>('');
+    const [dangTai, setDangTai] = useState<boolean>(false);
+
     const dsGvDaLoc = useMemo(() => {
         if (!idHocKy) return dsGvNganh;
         return dsGvNganh.filter((gv) => 
@@ -127,6 +129,8 @@ const PhanCongGvSv = () => {
 
     const xuLyPhanCongNgauNhien = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        setDangTai(true);
 
         if (!ktraChonHocKy || dsGvDaLoc.length === 0) {
             alert("Vui lòng chọn học kỳ và đảm bảo có giảng viên trong danh sách.");
@@ -152,6 +156,8 @@ const PhanCongGvSv = () => {
             }
         } catch (error) {
             console.error("Lỗi khi phân công ngẫu nhiên:", error);
+        }finally {
+            setDangTai(false);
         }
     }
 
@@ -229,7 +235,9 @@ const PhanCongGvSv = () => {
                                 </select>
                             </div>
                             <div className="khung-tienhanh-phancong">
-                                <button className={`nut-phancong ${ktraChonHocKy ? '' : 'disabled'}`} type="submit" disabled={!ktraChonHocKy}>Tiến Hành Phân Công</button>
+                                <button className={`nut-phancong ${ktraChonHocKy ? '' : 'disabled'}`} type="submit" disabled={!ktraChonHocKy || dangTai}>
+                                    {dangTai ? 'Đang Phân Công...' : 'Tiến Hành Phân Công'}
+                                </button>
                             </div>
                         </div>
                     </form>

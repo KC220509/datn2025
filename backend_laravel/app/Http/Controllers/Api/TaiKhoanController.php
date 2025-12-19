@@ -35,6 +35,13 @@ class TaiKhoanController extends Controller
                 'thongbao' => 'Thông tin đăng nhập không chính xác.'
             ], 401);
         }
+
+        if(!$nguoidung->trang_thai){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Tài khoản không tồn tại hoặc đã bị khóa.'
+            ], 403);
+        }
         
         $vaiTros = $nguoidung->vaiTros->map(function($vt){
             return [
@@ -61,6 +68,13 @@ class TaiKhoanController extends Controller
     public function layNguoiDung(Request $request)
     {
         $nguoiDung = $request->user();
+
+        if(!$nguoiDung->trang_thai){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Tài khoản không tồn tại hoặc đã bị khóa.'
+            ], 403);
+        }
 
         $vaiTros = $nguoiDung->vaiTros->map(function($vt){
             return [
@@ -92,10 +106,10 @@ class TaiKhoanController extends Controller
 
         $nguoiDung = NguoiDung::where('email', $request['email'])->first();
 
-        if ($nguoiDung->mat_khau == null) {
+        if ($nguoiDung->mat_khau == null || $nguoiDung->trang_thai == false) {
             return response()->json([
                 'trangthai' => false,
-                'thongbao' => 'Tài khoản không tồn tại.'
+                'thongbao' => 'Tài khoản không tồn tại hoặc đã bị khóa.'
             ], 404);
         }
         $matKhauMoi = Str::random(8);

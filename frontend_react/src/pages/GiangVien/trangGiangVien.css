@@ -520,17 +520,18 @@
     color: #666;
 }
 
-.danhsach-nhom-doan .bang-ds-nhom tr .cot-soluong{
-    text-align: center;
-    width: 150px;
-    font-weight: 500;
-}
-
 .danhsach-nhom-doan .bang-ds-nhom tr .cot-tennhom{
     min-width: 250px;
     text-align: left;
     font-weight: 500;
     color: #158aff;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-soluong,
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-hocky{
+    text-align: center;
+    width: 150px;
+    font-weight: 500;
 }
 
 

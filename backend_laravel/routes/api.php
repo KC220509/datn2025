@@ -32,6 +32,12 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:AD'])->prefix('admin')->g
 
     Route::post('/tao-ds-taikhoan-sv', [AdminController::class, 'taoDsTaiKhoanSv'])->name('ad_taoDsTaiKhoanSv');
     Route::post('/tao-ds-taikhoan-gv', [AdminController::class, 'taoDsTaiKhoanGv'])->name('ad_taoDsTaiKhoanGv');
+
+    Route::delete('/xoa-taikhoan-gv/{id_giangvien}', [AdminController::class, 'xoaTkGiangVien'])->name('ad_xoaTaiKhoanGv');
+
+
+    Route::put('/khoa-taikhoan/{id_nguoidung}', [AdminController::class, 'khoaTaiKhoan'])->name('ad_khoaTaiKhoan');
+    Route::put('/mo-khoa-taikhoan/{id_nguoidung}', [AdminController::class, 'moKhoaTaiKhoan'])->name('ad_moKhoaTaiKhoan');
 });
 
 //PDT

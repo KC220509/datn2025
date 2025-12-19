@@ -224,6 +224,10 @@
 .form-dang-nhap .khung-chucnang .nut-dang-nhap:hover{
     background-color: #0066ff;
 }
+.form-dang-nhap .khung-chucnang .nut-dang-nhap:disabled{
+    background-color: #a0c4ff;
+    cursor: not-allowed;
+}
 
 .form-dang-nhap .khung-chucnang .lienket-quenmk,
 .form-dang-nhap .khung-chucnang .lienket-dangnhap{

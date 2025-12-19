@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
+import axios from "axios";
 
 interface HocKy{
     id_hocky: string;
@@ -147,7 +148,8 @@ const TrangQlSinhVienAd = () => {
     const xyLyChuyenTrangLoc = (soTrangLoc: number) => {
         setTrangHienTaiLoc(soTrangLoc);
     };
-     const phanTrangDaLoc = () => {
+
+    const phanTrangDaLoc = () => {
         const trangSos = [];
         for (let i = 1; i <= tongSoTrangDaLoc; i++) {
           trangSos.push(i);
@@ -182,6 +184,7 @@ const TrangQlSinhVienAd = () => {
         e.preventDefault();
         
         // Xử lý tạo tài khoản sinh viên ở đây
+        setDangTai(true);
         try {
             const  dataTaoTk = await ketNoiAxios.post('/admin/tao-ds-taikhoan-sv', {
                 id_hocky: id_hocky,
@@ -208,6 +211,75 @@ const TrangQlSinhVienAd = () => {
             }, 3000);
         } finally {
             setDangTai(false);
+        }
+    }
+
+    // Xử lý xóa tài khoản sinh viên
+    const xuLyXoaTkSinhVien = async (id_sinhvien: string) => {
+
+        if(!window.confirm('Bạn có chắc chắn muốn xóa tài khoản sinh viên này không?')){
+            return;
+        }
+        try{
+            const phanhoi = await ketNoiAxios.delete(`/admin/xoa-taikhoan-sv/${id_sinhvien}`);
+            if (!phanhoi.data.trangthai){
+                alert('Xóa tài khoản giảng viên không thành công');
+                return;
+            }else{
+                alert(phanhoi.data.thongbao);
+                layDsTkSinhVien();
+
+            }
+
+        } catch (error) {
+            console.error('Lỗi khi xóa tài khoản sinh viên:', error);
+        }
+    }
+
+    // Xử lý khóa tài khoản
+    const xuLyKhoaTkSinhVien = async (id_nguoidung: string) => {
+
+        if(!window.confirm('Bạn có chắc chắn muốn khóa tài khoản sinh viên này không?')){
+            return;
+        }
+        try{
+                        const phanhoi = await ketNoiAxios.put(`/admin/khoa-taikhoan/${id_nguoidung}`);
+            if (!phanhoi.data.trangthai){
+                alert('Khóa tài khoản sinh viên không thành công');
+                return;
+            }else{
+                alert(phanhoi.data.thongbao);
+                layDsTkSinhVien();
+            }
+
+        }
+        catch (error) {
+            console.error('Lỗi khi khóa tài khoản sinh viên:', error);
+        }
+    }
+
+    //Xử lý mở khóa tài khoản
+    const xuLyMoKhoaTkSinhVien = async (id_nguoidung: string) => {
+
+        if(!window.confirm('Bạn muốn mở khóa tài khoản cho sinh viên này không?')){
+            return;
+        }
+        try{
+                        const phanhoi = await ketNoiAxios.put(`/admin/mo-khoa-taikhoan/${id_nguoidung}`);
+            if (!phanhoi.data.trangthai){
+                alert('Mở khóa tài khoản sinh viên không thành công');
+                return;
+            }else{
+                alert(phanhoi.data.thongbao);
+                layDsTkSinhVien();
+            }
+
+        }
+        catch (error) {
+            if (axios.isAxiosError(error)) {
+                alert(error.response?.data?.thongbao || "Lỗi hệ thống");
+            }
+            console.error('Lỗi khi mở khóa tài khoản sinh viên:', error);
         }
     }
 
@@ -265,9 +337,17 @@ const TrangQlSinhVienAd = () => {
                                         <td className="col-nganh">{sv.lop.nganh.ky_hieu}</td>
                                         <td className="col-chucnang">
                                             <div className="khung-chucnang">
-                                                <button className="nut-chucnang khoa-tk"><i className="bi bi-person-lock"></i></button>
+                                                {sv.nguoi_dung.trang_thai ? (
+                                                    <button onClick={() => xuLyKhoaTkSinhVien(sv.id_sinhvien)} className="nut-chucnang khoa-tk">
+                                                        <i className="bi bi-person-lock"></i>
+                                                    </button>
+                                                ) : (
+                                                    <button onClick={() => xuLyMoKhoaTkSinhVien(sv.id_sinhvien)} className="nut-chucnang mo-khoa-tk">
+                                                        <i className="bi bi-person-slash"></i>
+                                                    </button>
+                                                )}
                                                 <button className="nut-chucnang sua"><i className="bi bi-pencil-square"></i></button>
-                                                <button className="nut-chucnang xoa"><i className="bi bi-x-square"></i></button>
+                                                <button onClick={() => xuLyXoaTkSinhVien(sv.id_sinhvien)} className="nut-chucnang xoa"><i className="bi bi-x-square"></i></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -300,8 +380,8 @@ const TrangQlSinhVienAd = () => {
                     ) : null}
                 </div>
                 {moKhungTaoTk &&
-                    <div className="mokhung-tao-tksinhvien">
-                        <form onSubmit={submitTaoTkSinhVien} method="post" className="khung-tao-tksinhvien flex-col">
+                    <div className="mokhung-tao-tk">
+                        <form onSubmit={submitTaoTkSinhVien} method="post" className="khung-tao-tk flex-col">
                             <h2 className="tieude-khungtao">Tạo tài khoản sinh viên</h2>
                             {thongBao && (
                                 <div className={`thongbao ${thongBao.type === 'success' ? 'thongbao-thanhcong' : 'thongbao-thatbai'}`}>
@@ -320,8 +400,8 @@ const TrangQlSinhVienAd = () => {
                                 ))}
                                 </select>
                             </div>  
-                            <div className="khung-ds-sinhvien-hocky">
-                                <table className="bang-ds-svhk-chitiet">
+                            <div className="khung-ds-hocky">
+                                <table className="bang-ds-ndhk-chitiet">
                                     <thead>
                                         <tr>
                                             <th className="col-stt">STT</th>

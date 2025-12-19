@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import ketNoiAxios from "../tienichs/ketnoiAxios";
 
 import { NguoiDungContext, type NguoiDungContextKieu } from "./nguoidungContext";
+import axios from "axios";
 
 interface VaiTro {
     id_vaitro: string;
@@ -38,6 +39,7 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
             if (!res.data.trangthai) {
                 throw new Error(res.data.thongbao || "Đăng nhập thất bại");
             }
+        
 
             const tokenMoi = res.data.token;
             const nguoiDungApi: NguoiDung = {
@@ -56,11 +58,14 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
 
             return nguoiDungApi;
         } catch (err: unknown) {
-            if (err instanceof Error) {
-                throw new Error(err.message);
-            } else {
-                throw new Error("Đăng nhập thất bại");
+            let message = "Đăng nhập thất bại";
+            if (axios.isAxiosError(err)) {
+                message = err.response?.data?.thongbao || err.message || message;
+            } else if (err instanceof Error) {
+                message = err.message;
             }
+
+            throw new Error(message);
         }
     };
 

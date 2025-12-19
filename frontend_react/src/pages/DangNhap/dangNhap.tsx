@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useNguoiDung } from "../../hooks/useNguoiDung";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 
+
 interface BaiDang{
     id_baidang: string;
     tieu_de: string;
@@ -60,6 +61,7 @@ const DangNhap: React.FC = () => {
   const [matKhau, setMatKhau] = useState("");
   const [ghiNho, setGhiNho] = useState(false); 
   const [loi, setLoi] = useState("");
+  const [dangChay, setDangChay] = useState(false);
 
   const chuyenHuongMacDinh = (vaiTros: string[]): string => {
     if (vaiTros.includes('AD')) return '/quan-tri';
@@ -84,18 +86,27 @@ const DangNhap: React.FC = () => {
 
   const xulyDangNhap = async (e: React.FormEvent) => {
     e.preventDefault();
+    setDangChay(true);
     try {
       const nguoiDungApi = await dangNhap(email, matKhau, ghiNho);
 
       const duongDanChuyenHuong = chuyenHuongMacDinh(nguoiDungApi.vai_tros.map(vt => vt.id_vaitro));
       window.location.replace(duongDanChuyenHuong);
-    } catch (error) {
-      console.error("Lỗi đăng nhập:", error);
-      setLoi("Thông tin đăng nhập không hợp lệ !");
+
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setLoi(error.message); 
+      } else {
+        setLoi("Đã xảy ra lỗi không xác định.");
+      }
+      // console.error("Lỗi đăng nhập:", error);
 
       setTimeout(() => {
         setLoi("");
       }, 5000);
+    }
+    finally {
+      setDangChay(false);
     }
   }
 
@@ -133,7 +144,7 @@ const DangNhap: React.FC = () => {
 
     } catch (error) {
       console.error("Lỗi gửi email cấp lại mật khẩu:", error);
-      setLoi("Người dùng không tồn tại trong hệ thống.");
+      setLoi("Tài khoản không tồn tại hoặc đã bị khóa.");
 
         setTimeout(() => {
           setLoi("");
@@ -211,7 +222,7 @@ const DangNhap: React.FC = () => {
                   <label htmlFor="nhotk">Ghi nhớ tài khoản</label>
                 </div>
                 <div className="khung-chucnang flex-col">
-                  <button className="nut-dang-nhap" type="submit">Đăng Nhập</button>
+                  <button className="nut-dang-nhap" type="submit" disabled={dangChay}>{dangChay ? "Đăng nhập..." : "Đăng Nhập"}</button>
                   <p className="lienket-quenmk" onClick={xuLyMoKhungLayMatKhau}>Quên mật khẩu ?</p>
                 </div>
                 {loi && <p className="loi-dang-nhap text-red-500 mt-2">{loi}</p>}

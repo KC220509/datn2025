@@ -194,7 +194,7 @@ const DanhSachPhanCong = () => {
                     ))}
                 </div>
 
-                <button className="nut-xuat-excel" onClick={xuatDanhSach}>Xuất Excel</button>
+                <button className="nut-xuat-excel" onClick={xuatDanhSach}>Xuất danh sách</button>
             </div>
         </div>
     );
