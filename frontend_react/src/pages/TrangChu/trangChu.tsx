@@ -34,9 +34,9 @@ const TrangChu = () => {
     layDsThongBao();
   }, []);
 
-  const xuLyXemThongBao = (id_baidang: BaiDang) => {
-    console.log("Xem chi tiết thông báo:", id_baidang); 
-  }
+  // const xuLyXemThongBao = (id_baidang: BaiDang) => {
+  //   console.log("Xem chi tiết thông báo:", id_baidang); 
+  // }
 
   const DANH_SACH_LIEN_KET = [
     { ten: "Bộ Giáo dục và Đào tạo", link: "http://moet.gov.vn/", anh: "v1761665186/bo_gd_dt.png" },
