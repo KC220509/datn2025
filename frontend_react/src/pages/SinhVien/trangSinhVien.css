@@ -157,3 +157,170 @@
     font-size: 14px;
     margin: auto;
 }
+
+
+
+/* Danh sách nhóm đồ án */
+
+.trang-nhom-do-an{
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    gap: 20px;
+}
+
+
+.trang-nhom-do-an .khung-chucnang-top{
+    padding: 5px 2px 10px;
+    border-bottom: 2px solid #eee;
+    justify-content: space-between;
+
+}
+
+.trang-nhom-do-an .khung-chucnang-top .khung-timkiem{
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.khung-chucnang-top .khung-timkiem label{
+    font-weight: 500;
+    color: #575757;
+    white-space: nowrap;
+}
+
+.khung-chucnang-top .khung-timkiem input{
+    flex: 1;
+    min-width: 150px;
+    max-width: 300px;
+    min-height: 30px; 
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    outline: none;
+    color: #575757;
+}
+
+.trang-nhom-do-an .danhsach-nhom-doan{
+    width: 100%;
+    overflow-x: auto;
+}
+
+.trang-nhom-do-an .danhsach-nhom-doan .bang-ds-nhom{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.trang-nhom-do-an .danhsach-nhom-doan .bang-ds-nhom tr{
+    width: 100%;
+    transition: background-color 0.2s ease;
+}
+
+.trang-nhom-do-an .danhsach-nhom-doan .bang-ds-nhom tbody tr:hover{
+    background-color: #f8f9fa;
+}
+
+.trang-nhom-do-an .danhsach-nhom-doan .bang-ds-nhom tr th{
+    text-align: center;
+    padding: 10px 12px;
+    background-color: #666;
+    font-weight: 600;
+    color: #ffffff;
+    border: none;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+.trang-nhom-do-an .danhsach-nhom-doan .bang-ds-nhom tr td{
+    padding: 12px 12px;
+    border-bottom: 1px solid #e8e8e8;
+    color: #444;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.trang-nhom-do-an .danhsach-nhom-doan .bang-ds-nhom tbody tr:last-child td{
+    border-bottom: none;
+}
+
+
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-stt{
+    text-align: center;
+    width: 60px;
+    font-weight: 600;
+    color: #666;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-tennhom{
+    min-width: 250px;
+    text-align: center;
+    font-weight: 500;
+    color: #158aff;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-tengvhd,
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-soluong,
+.danhsach-nhom-doan .bang-ds-nhom tr .cot-hocky{
+    text-align: center;
+    width: 150px;
+    font-weight: 500;
+}
+
+
+.danhsach-nhom-doan .bang-ds-nhom .cot-chucnang{
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom .nut-chuc-nang{
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom .nut-chuc-nang.xem-nhom{
+    background-color: #17a2b8;
+    color: white;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom .nut-chuc-nang.xem-nhom:hover{
+    background-color: #138496;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+.danhsach-nhom-doan .bang-ds-nhom .nut-chuc-nang.sua-nhom{
+    background-color: #ffc107;
+    color: #333;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom .nut-chuc-nang.sua-nhom:hover{
+    background-color: #e0a800;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.danhsach-nhom-doan .bang-ds-nhom .nut-chuc-nang.xoa-nhom{
+    background-color: #dc3545;
+    color: white;
+}
+
+.danhsach-nhom-doan .bang-ds-nhom .nut-chuc-nang.xoa-nhom:hover{
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}

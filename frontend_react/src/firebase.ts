@@ -1,8 +1,8 @@
-// src/firebase.ts
+
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth"; // Import thư viện Auth
-import { getDatabase } from "firebase/database"; // Import thư viện Realtime Database
-// import { getAnalytics } from "firebase/analytics"; // Tùy chọn: Bỏ qua Analytics nếu không cần
+import { getAuth, signInWithCustomToken, signOut } from "firebase/auth"; 
+import { getDatabase } from "firebase/database"; 
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyDMYHlUwdgfziEoSqaCSYzkDlvhfNzb4nA",
@@ -17,5 +17,27 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
-export const database = getDatabase(app);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+export const dangNhapFireBase = async (fbtoken: string) => {
+    try {
+        const thongTinNguoiDung = await signInWithCustomToken(auth, fbtoken);
+        console.log("Firebase Auth: Đã kết nối thành công", thongTinNguoiDung.user.uid);
+        return thongTinNguoiDung.user;
+    } catch (error) {
+        console.error("Firebase Auth Error:", error);
+        throw error;
+    }
+};
+
+export const dangXuatFireBase = async () => {
+    try {
+        await signOut(auth);
+        console.log("Firebase Auth: Đã đăng xuất");
+    } catch (error) {
+        console.error("Firebase Logout Error:", error);
+    }
+};
+
+export { auth, db};

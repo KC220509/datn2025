@@ -9,17 +9,23 @@ use App\Mail\ThongBaoCapLaiMatKhau;
 use App\Models\NguoiDung;
 use App\Services\NguoiDungService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Kreait\Firebase\Contract\Auth as FirebaseAuth;
 
 class TaiKhoanController extends Controller
 {
     protected $nguoiDungService;
-    public function __construct(NguoiDungService $nguoiDungService)
+    protected $firebaseAuth;
+
+    // Inject Firebase Auth vào qua Constructor
+    
+    public function __construct(NguoiDungService $nguoiDungService, FirebaseAuth $firebaseAuth)
     {
         $this->nguoiDungService = $nguoiDungService;
+        $this->firebaseAuth = $firebaseAuth;
     }
 
 
@@ -42,6 +48,8 @@ class TaiKhoanController extends Controller
                 'thongbao' => 'Tài khoản không tồn tại hoặc đã bị khóa.'
             ], 403);
         }
+
+        $firebaseToken = $this->firebaseAuth->createCustomToken((string)$nguoidung->id_nguoidung)->toString();
         
         $vaiTros = $nguoidung->vaiTros->map(function($vt){
             return [
@@ -49,12 +57,14 @@ class TaiKhoanController extends Controller
                 'ten_hien_thi' => $vt->ten_hien_thi
             ];
         });
+
         $token = $nguoidung->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'trangthai' => true,
             'token' => $token,
             'token_type' => 'Bearer',
+            'firebase_token' => $firebaseToken,
             'nguoi_dung' => [
                 'id_nguoidung' => $nguoidung->id_nguoidung,
                 'ho_ten' => $nguoidung->ho_ten,
@@ -76,6 +86,8 @@ class TaiKhoanController extends Controller
             ], 403);
         }
 
+        $firebaseToken = $this->firebaseAuth->createCustomToken((string)$nguoiDung->id_nguoidung)->toString();
+
         $vaiTros = $nguoiDung->vaiTros->map(function($vt){
             return [
                 'id_vaitro' => $vt->id_vaitro,
@@ -90,6 +102,7 @@ class TaiKhoanController extends Controller
         });
         return response()->json([
             'trangthai' => true,
+            'firebase_token' => $firebaseToken,
             'nguoi_dung' => [
                 'id_nguoidung' => $nguoiDung->id_nguoidung,
                 'ho_ten' => $nguoiDung->ho_ten,

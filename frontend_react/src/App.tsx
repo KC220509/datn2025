@@ -108,7 +108,7 @@ function App() {
 
              {/* Chi tiết nhóm - Trang riêng không có khung chung */}
           <Route path='nhom-chat/chi-tiet-nhom/:id_nhom' element={
-              <VaiTroNguoiDung trangcon={<KhungNhomChat />} vaitros={['GV']} />
+              <VaiTroNguoiDung trangcon={<KhungNhomChat />} vaitros={['GV', 'SV']} />
           } >
             
             <Route index element={<NhomChat />} />

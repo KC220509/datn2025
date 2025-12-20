@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Outlet, useParams, useNavigate } from 'react-router-dom';
 import './khungNhomChat.css';
 import ketNoiAxios from '../../tienichs/ketnoiAxios';
+import { useNguoiDung } from '../../hooks/useNguoiDung';
+import axios from 'axios';
 
 
 interface NguoiDung{
@@ -51,6 +53,7 @@ interface ThongTinNhom {
 
 const KhungNhomChat = () => {
 
+    const { nguoiDung } = useNguoiDung();
     const { id_nhom } = useParams<{ id_nhom: string }>();
     const navigate = useNavigate();
     
@@ -64,14 +67,17 @@ const KhungNhomChat = () => {
             try {
                 const phanhoi = await ketNoiAxios.get(`/nhom/chi-tiet/${id_nhom}`);
 
-                if (phanhoi.data.trangthai) {
+                if(phanhoi.data.trangthai) {
                     setThongTinNhom(phanhoi.data.nhom);
-                } else {
-                    navigate('/khong-co-quyen');
                 }
-            } catch (error) {
-                console.error('Lỗi khi lấy thông tin nhóm:', error);
-            
+            } catch (error: unknown) {
+                if (axios.isAxiosError(error)) {
+                    const data = error.response?.data;
+                    
+                    if (data?.la_thanh_vien === false) {
+                        navigate('/khong-co-quyen');
+                    }
+                }
             } 
         };
 
@@ -79,18 +85,20 @@ const KhungNhomChat = () => {
     }, [id_nhom, navigate]);
 
     useEffect(() => {
-        const layDanhSachSvPc = async () => {
-            try {
-                const phanhoi = await ketNoiAxios.get('/gv/ds-sinhvien-pc');
-                if(phanhoi.data.trangthai){
-                    setDanhSachSvPc(phanhoi.data.ds_sinhvien_pc);
+        if(nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV')){
+            const layDanhSachSvPc = async () => {
+                try {
+                    const phanhoi = await ketNoiAxios.get('/gv/ds-sinhvien-pc');
+                    if(phanhoi.data.trangthai){
+                        setDanhSachSvPc(phanhoi.data.ds_sinhvien_pc);
+                    }
+                }catch(error){
+                    console.error('Lỗi khi lấy danh sách sinh viên phân công:', error);
                 }
-            }catch(error){
-                console.error('Lỗi khi lấy danh sách sinh viên phân công:', error);
             }
+            layDanhSachSvPc();
         }
-        layDanhSachSvPc();
-    }, []);
+    }, [nguoiDung]);
 
     const [menu_hien_tai, setMenuHienTai] = useState('kenh-chung');
 
@@ -106,7 +114,11 @@ const KhungNhomChat = () => {
     };
 
     const xuLyThoatNhom = () => {
-        navigate('/giang-vien/sinh-vien-phan-cong/danhsach-nhom');
+        if(nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV')){
+            navigate('/giang-vien/sinh-vien-phan-cong/danhsach-nhom');
+        }else if(nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'SV')){
+            navigate('/sinh-vien/ds-nhom-doan');
+        }
     };
 
     const [moKhungThemThanhVien, setMoKhungThemThanhVien] = useState<boolean>(false);
@@ -162,7 +174,7 @@ const KhungNhomChat = () => {
         }
     };
     
-    const toggleChonSinhVien = (id_sinhvien: string) => {
+    const xuLyChonSinhVien = (id_sinhvien: string) => {
         setDsIdSinhVienChonThem(prev => {
             const newSet = new Set(prev);
             if (newSet.has(id_sinhvien)) {
@@ -174,7 +186,6 @@ const KhungNhomChat = () => {
         });
     };
 
-    // Lọc sinh viên theo học kỳ của nhóm (nếu có thông tin học kỳ)
     const dsSinhVienHienThi = danhSachSvPc.filter(pc => {
         if (thongTinNhom?.ma_hocky) {
             return pc.hoc_ky.id_hocky === thongTinNhom.ma_hocky;
@@ -208,7 +219,7 @@ const KhungNhomChat = () => {
                                                         type="checkbox" 
                                                         checked={daLaThanhVien || dsIdSinhVienChonThem.has(pc.sinh_vien.id_sinhvien)}
                                                         disabled={daLaThanhVien}
-                                                        onChange={() => toggleChonSinhVien(pc.sinh_vien.id_sinhvien)}
+                                                        onChange={() => xuLyChonSinhVien(pc.sinh_vien.id_sinhvien)}
                                                     />
                                                 </td>
                                                 <td>{pc.sinh_vien.msv}</td>
@@ -315,8 +326,9 @@ const KhungNhomChat = () => {
                 <div className="phan-thanh-vien">
                     <div className="phan-tieude flex-row">
                         <h4 className="tieude-phan">Thành Viên Nhóm ({thongTinNhom?.sinh_viens.length})</h4>
-                        <i className="bi bi-person-plus-fill" onClick={() => setMoKhungThemThanhVien(true)}></i>
-                        
+                        {nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV') && (
+                            <i className="bi bi-person-plus-fill" onClick={() => setMoKhungThemThanhVien(true)}></i>
+                        )}
                     </div>
                     <div className="danh-sach-thanh-vien">
                         {thongTinNhom?.sinh_viens.map((thanh_vien) => (
@@ -326,9 +338,12 @@ const KhungNhomChat = () => {
                                     <p className="ten-thanh-vien">{thanh_vien?.nguoi_dung?.ho_ten}</p>
                                     <p className="email-thanh-vien">{thanh_vien?.nguoi_dung.email}</p>
                                 </div>
-                                <i className="nut-xoa-thanhvien bi bi-person-x-fill"
-                                    onClick={() => xuLyXoaThanhVien(String(thongTinNhom?.id_nhom), thanh_vien.id_sinhvien)}
-                                ></i>
+                                
+                                {nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV') && (
+                                    <i className="nut-xoa-thanhvien bi bi-person-x-fill"
+                                        onClick={() => xuLyXoaThanhVien(String(thongTinNhom?.id_nhom), thanh_vien.id_sinhvien)}
+                                    ></i>
+                                )}
                             </div>
                         ))}
                     </div>

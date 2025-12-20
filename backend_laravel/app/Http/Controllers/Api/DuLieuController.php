@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GuiTinNhanRequest;
 use App\Models\HocKyDk;
+use App\Models\NguoiDung;
 use App\Models\NhomDoAn;
+use App\Models\TinNhanNhom;
 use App\Services\KhoaNganhLopService;
 use App\Services\NguoiDungService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Kreait\Firebase\Contract\Database;
 
 // use Excel;
 
@@ -17,11 +22,14 @@ class DuLieuController extends Controller
     protected $nguoiDungService;
     protected $khoaNganhLopService;
 
+    protected $firebaseDb;
 
-    public function __construct(NguoiDungService $nguoiDungService, KhoaNganhLopService $khoaNganhLopService)
+
+    public function __construct(NguoiDungService $nguoiDungService, KhoaNganhLopService $khoaNganhLopService, Database $firebaseDb)
     {
         $this->nguoiDungService = $nguoiDungService;
         $this->khoaNganhLopService = $khoaNganhLopService;
+        $this->firebaseDb = $firebaseDb;
     }
 
     public function dsHocKy()
@@ -166,12 +174,16 @@ class DuLieuController extends Controller
         if (!$nhom) {
             return response()->json([
                 'trangthai' => false,
-                'thongbao' => 'Bạn không có quyền truy cập nhóm này hoặc nhóm không tồn tại.'
+                'la_thanh_vien' => false,
+                'thongbao' => 'Bạn không có quyền truy cập nhóm này hoặc nhóm không tồn tại.',
+
             ], 403);
         }
 
         return response()->json([
             'trangthai' => true,
+            'la_thanh_vien' => true,
+            'thongbao' => 'Chi tiết nhóm được lấy thành công.',
             'nhom' => $nhom,
         ]);
     }
@@ -223,6 +235,95 @@ class DuLieuController extends Controller
         return response()->json([
             'trangthai' => true,
             'thongbao' => $thongBao
+        ]);
+    }
+
+    public function layTinNhanNhom($idNhom)
+    {
+        $dsTinNhan = TinNhanNhom::where('ma_nhom', $idNhom)
+            ->orderBy('created_at', 'asc')
+            ->with('nguoiGui')
+            ->get();
+
+        return response()->json([
+            'trangthai' => true,
+            'ds_tinnhan' => $dsTinNhan,
+        ]);
+    }
+
+
+    // Xử lý việc nhắn tin
+
+    public function guiTinNhan(GuiTinNhanRequest $request) {
+        $id_nguoidung = Auth::id();
+        $nguoiDung = NguoiDung::find($id_nguoidung);
+
+        if (!$nguoiDung) {
+            return response()->json(['trangthai' => false, 'thongbao' => 'Người dùng không tồn tại.'], 404);
+        }
+
+        DB::transaction(function () use ($request, $id_nguoidung, $nguoiDung) {
+            $tep = $request->file('tinnhan_tep');
+            if($tep) {
+                $gocTenTep = pathinfo($request->tinnhan_tep->getClientOriginalName(), PATHINFO_FILENAME); 
+                    $duoiTep = $request->tinnhan_tep->getClientOriginalExtension(); 
+                    $newTenTep = $gocTenTep . '.' . $duoiTep; 
+
+                    $duongDanTepMoi = $tep->move(
+                        sys_get_temp_dir(), 
+                        $newTenTep  
+                    );
+
+                    $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
+                        [
+                            'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+                            'resource_type' => 'auto',
+                            'use_filename' => true,
+                        ]
+                    );
+
+                    $duongDanTep = $taiLenCloud['secure_url'];
+            } else {
+                $duongDanTep = null;
+            }
+
+            $tinNhan = new TinNhanNhom();
+            $tinNhan->id_tinnhan = Str::uuid();
+            $tinNhan->ma_nhom = $request->ma_nhom;
+            $tinNhan->ma_nguoigui = $id_nguoidung;
+            $tinNhan->noi_dung = $request->noi_dung;
+            $tinNhan->duong_dan_tep = $duongDanTep;
+            $tinNhan->da_xem = false;
+            $tinNhan->tinnhan_ghim = false;
+            $tinNhan->tinnhan_xoa = false;
+            $tinNhan->created_at = now();
+            $tinNhan->updated_at = now();
+            $tinNhan->save();
+
+
+            $dataFirebase = [
+                'id_tinnhan'    => (string) $tinNhan->id_tinnhan,
+                'id_nguoigui'   => (string) $tinNhan->ma_nguoigui,
+                'ho_ten'        => $nguoiDung->ho_ten, 
+                'noi_dung'      => $tinNhan->noi_dung ?? "",
+                'ten_tep'       => $tep ? $gocTenTep . '.' . $duoiTep : "",
+                'duong_dan_tep' => $tinNhan->duong_dan_tep ?? "",
+                'da_xem'        => false,
+                'tinnhan_ghim'  => false,
+                'tinnhan_xoa'   => false,
+                'created_at'    => now()->getTimestamp() * 1000, 
+                'updated_at'    => now()->getTimestamp() * 1000
+            ];
+            // 3. Đẩy lên Firebase Realtime Database
+            $this->firebaseDb->getReference('nhom_chat/' . $request->ma_nhom)
+                ->push($dataFirebase);
+
+        });
+
+
+        return response()->json([
+            'trangthai' => true, 
+            'thongbao' => 'Gửi tin nhắn thành công.'
         ]);
     }
 }

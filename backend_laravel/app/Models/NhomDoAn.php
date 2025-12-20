@@ -38,4 +38,10 @@ class NhomDoAn extends Model
             'id_sinhvien'
         );
     }
+
+
+    public function tinNhanNhoms()
+    {
+        return $this->hasMany(TinNhanNhom::class, 'ma_nhom', 'id_nhom');
+    }
 }

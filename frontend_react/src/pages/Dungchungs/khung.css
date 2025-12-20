@@ -46,6 +46,7 @@
     font-size: clamp(16px, 2.6vw, 18px);
     color: #ffffff;
     text-decoration: none;
+    font-size: 18px;
 }
 
 .tieu-de-tren .tieu-de-phai{

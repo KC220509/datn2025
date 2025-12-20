@@ -81,15 +81,19 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:GV'])->prefix('gv')->grou
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:SV'])->prefix('sv')->group(function () {
     Route::get('/thong-tin-sv', [SinhVienController::class, 'layThongTinSV'])->name('sv_layThongTinSV');
     Route::get('/ds-giangvien-hd', [SinhVienController::class, 'layDanhSachGiangVienHd'])->name('sv_layDsGiangVienHd');
+    Route::get('/ds-nhom', [SinhVienController::class, 'layDanhSachNhom'])->name('sv_layDsNhom');
 });
 
 
 
 Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
     Route::get('/chi-tiet/{idNhom}', [DuLieuController::class, 'layChiTietNhom'])->name('layChiTietNhom');
+    Route::get('/chi-tiet/tinnhan/{idNhom}', [DuLieuController::class, 'layTinNhanNhom'])->name('layTinNhanNhom');
+
+    Route::post('/chi-tiet/tinnhan/gui', [DuLieuController::class, 'guiTinNhan'])->name('guiTinNhanNhom');
+
 });
 
-Route::post('/auth/firebase', [FirebaseAuthController::class, 'verifyToken']);
 
 Route::get('/ds-thongbao', [DuLieuController::class, 'layDsThongBao'])->name('layDsThongBao');
 Route::get('/ds-thongbao/chi-tiet/{id_baidang}', [DuLieuController::class, 'layChiTietThongBao'])->name('layChiTietThongBao');

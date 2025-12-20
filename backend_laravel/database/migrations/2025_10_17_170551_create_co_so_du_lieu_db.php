@@ -273,10 +273,10 @@ return new class extends Migration
 
 
         Schema::create('tin_nhan_nhom', function (Blueprint $table){
-            $table->uuid('id_tinhan')->primary();
+            $table->uuid('id_tinnhan')->primary();
             $table->uuid('ma_nhom');
             $table->uuid('ma_nguoigui');
-            $table->text('noi_dung');
+            $table->text('noi_dung')->nullable();
             $table->string('duong_dan_tep')->nullable();
             $table->boolean('da_xem')->default(false);
             $table->boolean('tinnhan_ghim')->default(false);
@@ -286,6 +286,11 @@ return new class extends Migration
             $table->foreign('ma_nhom')
                 ->references('id_nhom')
                 ->on('nhom_do_an')
+                ->onDelete('cascade');
+                
+            $table->foreign('ma_nguoigui')
+                ->references('id_nguoidung')
+                ->on('nguoi_dung')
                 ->onDelete('cascade');
 
         });

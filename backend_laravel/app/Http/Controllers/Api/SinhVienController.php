@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\NguoiDung;
+use App\Models\NhomDoAn;
 use App\Models\PhanCong;
 use App\Models\SinhVien;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +70,39 @@ class SinhVienController extends Controller
             'trangthai' => true,
             'thongbao' => 'Danh sách giảng viên được phân công cho sinh viên.',
             'ds_giangvien_hd' => $ds_giangvien_hd
+        ]);
+    }
+
+    public function layDanhSachNhom()
+    {
+        $id_sinhvien = Auth::id();
+
+        $sinhvien = $this->sinhVienModel->find($id_sinhvien);
+        if (!$sinhvien) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Sinh viên không tồn tại.'
+            ], 404);
+        }
+
+        $ds_nhom = $sinhvien->nhomDoAns()
+                            ->with(['hocKy', 'nguoiTao.nguoiDung', 'sinhViens'])
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
+        if ($ds_nhom->isEmpty()) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Sinh viên chưa tham gia nhóm nào.'
+            ]);
+        }
+
+        
+
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Danh sách nhóm được lấy thành công.',
+            'ds_nhom' => $ds_nhom
         ]);
     }
 }

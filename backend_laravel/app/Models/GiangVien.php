@@ -39,4 +39,9 @@ class GiangVien extends Model
         return $this->hasMany(PhanCong::class, 'ma_truongbomon', 'id_giangvien');
     }
 
+    public function nhomDoAns()
+    {
+        return $this->hasMany(NhomDoAn::class, 'ma_nguoitao', 'id_giangvien');
+    }
+
 }

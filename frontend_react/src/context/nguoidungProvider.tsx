@@ -3,6 +3,7 @@ import ketNoiAxios from "../tienichs/ketnoiAxios";
 
 import { NguoiDungContext, type NguoiDungContextKieu } from "./nguoidungContext";
 import axios from "axios";
+import { dangNhapFireBase, dangXuatFireBase } from "../firebase";
 
 interface VaiTro {
     id_vaitro: string;
@@ -41,12 +42,20 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
             }
         
 
-            const tokenMoi = res.data.token;
+            const firebaseToken = res.data.firebase_token;
+            
+            if (firebaseToken) {
+                await dangNhapFireBase(firebaseToken);
+            }
+            
+            
             const nguoiDungApi: NguoiDung = {
                 ...res.data.nguoi_dung,
                 vai_tros: res.data.nguoi_dung.vai_tros
             };
-
+            
+            const tokenMoi = res.data.token;
+            
             if (ghiNho) {
                 localStorage.setItem("token", tokenMoi);
             } else {
@@ -71,11 +80,15 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
 
 
     // Hàm đăng xuất
-    const dangXuat = useCallback(() => {
+    const dangXuat = useCallback(async () => {
+
+        await dangXuatFireBase();
+
         localStorage.removeItem('token'); 
         sessionStorage.removeItem('token'); 
         setToken(null);
         setNguoiDung(null);
+
         window.location.replace('/dang-nhap');
     }, []);
 
@@ -89,8 +102,14 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
                 setToken(tokenLuu); 
                 ketNoiAxios.defaults.headers.common['Authorization'] = `Bearer ${tokenLuu}`;
 
+
                 try {
                     const res = await ketNoiAxios.get("/nguoi-dung");
+                    
+                    if (res.data.firebase_token) {
+                        await dangNhapFireBase(res.data.firebase_token);
+                    }
+
                     nguoiDungDaKhoiPhuc = {
                         ...res.data.nguoi_dung,
                         vai_tros: res.data.nguoi_dung.vai_tros

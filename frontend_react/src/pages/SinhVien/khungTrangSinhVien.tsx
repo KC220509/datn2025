@@ -18,11 +18,11 @@ const KhungTrangSinhVien: React.FC = () => {
                                     Nhóm Đồ Án Tốt Nghiệp
                                 </NavLink>
                             </li>
-                            <li>
+                            {/* <li>
                                 <NavLink to="/sinh-vien/ql-giangvien" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                                     Danh Sách Giảng Viên
                                 </NavLink>
-                            </li>
+                            </li> */}
                         </ul>
                     </nav>
                 </aside>
