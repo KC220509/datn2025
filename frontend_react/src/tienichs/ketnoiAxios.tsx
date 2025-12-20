@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const diaChiAPI = "http://hotrodoan:8000/api";
+const diaChiAPI = import.meta.env.VITE_API_URL || "http://hotrodoan:8000/api";
 
 const ketNoiAxios = axios.create({
   baseURL: diaChiAPI,
