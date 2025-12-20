@@ -219,11 +219,16 @@
 /* Các phần thông tin */
 .phan-thong-tin,
 .phan-giang-vien,
-.phan-thanh-vien {
+.phan-thanh-vien,
+.phan-tep-dinh-kem {
     padding: 15px 15px;
     border-bottom: 1px solid #d0d0d0;
 }
-
+.phan-thanh-vien,
+.phan-tep-dinh-kem {
+    max-height: 200px;
+    overflow-y: auto;
+}
 .phan-tieude{
     margin-bottom: 10px;
     align-items: center;
@@ -303,13 +308,15 @@
 }
 
 /* Danh sách thành viên */
-.danh-sach-thanh-vien {
+.danh-sach-thanh-vien,
+.danh-sach-tep {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.item-thanh-vien {
+.item-thanh-vien,
+.item-tep {
     display: flex;
     gap: 10px;
     padding: 10px;
@@ -317,13 +324,17 @@
     border-radius: 8px;
     transition: all 0.2s ease;
 }
-
-.item-thanh-vien:hover {
+.item-tep{
+    cursor: pointer;
+    align-items: center;
+}
+.item-tep:hover {
     background-color: #d5dbdb;
     transform: translateX(4px);
 }
 
-.avatar-thanh-vien {
+.avatar-thanh-vien,
+.avatar-tep {
     font-size: 24px;
     display: flex;
     align-items: center;
@@ -331,10 +342,21 @@
     color: #0ccece;
 }
 
-.chi-tiet-thanh-vien {
+.chi-tiet-thanh-vien,
+.chi-tiet-tep {
     flex: 1;
     min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+.chi-tiet-tep p{
+    color: #3171e7;
+    font-weight: 500;
+    font-size: 14px;
+}
+
 
 .ten-thanh-vien {
     margin: 0 0 2px 0;
@@ -464,7 +486,7 @@
     min-width: 200px;
     max-width: 230px;
     height: 140px;
-    object-fit: cover;
+    /* object-fit: cover; */
     border-radius: 6px;
 
 }
@@ -671,7 +693,8 @@
 
     .phan-thong-tin,
     .phan-giang-vien,
-    .phan-thanh-vien {
+    .phan-thanh-vien,
+    .phan-tep-dinh-kem {
         padding: 12px 10px;
         border-bottom: none;
         border-right: 1px solid #d0d0d0;
@@ -750,7 +773,8 @@
 
     .phan-thong-tin,
     .phan-giang-vien,
-    .phan-thanh-vien {
+    .phan-thanh-vien,
+    .phan-tep-dinh-kem {
         border-right: none;
         border-bottom: 1px solid #d0d0d0;
         padding: 10px 12px;

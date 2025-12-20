@@ -4,6 +4,8 @@ import './khungNhomChat.css';
 import ketNoiAxios from '../../tienichs/ketnoiAxios';
 import { useNguoiDung } from '../../hooks/useNguoiDung';
 import axios from 'axios';
+import { limitToLast, onValue, query, ref } from 'firebase/database';
+import { db } from '../../firebase';
 
 
 interface NguoiDung{
@@ -51,11 +53,55 @@ interface ThongTinNhom {
     ma_hocky: string;
 }
 
+
+
+interface TepDinhKemNhom{
+    id_tinnhan: string;
+    ma_nhom: string;
+    ten_tep: string;
+    duong_dan_tep: string;
+}
+
+
 const KhungNhomChat = () => {
 
     const { nguoiDung } = useNguoiDung();
     const { id_nhom } = useParams<{ id_nhom: string }>();
     const navigate = useNavigate();
+
+    const [tepDinhKem, setTepDinhKem] = useState<TepDinhKemNhom[]>([]);
+
+    useEffect(() => {
+        if (!id_nhom) return;
+
+        const tinNhanHienTai = ref(db, `nhom_chat/${id_nhom}`);
+        
+        const q = query(tinNhanHienTai, limitToLast(50));
+
+        const dongKetNoi = onValue(q, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const dsTinNhan = Object.keys(data).map(key => ({
+                    id_firebase: key,
+                    ...data[key]
+                }));
+
+                const dsTep = dsTinNhan.filter(item => 
+                                            item.ten_tep !== null && 
+                                            item.duong_dan_tep !== "" &&
+                                            item.tinnhan_xoa === false 
+                                        )
+                                        .reverse();
+
+                console.log("Dữ liệu nhận từ Firebase:", dsTep);
+                setTepDinhKem(dsTep);
+            } else {
+                setTepDinhKem([]); 
+            }
+        });
+
+        return () => dongKetNoi();
+    }, [id_nhom]);
     
     const [thongTinNhom, setThongTinNhom] = useState<ThongTinNhom>();
 
@@ -348,6 +394,27 @@ const KhungNhomChat = () => {
                         ))}
                     </div>
                 </div>
+
+                {/* Danh sách tệp đính kèm */}
+                {tepDinhKem.length > 0 && (
+                    <div className="phan-tep-dinh-kem">
+                        <div className="phan-tieude flex-row">
+                            <h4 className="tieude-phan">Tệp Đính Kèm</h4>
+                        </div>
+                        <div className="danh-sach-tep">
+                            {tepDinhKem.map((tep) => (
+                                <a key={tep.id_tinnhan} href={`${tep.duong_dan_tep}`} target='_blank' className="item-tep flex-row">
+                                    <div className="avatar-tep">
+                                        <i className="bi bi-file-earmark-arrow-down-fill"></i>
+                                    </div>
+                                    <div className="chi-tiet-tep">
+                                        <p className="ten-tep">{tep.ten_tep}</p>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </aside>
         </div>
     );

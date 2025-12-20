@@ -3,10 +3,11 @@ import ketNoiAxios from "../../tienichs/ketnoiAxios";
 import { useParams } from "react-router-dom";
 import { limitToLast, onValue, query, ref } from "firebase/database";
 import { db } from "../../firebase";
+import { useNguoiDung } from "../../hooks/useNguoiDung";
 
 
 interface NguoiDung{
-    id_nguoi_dung: string;
+    id_nguoidung: string;
     ho_ten: string;
     email: string;
 
@@ -26,11 +27,13 @@ interface TinNhanNhom{
     tinnhan_xoa: boolean;
     created_at: Date;
     updated_at: Date;
+    dang_gui: boolean;
 }
 
 const NhomChat = () => {
 
     // Lấy tin nhắn nhóm
+    const { nguoiDung } = useNguoiDung();
     const { id_nhom } = useParams<{ id_nhom: string }>();
     const [tinNhanNhom, setTinNhanNhom] = useState<TinNhanNhom[]>([]);
 
@@ -56,26 +59,27 @@ const NhomChat = () => {
     useEffect(() => {
         if (!id_nhom) return;
 
-        const messagesRef = ref(db, `nhom_chat/${id_nhom}`);
+        const tinNhanHienTai = ref(db, `nhom_chat/${id_nhom}`);
         
-        const q = query(messagesRef, limitToLast(50));
+        const q = query(tinNhanHienTai, limitToLast(50));
 
-        const unsubscribe = onValue(q, (snapshot) => {
+        const dongKetNoi = onValue(q, (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                const messagesArray = Object.keys(data).map(key => ({
+                const dsTinNhan = Object.keys(data).map(key => ({
                     id_firebase: key,
+                    id_tinnhan: data[key].id_tinnhan || key,
                     ...data[key]
                 }));
 
-                console.log("Dữ liệu nhận từ Firebase:", messagesArray);
-                setTinNhanNhom(messagesArray);
+                console.log("Dữ liệu nhận từ Firebase:", dsTinNhan);
+                setTinNhanNhom(dsTinNhan);
             } else {
                 setTinNhanNhom([]); 
             }
         });
 
-        return () => unsubscribe();
+        return () => dongKetNoi();
     }, [id_nhom]);
 
 
@@ -93,6 +97,33 @@ const NhomChat = () => {
         e.preventDefault();
         if (!noiDung.trim() && !tepChon) return;
 
+        // --- TẠO TIN NHẮN GIẢ ---
+        const idTamThoi = "temp-" + Date.now();
+        const tinNhanTamThoi: TinNhanNhom = {
+            id_tinnhan: idTamThoi,
+            ma_nhom: id_nhom || "",
+            nguoi_gui: { 
+                id_nguoidung: String(nguoiDung?.id_nguoidung || ""), 
+                ho_ten: nguoiDung?.ho_ten || "", 
+                email: nguoiDung?.email || "" 
+            },
+            ho_ten: nguoiDung?.ho_ten || "", 
+            noi_dung: noiDung,
+            ten_tep: "",
+            duong_dan_tep: "",
+            da_xem: false,
+            tinnhan_ghim: false,
+            tinnhan_xoa: false,
+            created_at: new Date(),
+            updated_at: new Date(),
+            dang_gui: true
+        };
+
+        setTinNhanNhom((prev) => [...prev, tinNhanTamThoi]);
+        setNoiDung("");
+        setTepChon(null);
+
+        // --- GỬI TIN NHẮN THẬT LÊN SERVER ---
         const formData = new FormData();
         formData.append('ma_nhom', String(id_nhom));
         formData.append('noi_dung', noiDung);
@@ -111,6 +142,8 @@ const NhomChat = () => {
             }
         } catch (error) {
             console.error("Lỗi gửi tin nhắn:", error);
+            setTinNhanNhom((prev) => prev.filter(tn => tn.id_tinnhan !== idTamThoi));
+            alert("Không thể gửi tin nhắn. Vui lòng thử lại.");
         }
     };
 
@@ -124,7 +157,7 @@ const NhomChat = () => {
                     
                     {tinNhanNhom.length > 0 ? (
                         tinNhanNhom.map((tn) => (
-                            <div key={tn.id_tinnhan} className="tin-nhan-dong flex-row">
+                            <div key={tn.id_tinnhan} className={`tin-nhan-dong flex-row ${tn.dang_gui ? 'opacity-50' : ''}`}>
                                 <div className="avt-tin-nhan">
                                     <i className="bi bi-person-circle"></i>
                                 </div>
@@ -132,7 +165,7 @@ const NhomChat = () => {
                                     <div className="thong-tin-nguoi-gui flex-row">
                                         <span className="ten-nguoi-gui">{tn.ho_ten}</span>
                                         <span className="thoi-gian-gui">
-                                            {tn.created_at ? new Date(tn.created_at).toLocaleTimeString() : ""}
+                                            {tn.dang_gui ? "Đang gửi..." : (tn.created_at ? new Date(tn.created_at).toLocaleTimeString() : "")}
                                         </span>
                                     </div>
                                     <div className="noi-dung-tin-nhan-gui">{tn.noi_dung}</div>
@@ -148,7 +181,7 @@ const NhomChat = () => {
                                                 </div>
                                             ) : (
                                                 <div className="tep-dinh-kem">
-                                                    <a href={tn.duong_dan_tep} target="_blank" rel="noreferrer" className="flex-row items-center p-2 bg-light rounded">
+                                                    <a href={tn.duong_dan_tep} target="_blank" rel="noreferrer" className="flex-row">
                                                         <i className="bi bi-file-earmark-arrow-down-fill"></i>
                                                         <span>{tn.ten_tep}</span>
                                                     </a>
