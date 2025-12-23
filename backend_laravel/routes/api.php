@@ -105,7 +105,7 @@ Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
 
     // Nhóm - Nhiệm vụ - SV
     Route::middleware(['kiem_tra_dang_nhap:SV'])->group(function () {
-        // Route::get('/chi-tiet/{idNhom}/nhiem-vu', [SinhVienController::class, 'layDsNhiemVu'])->name('sv_layDsNhiemVu');
+        Route::post('/chi-tiet/nhiem-vu/{idNhiemVu}/nop-bai', [SinhVienController::class, 'nopBai'])->name('sv_nopBai');
     });
 
 });

@@ -742,14 +742,13 @@
     background-color: #28a745;
     color: white;
     border: none;
-    padding: 5px 15px;
+    padding: 8px 15px;
     border-radius: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 10px;
     font-weight: bold;
-    line-height: 2;
 }
 
 /* Danh sách bài tập */
@@ -1001,7 +1000,6 @@
 /* Chi tiết bài tập */
 .khung-chi-tiet-bt { 
     background: #f8f9fa; 
-    /* padding: 20px;  */
     border-radius: 12px; }
 .dau-trang {  
     gap: 20px; 
@@ -1123,16 +1121,13 @@
 
 .vung-upload { 
     border: 2px dashed #007bff; 
-    padding: 30px 10px; 
+    padding: 20px 10px; 
     text-align: center; 
     border-radius: 8px; 
     margin: 15px 0; 
 }
 
-.vung-upload .label-upload.disabled { 
-    pointer-events: none; 
-    opacity: 0.6;
-}
+
 
 .label-upload { 
     cursor: pointer; 
@@ -1141,8 +1136,8 @@
 }
 
 .vung-upload .khung-danh-sach-tep-da-chon { 
-    margin-top: 15px; 
-    max-height: 120px; 
+    max-height: 180px; 
+    margin-top: 10px;
     gap: 10px;
     overflow-y: auto; 
     border: 1px solid #ddd; 
@@ -1160,7 +1155,46 @@
     font-size: 14px; 
 }
 
-.nut-gui-bai { 
+
+.vung-upload .khung-tep-da-nop{
+    max-height: 200px; 
+    gap: 8px;
+    overflow-y: auto; 
+    overflow-x: hidden;
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    padding: 10px; 
+    background: #f8f9fa; 
+}
+.vung-upload .khung-tep-da-nop p{
+    font-size: 14px; 
+    color: #555; 
+    font-weight: 500;
+    text-align: center;
+}
+
+.vung-upload .khung-tep-da-nop .tep-item{
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: #28a745; 
+}
+.vung-upload .khung-tep-da-nop .tep-item a{
+    color: #28a745; 
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nhom-nut-hanh-dong .da-dong{
+    width: 100%;
+    font-weight: bold;
+    color: #fe0a0a; 
+    cursor: not-allowed;
+    text-align: center;
+}
+
+
+.nhom-nut-hanh-dong .nut-hoan-tac { 
     width: 100%; 
     padding: 12px; 
     border: none; 
@@ -1168,6 +1202,22 @@
     font-weight: bold; 
     cursor: pointer; 
     transition: 0.3s; 
+    background: #02a4fb;
+    color: #ffffff;
+}
+
+.nhom-nut-hanh-dong .nut-hoan-tac:hover { 
+    background: #0284d0; 
+}
+
+.nhom-nut-hanh-dong .nut-gui-bai{
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 6px; 
+    border: none; 
+    background: #007bff; 
+    color: #fff; 
+    font-weight: bold;
 }
 .nut-gui-bai.con_han { 
     background: #28a745; 
@@ -1182,7 +1232,22 @@
     cursor: not-allowed; 
 }
 
+.nhom-nut-hanh-dong .nut-huy-bo{
+    width: 100%; 
+    padding: 12px; 
+    margin-top: 8px;
+    border: none; 
+    border-radius: 6px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    background: #e74c3c; 
+    color: #ffffff;
+}
 
+.nhom-nut-hanh-dong .nut-huy-bo:hover {
+    background: #c0392b;
+}
 
 /* Tablets lớn */
 @media (max-width: 1200px) {

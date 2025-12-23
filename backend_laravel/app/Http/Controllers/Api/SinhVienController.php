@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SinhVienNopBaiRequest;
 use App\Models\NguoiDung;
 use App\Models\NhiemVu;
 use App\Models\NhomDoAn;
+use App\Models\NopBai;
 use App\Models\PhanCong;
 use App\Models\SinhVien;
 use App\Models\ThanhVienNhom;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class SinhVienController extends Controller
 {
@@ -108,5 +111,66 @@ class SinhVienController extends Controller
         ]);
     }
 
-   
+    public function NopBai(SinhVienNopBaiRequest $request, $idNhiemVu)
+    {
+        $id_sinhvien = Auth::id();
+
+        $nhiemvu = NhiemVu::find($idNhiemVu);
+        if (!$nhiemvu) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Nhiệm vụ không tồn tại.'
+            ], 404);
+        }
+
+        // Xử lý lưu tệp đính kèm
+        $dsDuongDanTep = [];
+        if($request->hasFile('tep_dinh_kem')){
+            $dsTep = $request->file('tep_dinh_kem');
+
+            foreach($dsTep as $tep){
+                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
+                $duoiTep = $tep->getClientOriginalExtension();
+                $newTenTep = $gocTenTep . '.' . $duoiTep;
+                $duongDanTepTam = $tep->move(sys_get_temp_dir(), $newTenTep);
+                $taiLenCloud = cloudinary()->uploadApi()->upload(
+                    $duongDanTepTam->getRealPath(),
+                    [
+                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+                        'resource_type' => 'auto',
+                        'use_filename' => true,
+                    ]
+                );
+
+                $dsDuongDanTep[] = $taiLenCloud['secure_url'];
+                if (file_exists($duongDanTepTam->getRealPath())) {
+                    unlink($duongDanTepTam->getRealPath());
+                }
+            }
+        }
+
+        $ketQua = NopBai::updateOrCreate(
+            [
+                'ma_nhiemvu' => $idNhiemVu,
+                'ma_sinhvien' => $id_sinhvien
+            ],
+            [
+                'id_nopbai' => Str::uuid(),
+                'ma_nhom' => $nhiemvu->ma_nhom,
+                'duong_dan_teps' => $dsDuongDanTep,
+                'thoigian_nop' => now(),
+                'trang_thai' => now() > $nhiemvu->han_nop ? 'tre_han' : 'dung_han' 
+            ]
+        );
+        
+
+        
+
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Nộp bài thành công.',
+            'nhiemvu' => $nhiemvu,
+            'nopBai' => $ketQua
+        ]);
+    }
 }

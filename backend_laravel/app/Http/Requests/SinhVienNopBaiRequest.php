@@ -11,7 +11,7 @@ class SinhVienNopBaiRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class SinhVienNopBaiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'tep_dinh_kem.*' => 'required|file|max:20480'
         ];
     }
 }

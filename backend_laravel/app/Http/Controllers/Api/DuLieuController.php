@@ -349,7 +349,7 @@ class DuLieuController extends Controller
 
     }
 
-     public function layDsChoSinhVien($id_nhom){
+    public function layDsChoSinhVien($id_nhom){
         $id_sinhvien = Auth::id();
         $thanhVien = ThanhVienNhom::where('ma_nhom', $id_nhom)
                         ->where('ma_sinhvien', $id_sinhvien)
@@ -365,8 +365,9 @@ class DuLieuController extends Controller
                             ->with(['danhSachNopBai' => function($query) use ($id_sinhvien) {
                                 $query->where('ma_sinhvien', $id_sinhvien);
                             }])
-                            ->orderBy('han_nop', 'asc')
+                            ->orderBy('created_at', 'desc')
                             ->get();
+
                             
         return response()->json([
             'trangthai' => true,
@@ -374,10 +375,7 @@ class DuLieuController extends Controller
             'ds_nhiemvu' => [
                 'con_han' => $dsNhiemVu->filter(fn($q) => in_array($q->trangthai_nhiemvu, ['con_han', 'dang_tre_han']))->values(),
                 'qua_han' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'da_dong')->values(),
-                // 'dung_han' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'dung_han')->values(),
-                // 'tre_han' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'tre_han')->values(),
-                'hoan_thanh' => $dsNhiemVu->filter(fn($q) => in_array($q->trangthai_nhiemvu, ['dung_han', 'tre_han']))->values(),
-
+                'hoan_thanh' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'hoan_thanh')->values(),
 
             ]
         ]);
@@ -426,9 +424,13 @@ class DuLieuController extends Controller
 
     public function layChiTietNhiemVu($idNhiemVu)
     {
+        $id_nguoidung = Auth::id();
+
         $nhiemVu = NhiemVu::where('id_nhiemvu', $idNhiemVu)
-            ->with('nhomDATN')
-            ->first();
+                            ->with(['nhomDATN', 'danhSachNopBai' => function($query) use ($id_nguoidung) {
+                                $query->where('ma_sinhvien', $id_nguoidung);
+                            }])
+                            ->first();
 
 
         if (!$nhiemVu) {
@@ -438,6 +440,7 @@ class DuLieuController extends Controller
             ], 404);
         }
 
+        // Xử lý tên tệp hướng dẫn của giảng viên
         $dsTenTep = [];
         if ($nhiemVu->duong_dan_teps) {
             foreach ($nhiemVu->duong_dan_teps as $duongDanTep) {
@@ -447,10 +450,23 @@ class DuLieuController extends Controller
 
         $nhiemVu->ten_teps = $dsTenTep;
 
+        // Xử lý tên tệp nộp bài của sinh viên
+        if ($nhiemVu->danhSachNopBai->isNotEmpty()) {
+            $baiNop = $nhiemVu->danhSachNopBai->first();
+            $dsTenTepSV = [];
+            if ($baiNop->duong_dan_teps) {
+                foreach ($baiNop->duong_dan_teps as $path) {
+                    $dsTenTepSV[] = urldecode(basename($path));
+                }
+            }
+           
+            $baiNop->ten_teps = $dsTenTepSV;
+        }
 
         return response()->json([
             'trangthai' => true,
-            'nhiem_vu' => $nhiemVu
+            'nhiem_vu' => $nhiemVu,
+            'bai_nop' => $baiNop ?? null,
         ]);
     }
 }

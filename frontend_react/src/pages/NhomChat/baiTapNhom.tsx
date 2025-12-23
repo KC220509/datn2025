@@ -5,14 +5,25 @@ import { useNguoiDung } from '../../hooks/useNguoiDung';
 import './khungNhomChat.css'; 
 import ChiTietBaiTap from './chiTietBaiTap';
 
+interface NopBai {
+    id_nopbai: string;
+    ma_nhom: string;
+    ma_sinhvien: string;
+    ma_nhiemvu: string;
+    duong_dan_teps: string[];
+    trang_thai: string; 
+    nhan_xet: string;
+    thoigian_nop: string;
+}
+
 interface NhiemVu {
     id_nhiemvu: string;
     ten_nhiemvu: string;
     han_nop: string;
     han_dong: string;
-    trang_thai_nop?: string; 
     trangthai_nhiemvu: string;
-    danh_sach_nop_bai_count?: number;
+    danh_sach_nop_bai?: NopBai[];
+    danh_sach_nop_bai_count?: number;    
 }
 
 interface DSNhiemVuTrangThai {
@@ -49,7 +60,8 @@ const QuanLyBaiTap = () => {
         tong_so_sv: 0
     });
 
-    const [tabHienTai, setTabHienTai] = useState<keyof DSNhiemVuTrangThai>('con_han');
+    type tabBaiTap = 'con_han' | 'qua_han' | 'hoan_thanh';
+    const [tabHienTai, setTabHienTai] = useState<tabBaiTap>('con_han');
 
     useEffect(() => {
         layDanhSachBaiTap(String(id_nhom));
@@ -149,22 +161,25 @@ const QuanLyBaiTap = () => {
         }
     };
 
-    const nhanTrangThaiNop = (loai: string) => {
-        switch (loai) {
+    const nhanTrangThaiNop = (bt: NhiemVu) => {
+        const baiNop = bt.danh_sach_nop_bai?.[0];
+        if (baiNop) {
+            return (
+                <span className={`nhan-trang-thai ${baiNop.trang_thai === 'tre_han' ? 'hoan-thanh-tre' : 'hoan-thanh'}`}>
+                    {baiNop.trang_thai === 'tre_han' ? 'Đã nộp trễ' : 'Đã nộp bài'}
+                </span>
+            );
+        }
+        switch (bt.trangthai_nhiemvu) {
 
             // Đang diễn ra
             case 'con_han': return <span className="nhan-trang-thai cho-nop">Đang diễn ra</span>;
             case 'dang_tre_han': return <span className="nhan-trang-thai tre-han">Nộp trễ</span>;
 
             // Quá hạn
-            case 'da_dong': return <span className="nhan-trang-thai da-dong">Đã đóng</span>;
+            case 'da_dong': return <span className="nhan-trang-thai da-dong">Chưa nộp bài</span>;
             
-            // Hoàn thành
-            // case 'dung_han': return <span className="nhan-trang-thai hoan-thanh">Đã nộp bài</span>;
-            // case 'tre_han': return <span className="nhan-trang-thai hoan-thanh-tre">Nộp bài trễ</span>;
-            case 'hoan_thanh': return <span className="nhan-trang-thai hoan-thanh-tre">Đã hoàn thành</span>;
-            
-            default: return <span className="nhan-trang-thai">Không rõ</span>;
+            default: return null;
         }
     };
 
@@ -174,77 +189,83 @@ const QuanLyBaiTap = () => {
     return (
         <div className="khung-quan-ly-bai-tap">
             {idNhiemVuDangXem ? (
-                /* Nếu có ID thì hiện trang chi tiết */
                 <ChiTietBaiTap
                     nhiemVuId={idNhiemVuDangXem} 
                     laGiangVien={laGiangVien ?? false}
-                    onBack={() => setIdNhiemVuDangXem(null)} 
+                    onBack={() => {
+                        setIdNhiemVuDangXem(null)
+                        layDanhSachBaiTap(String(id_nhom));
+                    }} 
                 />
             ) : (
                 <>
-                <div className="thanh-dieu-huong-tab">
-                    <div className="nhom-tab">
-                        <button className={tabHienTai === 'con_han' ? 'active' : ''} onClick={() => setTabHienTai('con_han')}>
-                            Đang diễn ra ({dsTrangThaiBaiTap.con_han.length})
-                        </button>
-                        {!laGiangVien && (
-                            <>
-                                <button className={tabHienTai === 'qua_han' ? 'active' : ''} onClick={() => setTabHienTai('qua_han')}>
-                                    Quá hạn ({dsTrangThaiBaiTap.qua_han.length})
-                                </button>
-                            </>
-                        )}
-                        <button className={tabHienTai === 'hoan_thanh' ? 'active' : ''} onClick={() => setTabHienTai('hoan_thanh')}>
-                            Hoàn thành ({dsTrangThaiBaiTap.hoan_thanh.length})
-                        </button>
-                        
-                    </div>
-                    
-                    {laGiangVien && (
-                        <button className="nut-them-bai-tap" onClick={() => setMoKhungTao(true)}>
-                            <i className="bi bi-plus-square-dotted"></i> Bài Tập
-                        </button>
-                    )}
-                </div>
-
-                <div className="danh-sach-bai-tap">
-                    {(dsTrangThaiBaiTap[tabHienTai] as NhiemVu[]).length > 0 ? (
-                        (dsTrangThaiBaiTap[tabHienTai] as NhiemVu[]).map((bt) => (
-                            <div key={bt.id_nhiemvu} className={`the-bai-tap ${bt.trangthai_nhiemvu}`}>
-                                <div className="ben-trai">
-                                    
-                                    <div className="bieu-tuong-van-ban">
-                                        {tabHienTai === 'hoan_thanh' ? '✅' : tabHienTai === 'qua_han' ? '⏰' : '📝'}
-                                    </div>
-                                    <div className="thong-tin-bt">
-                                        <h4>{bt.ten_nhiemvu}</h4>
-                                        <p className="han-nop">Đến hạn: {new Date(bt.han_nop).toLocaleString('vi-VN')}</p>
-                                        <p className="thoi-gian-dong">Đóng vào: {new Date(bt.han_dong).toLocaleString('vi-VN')}</p>
-                                    </div>
-                                </div>
-                                <div className="ben-phai">
-                                    {!laGiangVien && nhanTrangThaiNop(bt.trangthai_nhiemvu)}
-                                    
-                                    <button className="nut-chi-tiet" onClick={() => setIdNhiemVuDangXem(bt.id_nhiemvu)}>
-                                        {laGiangVien ? (
-                                            <span className="nhan-trang-thai thong-ke-nop">
-                                                {bt.trangthai_nhiemvu === 'hoan_thanh' ? (
-                                                    `Đã nộp: ${bt.danh_sach_nop_bai_count || 0} / ${dsTrangThaiBaiTap.tong_so_sv || 0}`
-                                                ) : (
-                                                    'Xem chi tiết'
-                                                )}
-                                            </span>
-                                        ) : (
-                                            bt.trangthai_nhiemvu === 'da_dong' ? 'Xem chi tiết' : 'Xem nhiệm vụ'
-                                        )}
+                    <div className="thanh-dieu-huong-tab">
+                        <div className="nhom-tab">
+                            <button className={tabHienTai === 'con_han' ? 'active' : ''} onClick={() => setTabHienTai('con_han')}>
+                                Đang diễn ra ({dsTrangThaiBaiTap.con_han.length})
+                            </button>
+                            {!laGiangVien && (
+                                <>
+                                    <button className={tabHienTai === 'qua_han' ? 'active' : ''} onClick={() => setTabHienTai('qua_han')}>
+                                        Quá hạn ({dsTrangThaiBaiTap.qua_han.length})
                                     </button>
+                                </>
+                            )}
+                            <button className={tabHienTai === 'hoan_thanh' ? 'active' : ''} onClick={() => setTabHienTai('hoan_thanh')}>
+                                Hoàn thành ({dsTrangThaiBaiTap.hoan_thanh.length})
+                            </button>
+                            
+                        </div>
+                        
+                        {laGiangVien && (
+                            <button className="nut-them-bai-tap" onClick={() => setMoKhungTao(true)}>
+                                <i className="bi bi-plus-square-dotted"></i> Bài Tập
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="danh-sach-bai-tap">
+                        {(dsTrangThaiBaiTap[tabHienTai])?.length > 0 ? (
+                            (dsTrangThaiBaiTap[tabHienTai]).map((bt) => (
+                                <div key={bt.id_nhiemvu} className={`the-bai-tap ${bt.trangthai_nhiemvu}`}>
+                                    <div className="ben-trai">
+                                        
+                                        <div className="bieu-tuong-van-ban">
+                                            {tabHienTai === 'hoan_thanh' ? '✅' : tabHienTai === 'qua_han' ? '⏰' : '📝'}
+                                        </div>
+                                        <div className="thong-tin-bt">
+                                            <h4>{bt.ten_nhiemvu}</h4>
+                                            <p className="han-nop">Đến hạn: {new Date(bt.han_nop).toLocaleString('vi-VN')}</p>
+                                            <p className="thoi-gian-dong">Đóng vào: {new Date(bt.han_dong).toLocaleString('vi-VN')}</p>
+                                        </div>
+                                    </div>
+                                    <div className="ben-phai">
+                                        {!laGiangVien && nhanTrangThaiNop(bt)}
+                                        {laGiangVien && (
+                                            <span className="nhan-trang-thai da-dong">
+                                                {`Đã nộp: ${bt.danh_sach_nop_bai_count || 0} / ${dsTrangThaiBaiTap.tong_so_sv || 0}`}
+                                            </span>
+                                        )}
+                                        <button className="nut-chi-tiet" onClick={() => setIdNhiemVuDangXem(bt.id_nhiemvu)}>
+                                            {laGiangVien ? (
+                                                <span className="nhan-trang-thai thong-ke-nop">
+                                                    {bt.trangthai_nhiemvu === 'hoan_thanh' ? (
+                                                        `Đã nộp: ${bt.danh_sach_nop_bai_count || 0} / ${dsTrangThaiBaiTap.tong_so_sv || 0}`
+                                                    ) : (
+                                                        'Xem chi tiết'
+                                                    )}
+                                                </span>
+                                            ) : (
+                                                bt.trangthai_nhiemvu === 'da_dong' ? 'Xem chi tiết' : 'Xem nhiệm vụ'
+                                            )}
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="trong-rong">Chưa có bài tập nào trong mục này.</div>
-                    )}
-                </div>
+                            ))
+                        ) : (
+                            <div className="trong-rong" style={{textAlign: 'center'}}>Không có bài tập nào trong mục này.</div>
+                        )}
+                    </div>
                 </>
             )}
 

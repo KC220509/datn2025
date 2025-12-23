@@ -60,10 +60,10 @@ class NhiemVu extends Model
         }
 
         // Lấy trạng thái nhiệm vụ cho SINH VIÊN
-        $baiNop = $this->danhSachNopBai()->where('ma_sinhvien', $nguoiDung->id_nguoiDung)->first();
+        $baiNop = $this->danhSachNopBai()->where('ma_sinhvien', $nguoiDung->id_nguoidung)->first();
 
         if ($baiNop) {
-            return $baiNop->trang_thai; // 'dung_han' hoặc 'tre_han'
+            return 'hoan_thanh'; // 'dung_han' hoặc 'tre_han'
         }else{
             if ($now > $this->han_dong) {
                 return 'da_dong'; // Quá hạn đóng --> Không thể nộp
