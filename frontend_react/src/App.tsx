@@ -41,7 +41,7 @@ import NhomChat from './pages/NhomChat/nhomChat';
 import QuanLyThongBao from './pages/PhongDaoTao/qlThongBao';
 import DanhSachThongBao from './pages/PhongDaoTao/danhSachThongBao';
 import DangThongBao from './pages/PhongDaoTao/dangThongBao';
-
+import QuanLyBaiTap from './pages/NhomChat/baiTapNhom';
 
 
 function App() {
@@ -112,6 +112,8 @@ function App() {
           } >
             
             <Route index element={<NhomChat />} />
+            <Route path='bai-tap' element={<QuanLyBaiTap />} />
+
             
           </Route>
       </Route>

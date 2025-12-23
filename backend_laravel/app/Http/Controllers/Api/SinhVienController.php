@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\NguoiDung;
+use App\Models\NhiemVu;
 use App\Models\NhomDoAn;
 use App\Models\PhanCong;
 use App\Models\SinhVien;
+use App\Models\ThanhVienNhom;
 use Illuminate\Support\Facades\Auth;
 
 class SinhVienController extends Controller
@@ -105,4 +107,6 @@ class SinhVienController extends Controller
             'ds_nhom' => $ds_nhom
         ]);
     }
+
+   
 }

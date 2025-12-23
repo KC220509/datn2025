@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://hotrodoan:5173'], // kết nối react vite
+    'allowed_origins' => ['http://hotrodoan:5173', '*'], // kết nối react vite
 
     'allowed_origins_patterns' => [],
 

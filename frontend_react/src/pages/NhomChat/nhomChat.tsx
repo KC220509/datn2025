@@ -149,10 +149,7 @@ const NhomChat = () => {
 
     return (
         <div className="khu-vuc-nhan-tin flex-col">
-            
             <div className="hien-thi-tin-nhan flex-col">
-                
-
                 <div className="khung-tin-nhan-cuon flex-col">
                     
                     {tinNhanNhom.length > 0 ? (
@@ -199,8 +196,6 @@ const NhomChat = () => {
                         </div>
                     )}
 
-
-
                     <div ref={cuonXuongTinNhan}></div>
                 </div>
                
@@ -215,7 +210,6 @@ const NhomChat = () => {
                             {tepChon.name}
                         </span>
                         <i className="xoa-tep-chon bi bi-x-square" onClick={() => setTepChon(null)}></i>
-                        
                     </div>
                 )}
                 <form className="form-nhap-tin-nhan flex-row" onSubmit={xuLyGuiTinNhan}>

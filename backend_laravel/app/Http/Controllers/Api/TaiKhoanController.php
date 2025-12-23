@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CapLaiMatKhauRequest;
 use App\Http\Requests\DangNhapRequest;
+use App\Http\Requests\DoiMatKhauRequest;
 use App\Mail\ThongBaoCapLaiMatKhau;
 use App\Models\NguoiDung;
 use App\Services\NguoiDungService;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -135,5 +136,41 @@ class TaiKhoanController extends Controller
             'thongbao' => 'Email đã được gửi. Vui lòng kiểm tra hộp thư của bạn.'
         ]);
 
+    }
+
+
+    public function doiMatKhau(DoiMatKhauRequest $doiMatKhauRequest){
+        $request = $doiMatKhauRequest->validated();
+
+        $nguoiDung = NguoiDung::find(Auth::id());
+        if (!password_verify($request['matKhauCu'], $nguoiDung->mat_khau)) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Mật khẩu cũ không đúng.'
+            ], 400);
+        }
+
+        if ( $request['matKhauCu'] === $request['matKhauMoi']) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Mật khẩu mới phải khác mật khẩu cũ.'
+            ], 400);
+        }
+
+        if ( $request['matKhauMoi'] !== $request['xacNhanMatKhauMoi']) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Xác nhận mật khẩu mới không khớp.'
+            ], 400);
+        }
+
+        $nguoiDung->mat_khau = Hash::make($request['matKhauMoi']);
+
+        $nguoiDung->save();
+
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Đổi mật khẩu thành công. Hệ thống sẽ tiến hành đăng nhập lại.'
+        ]);
     }
 }

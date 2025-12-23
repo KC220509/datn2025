@@ -262,12 +262,44 @@ return new class extends Migration
             $table->uuid('id_nhiemvu')->primary();
             $table->uuid('ma_nhom');
             $table->string('ten_nhiemvu');
+            $table->text('noi_dung')->nullable();
+            $table->json('duong_dan_teps')->nullable();
             $table->datetime('han_nop');
+            $table->datetime('han_dong');
             $table->timestamps();
 
             $table->foreign('ma_nhom')
                 ->references('id_nhom')
                 ->on('nhom_do_an')
+                ->onDelete('cascade');
+        });
+
+        Schema::create('nop_bai', function (Blueprint $table) {
+            $table->uuid('id_nopbai')->primary();
+            $table->uuid('ma_nhom');
+            $table->uuid('ma_nhiemvu');
+            $table->uuid('ma_sinhvien');
+            $table->json('duong_dan_teps')->nullable();
+            $table->datetime('thoigian_nop');
+            $table->enum('trang_thai', ['dung_han', 'tre_han']);
+            $table->text('nhan_xet')->nullable();
+            $table->timestamps();
+
+            $table->unique(['ma_nhiemvu', 'ma_sinhvien']); 
+
+            $table->foreign('ma_nhom')
+                ->references('id_nhom')
+                ->on('nhom_do_an')
+                ->onDelete('cascade');
+
+            $table->foreign('ma_nhiemvu')
+                ->references('id_nhiemvu')
+                ->on('nhiem_vu')
+                ->onDelete('cascade');
+
+            $table->foreign('ma_sinhvien')
+                ->references('id_sinhvien')
+                ->on('sinh_vien')
                 ->onDelete('cascade');
         });
 
@@ -381,6 +413,7 @@ return new class extends Migration
         Schema::dropIfExists('ket_qua_DATN');
         Schema::dropIfExists('de_tai');
         Schema::dropIfExists('tin_nhan_nhom');
+        Schema::dropIfExists('nop_bai');
         Schema::dropIfExists('nhiem_vu');
         Schema::dropIfExists('thanh_vien_nhom');
         Schema::dropIfExists('nhom_do_an');

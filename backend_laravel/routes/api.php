@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\GiangVienController;
 use App\Http\Controllers\Api\SinhVienController;
 use App\Http\Controllers\Api\TaiKhoanController;
 use App\Http\Controllers\Api\TruongBoMonController;
-use App\Http\Controllers\FirebaseAuthController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,7 +18,7 @@ Route::post('dang-nhap', [TaiKhoanController::class, 'dangNhap'])->name('dangNha
 
 Route::post('/cap-lai-mat-khau', [TaiKhoanController::class, 'capLaiMatKhau']);
 Route::middleware('auth:sanctum')->get('/nguoi-dung', [TaiKhoanController::class, 'layNguoiDung']);
-
+Route::middleware('auth:sanctum')->post('/nguoi-dung/doi-mat-khau', [TaiKhoanController::class, 'doiMatKhau']);
 
 //Admin 
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:AD'])->prefix('admin')->group(function () {
@@ -74,6 +73,8 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:GV'])->prefix('gv')->grou
     Route::post('/nhom/them-thanh-vien/{idNhom}', [GiangVienController::class, 'themSinhVienVaoNhom'])->name('gv_themSinhVienVaoNhom');
     Route::delete('/nhom/xoa-thanh-vien/{id_nhom}/{id_sinhvien}', [GiangVienController::class, 'xoaThanhVienKhoiNhom'])->name('gv_xoaThanhVienKhoiNhom');
     Route::delete('/xoa-nhom/{id_nhom}', [GiangVienController::class, 'xoaNhomDoAn'])->name('gv_xoaNhomDoAn');
+
+    // Route::get('/ds-nhiemvu/{id_nhom}', [GiangVienController::class, 'layDsNhiemVu'])->name('gv_layDsNhiemVu');
 });
 
 
@@ -88,9 +89,24 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:SV'])->prefix('sv')->grou
 
 Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
     Route::get('/chi-tiet/{idNhom}', [DuLieuController::class, 'layChiTietNhom'])->name('layChiTietNhom');
+    
+    // Nhóm - Tin nhắn
     Route::get('/chi-tiet/tinnhan/{idNhom}', [DuLieuController::class, 'layTinNhanNhom'])->name('layTinNhanNhom');
-
     Route::post('/chi-tiet/tinnhan/gui', [DuLieuController::class, 'guiTinNhan'])->name('guiTinNhanNhom');
+    
+    // Nhóm - Nhiệm vụ - Chung
+    Route::get('/chi-tiet/{idNhom}/nhiem-vu', [DuLieuController::class, 'layDsNhiemVu'])->name('layDsNhiemVu');
+    Route::get('/chi-tiet/nhiem-vu/{idNhiemVu}', [DuLieuController::class, 'layChiTietNhiemVu'])->name('layChiTietNhiemVu');
+    
+    // Nhóm - Nhiệm vụ - GV
+    Route::middleware(['kiem_tra_dang_nhap:GV'])->group(function () {
+        Route::post('/chi-tiet/{idNhom}/tao-nhiem-vu', [GiangVienController::class, 'taoNhiemVu'])->name('gv_taoNhiemVu');
+    });
+
+    // Nhóm - Nhiệm vụ - SV
+    Route::middleware(['kiem_tra_dang_nhap:SV'])->group(function () {
+        // Route::get('/chi-tiet/{idNhom}/nhiem-vu', [SinhVienController::class, 'layDsNhiemVu'])->name('sv_layDsNhiemVu');
+    });
 
 });
 

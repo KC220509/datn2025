@@ -63,8 +63,11 @@ class NguoiDung extends Authenticatable
     }
 
 
-    public function kiemTraVaiTro(string $vaiTroId): bool
+    public function kiemTraVaiTro($vaiTroId): bool
     {
+        if(is_array($vaiTroId)) {
+            return $this->vaiTros->pluck('id_vaitro')->intersect($vaiTroId)->isNotEmpty();
+        }
         return $this->vaiTros->contains('id_vaitro', $vaiTroId);
     }
 

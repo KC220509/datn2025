@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GuiTinNhanRequest;
 use App\Models\HocKyDk;
 use App\Models\NguoiDung;
+use App\Models\NhiemVu;
 use App\Models\NhomDoAn;
+use App\Models\ThanhVienNhom;
 use App\Models\TinNhanNhom;
 use App\Services\KhoaNganhLopService;
 use App\Services\NguoiDungService;
@@ -266,23 +268,23 @@ class DuLieuController extends Controller
             $tep = $request->file('tinnhan_tep');
             if($tep) {
                 $gocTenTep = pathinfo($request->tinnhan_tep->getClientOriginalName(), PATHINFO_FILENAME); 
-                    $duoiTep = $request->tinnhan_tep->getClientOriginalExtension(); 
-                    $newTenTep = $gocTenTep . '.' . $duoiTep; 
+                $duoiTep = $request->tinnhan_tep->getClientOriginalExtension(); 
 
-                    $duongDanTepMoi = $tep->move(
-                        sys_get_temp_dir(), 
-                        $newTenTep  
-                    );
+                $newTenTep = $gocTenTep . '.' . $duoiTep; 
+                $duongDanTepMoi = $tep->move(
+                    sys_get_temp_dir(), 
+                    $newTenTep  
+                );
 
-                    $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
-                        [
-                            'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                            'resource_type' => 'auto',
-                            'use_filename' => true,
-                        ]
-                    );
+                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
+                    [
+                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+                        'resource_type' => 'auto',
+                        'use_filename' => true,
+                    ]
+                );
 
-                    $duongDanTep = $taiLenCloud['secure_url'];
+                $duongDanTep = $taiLenCloud['secure_url'];
             } else {
                 $duongDanTep = null;
             }
@@ -324,6 +326,131 @@ class DuLieuController extends Controller
         return response()->json([
             'trangthai' => true, 
             'thongbao' => 'Gửi tin nhắn thành công.'
+        ]);
+    }
+    
+
+    public function layDsNhiemVu($idNhom) {
+        $nguoiDung = Auth::user();
+        
+        $vaiTroIds = $nguoiDung->vaiTros->pluck('id_vaitro')->toArray();
+
+        if ($vaiTroIds && in_array('GV', $vaiTroIds)) {
+            return $this->layDsChoGiangVien($idNhom);
+        } 
+        if ($vaiTroIds && in_array('SV', $vaiTroIds)) {
+            return $this->layDsChoSinhVien($idNhom);
+        }
+
+           return response()->json([
+               'thongbao' => 'Không có quyền truy cập nhóm.'
+           ], 403);
+    
+
+    }
+
+     public function layDsChoSinhVien($id_nhom){
+        $id_sinhvien = Auth::id();
+        $thanhVien = ThanhVienNhom::where('ma_nhom', $id_nhom)
+                        ->where('ma_sinhvien', $id_sinhvien)
+                        ->exists();
+
+        if(!$thanhVien){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Sinh viên không thuộc nhóm này.'
+            ], 403);
+        }
+        $dsNhiemVu = NhiemVu::where('ma_nhom', $id_nhom)
+                            ->with(['danhSachNopBai' => function($query) use ($id_sinhvien) {
+                                $query->where('ma_sinhvien', $id_sinhvien);
+                            }])
+                            ->orderBy('han_nop', 'asc')
+                            ->get();
+                            
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Danh sách nhiệm vụ được lấy thành công.',
+            'ds_nhiemvu' => [
+                'con_han' => $dsNhiemVu->filter(fn($q) => in_array($q->trangthai_nhiemvu, ['con_han', 'dang_tre_han']))->values(),
+                'qua_han' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'da_dong')->values(),
+                // 'dung_han' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'dung_han')->values(),
+                // 'tre_han' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'tre_han')->values(),
+                'hoan_thanh' => $dsNhiemVu->filter(fn($q) => in_array($q->trangthai_nhiemvu, ['dung_han', 'tre_han']))->values(),
+
+
+            ]
+        ]);
+    }
+
+    private function layDsChoGiangVien($idNhom) {
+        $id_giangvien = Auth::id();
+
+        $nhom = NhomDoAn::where('id_nhom', $idNhom)
+                        ->where('ma_nguoitao', $id_giangvien)
+                        ->first();
+
+        if (!$nhom) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Bạn không có quyền quản lý nhóm này.'
+            ], 403);
+        }
+
+        try {
+            $nhiemVus = NhiemVu::where('ma_nhom', $idNhom)
+                                ->withCount('danhSachNopBai')
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+
+            $tongSV = ThanhVienNhom::where('ma_nhom', $idNhom)->count();
+
+            return response()->json([
+                'trangthai' => true,
+                'ds_nhiemvu' => [
+                    // Nhiệm vụ đang mở
+                    'con_han' => $nhiemVus->filter(fn($q) => $q->trangthai_nhiemvu === 'con_han')->values(),
+                    // Nhiệm vụ đã đóng hoàn toàn
+                    'hoan_thanh' => $nhiemVus->filter(fn($q) => $q->trangthai_nhiemvu === 'hoan_thanh')->values(),
+                    'tong_so_sv' => $tongSV
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Lỗi hệ thống: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function layChiTietNhiemVu($idNhiemVu)
+    {
+        $nhiemVu = NhiemVu::where('id_nhiemvu', $idNhiemVu)
+            ->with('nhomDATN')
+            ->first();
+
+
+        if (!$nhiemVu) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Không tìm thấy nhiệm vụ.'
+            ], 404);
+        }
+
+        $dsTenTep = [];
+        if ($nhiemVu->duong_dan_teps) {
+            foreach ($nhiemVu->duong_dan_teps as $duongDanTep) {
+                $dsTenTep[] = urldecode(basename($duongDanTep));
+            }
+        }
+
+        $nhiemVu->ten_teps = $dsTenTep;
+
+
+        return response()->json([
+            'trangthai' => true,
+            'nhiem_vu' => $nhiemVu
         ]);
     }
 }

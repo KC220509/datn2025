@@ -47,4 +47,8 @@ class SinhVien extends Model
             'id_nhom'
         );
     }
+
+    public function nopBais(){
+        return $this->hasMany(NopBai::class, 'ma_sinhvien', 'id_sinhvien');
+    }
 }

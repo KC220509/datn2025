@@ -243,6 +243,81 @@
 }
 
 
+
+.tieu-de-cha .khung-doi-mat-khau{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.khung-doi-mat-khau .khung-noi-dung{
+    width: clamp(300px, 40vw, 400px);
+    gap: 20px;
+    padding: 20px 40px 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #273641;
+}
+.khung-doi-mat-khau .khung-noi-dung .khung-tieu-de{
+    align-items: center;
+    justify-content: space-between;
+}
+.khung-doi-mat-khau .khung-noi-dung .khung-tieu-de .tieu-de{
+    font-size: 20px;
+    font-weight: bold;
+    color: #0a67e9;
+    text-transform: uppercase;  
+}
+
+.khung-doi-mat-khau .khung-noi-dung .khung-tieu-de i{
+    cursor: pointer;
+    font-size: 18px;
+    color: #ff0000;
+}
+
+.khung-doi-mat-khau .form-doi-mat-khau{
+    gap: 8px;
+    font-size: 16px;
+}
+
+.khung-doi-mat-khau .form-doi-mat-khau label{
+    font-weight: 600;
+    cursor: pointer;
+}
+.khung-doi-mat-khau .form-doi-mat-khau input{
+    padding: 10px 12px;
+    outline: none;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+
+.khung-doi-mat-khau .form-doi-mat-khau .nut-xac-nhan{
+    margin-top: 12px;
+    background-color: #0a67e9;
+    color: #ffffff;
+    border: none;
+    padding: 8px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    text-transform: uppercase;  
+    line-height: 2;
+}
+
+.khung-doi-mat-khau .form-doi-mat-khau .nut-xac-nhan:hover {
+    background-color: #084bb5;
+}
+
 /* responsive */
 
 @media (max-width: 1080px) {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Outlet, useParams, useNavigate } from 'react-router-dom';
+import { Outlet, useParams, useNavigate, NavLink } from 'react-router-dom';
 import './khungNhomChat.css';
 import ketNoiAxios from '../../tienichs/ketnoiAxios';
 import { useNguoiDung } from '../../hooks/useNguoiDung';
@@ -146,18 +146,14 @@ const KhungNhomChat = () => {
         }
     }, [nguoiDung]);
 
-    const [menu_hien_tai, setMenuHienTai] = useState('kenh-chung');
-
    
     const ds_menu = [
-        { id: 'kenh-chung', ten: 'Kênh Chung', icon: '💬' },
-        { id: 'bai-tap', ten: 'Bài Tập', icon: '📝' },
-        { id: 'tai-lieu', ten: 'Tài Liệu', icon: '📚' },
+        { id: 'kenh-chat', ten: 'Kênh Chat', icon: '💬', duongdan: `.` },
+        { id: 'bai-tap', ten: 'Bài Tập', icon: '📝', duongdan: `bai-tap` },
+        { id: 'tai-lieu', ten: 'Tài Liệu', icon: '📚', duongdan: `tai-lieu` },
     ];
 
-    const xuLyChonMenu = (id: string) => {
-        setMenuHienTai(id);
-    };
+    
 
     const xuLyThoatNhom = () => {
         if(nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV')){
@@ -311,13 +307,13 @@ const KhungNhomChat = () => {
                     <ul>
                         {ds_menu.map((item) => (
                             <li key={item.id}>
-                                <button
-                                    className={`nut-menu-chat ${menu_hien_tai === item.id ? 'active' : ''}`}
-                                    onClick={() => xuLyChonMenu(item.id)}
+                                <NavLink to={item.duongdan!}
+                                    end={item.id === 'kenh-chat'}
+                                    className={({ isActive }) => `nut-menu-chat ${isActive ? 'active' : ''}`}
                                 >
                                     <span className="icon-menu">{item.icon}</span>
                                     <span className="ten-menu">{item.ten}</span>
-                                </button>
+                                </NavLink>
                             </li>
                         ))}
                     </ul>
@@ -343,7 +339,7 @@ const KhungNhomChat = () => {
                     <h3>Thông Tin Nhóm</h3>
                 </div>
 
-                {/* Thông tin nhóm */}
+                
                 <div className="phan-thong-tin">
                     <div className="khung-thong-tin-item">
                         <label className="tieude-thong-tin">Tên Nhóm</label>
@@ -356,7 +352,7 @@ const KhungNhomChat = () => {
                     </div>
                 </div>
 
-                {/* Thông tin người tạo (Giảng viên) */}
+                
                 <div className="phan-giang-vien">
                     <h4 className="tieude-phan">Giảng Viên Hướng Dẫn</h4>
                     <div className="khung-thong-tin-giang-vien">
@@ -368,7 +364,7 @@ const KhungNhomChat = () => {
                     </div>
                 </div>
 
-                {/* Danh sách thành viên */}
+               
                 <div className="phan-thanh-vien">
                     <div className="phan-tieude flex-row">
                         <h4 className="tieude-phan">Thành Viên Nhóm ({thongTinNhom?.sinh_viens.length})</h4>
@@ -395,11 +391,11 @@ const KhungNhomChat = () => {
                     </div>
                 </div>
 
-                {/* Danh sách tệp đính kèm */}
+                
                 {tepDinhKem.length > 0 && (
                     <div className="phan-tep-dinh-kem">
                         <div className="phan-tieude flex-row">
-                            <h4 className="tieude-phan">Tệp Đính Kèm</h4>
+                            <h4 className="tieude-phan">Tệp Đính Kèm (Nhóm Chat)</h4>
                         </div>
                         <div className="danh-sach-tep">
                             {tepDinhKem.map((tep) => (

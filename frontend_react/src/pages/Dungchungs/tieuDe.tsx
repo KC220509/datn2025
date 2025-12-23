@@ -1,9 +1,63 @@
 import { NavLink } from "react-router-dom";
 import { useNguoiDung } from "../../hooks/useNguoiDung";
+import { useState } from "react";
+import ketNoiAxios from "../../tienichs/ketnoiAxios";
+import axios from "axios";
 
 function TieuDe() {
 
-    const { nguoiDung, dangXuat } = useNguoiDung();
+    const { nguoiDung, dangXuat, dangNhap } = useNguoiDung();
+
+    const [moKhungDoiMatKhau, setMoKhungDoiMatKhau] = useState(false);
+
+    const [matKhauCu, setMatKhauCu] = useState('');
+    const [matKhauMoi, setMatKhauMoi] = useState('');
+    const [xacNhanMatKhauMoi, setXacNhanMatKhauMoi] = useState('');
+    const [dangTai, setDangTai] = useState(false);
+
+
+    const xuLyLamMoi = () => {
+        setMatKhauCu('');
+        setMatKhauMoi('');
+        setXacNhanMatKhauMoi('');
+        setMoKhungDoiMatKhau(false);
+        setDangTai(false);
+    }
+
+    const xuLyDoiMatKhau = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setDangTai(true);
+        const formData = new FormData();
+        formData.append('matKhauCu', matKhauCu);
+        formData.append('matKhauMoi', matKhauMoi);
+        formData.append('xacNhanMatKhauMoi', xacNhanMatKhauMoi);
+        try{
+            const phanHoi = await ketNoiAxios.post('/nguoi-dung/doi-mat-khau', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            if(phanHoi.data.trangthai){
+                alert(phanHoi.data.thongbao);
+                xuLyLamMoi();
+                // Tiến hành đăng nhập lại
+                await dangNhap(nguoiDung!.email, matKhauMoi, true);
+
+                window.location.reload();
+            }
+
+        }catch(error){
+            console.error('Lỗi đổi mật khẩu:', error);
+            if (axios.isAxiosError(error) && error.response) {
+                alert(`Đổi mật khẩu không thành công: ${(error.response?.data.thongbao)}`);
+            }else{
+                alert('Không thể kết nối đến máy chủ. Vui lòng kiểm tra mạng!');
+            }
+        } finally {
+            setDangTai(false);
+        }
+    }
 
 
     const TieuDeDuoi = () => (
@@ -18,7 +72,7 @@ function TieuDe() {
                     <button type="button" className="nut-caidat">Thông Tin Tài Khoản</button>
                     <ul className="caidat-chucnang flex-col">
                         <li>Thông tin cá nhân</li>
-                        <li>Đổi mật khẩu</li>
+                        <li onClick={() => setMoKhungDoiMatKhau(true)}>Đổi mật khẩu</li>
                     </ul>
                 </div>
                 <button className="dang-xuat" onClick={dangXuat} type="button">Đăng xuất</button>
@@ -45,6 +99,40 @@ function TieuDe() {
             </div>
 
             {nguoiDung ? <TieuDeDuoi /> : null}
+
+            {moKhungDoiMatKhau ? (
+                <div className="khung-doi-mat-khau">
+                    <div className="khung-noi-dung flex-col">
+                        <div className="khung-tieu-de flex-row">
+                            <h3 className="tieu-de">Đổi Mật Khẩu</h3>
+                            <i className="bi bi-x-square" onClick={() => setMoKhungDoiMatKhau(false)}></i>
+                        </div>
+                        <form className="form-doi-mat-khau flex-col" onSubmit={xuLyDoiMatKhau}>
+                            <label htmlFor="matkhau_cu" className="nhan-mat-khau-cu">Mật khẩu cũ <span style={{color: 'red'}}>*</span></label>
+                            <input id="matkhau_cu" type="password" className="o-nhap-mat-khau-cu"
+                                value={matKhauCu}
+                                onChange={(e) => setMatKhauCu(e.target.value)}    
+                                required />
+
+                            <label htmlFor="matkhau_moi" className="nhan-mat-khau-moi">Mật khẩu mới <span style={{color: 'red'}}>*</span></label>
+                            <input id="matkhau_moi" type="password" className="o-nhap-mat-khau-moi"
+                                value={matKhauMoi}
+                                onChange={(e) => setMatKhauMoi(e.target.value)}
+                                required />
+
+                            <label htmlFor="xac_nhan_matkhau_moi" className="nhan-xac-nhan-mat-khau-moi">Xác nhận mật khẩu mới <span style={{color: 'red'}}>*</span></label>
+                            <input id="xac_nhan_matkhau_moi" type="password" className="o-nhap-xac-nhan-mat-khau-moi"
+                                value={xacNhanMatKhauMoi}
+                                onChange={(e) => setXacNhanMatKhauMoi(e.target.value)}
+                                required />
+
+                            <button type="submit" className="nut-xac-nhan" disabled={dangTai}>
+                                {dangTai ? 'Đang xử lý...' : 'Xác nhận'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            ) : null}
         </header>
     );
 }

@@ -44,4 +44,9 @@ class NhomDoAn extends Model
     {
         return $this->hasMany(TinNhanNhom::class, 'ma_nhom', 'id_nhom');
     }
+
+    public function nhiemVus()
+    {
+        return $this->hasMany(NhiemVu::class, 'ma_nhom', 'id_nhom');
+    }
 }
