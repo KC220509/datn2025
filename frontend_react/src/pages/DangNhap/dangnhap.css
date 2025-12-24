@@ -24,8 +24,8 @@
 }
 
 .trang-dang-nhap .giua{
-    flex: 1 1 100%;
-    min-width: 280px;
+    flex: 1 1 350px;
+    min-width: 350px;
     background-color: #ffffff;
 }
 

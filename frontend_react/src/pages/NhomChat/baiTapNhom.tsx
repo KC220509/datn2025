@@ -38,6 +38,13 @@ const QuanLyBaiTap = () => {
     const { id_nhom } = useParams<{ id_nhom: string }>();
     const laGiangVien = nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV');
     
+    const [danhSachTep, setDanhSachTep] = useState<File[]>([]);
+    const [formTao, setFormTao] = useState({
+        ten_nhiemvu: '',
+        noi_dung: '',
+        han_nop: '',
+        han_dong: ''
+    });
 
     const [moKhungTao, setMoKhungTao] = useState(false);
     const [dangTao, setDangTao] = useState(false);
@@ -79,15 +86,6 @@ const QuanLyBaiTap = () => {
         }
     };
 
-     
-    const [danhSachTep, setDanhSachTep] = useState<File[]>([]);
-
-    const [formTao, setFormTao] = useState({
-        ten_nhiemvu: '',
-        noi_dung: '',
-        han_nop: '',
-        han_dong: ''
-    });
 
     useEffect(() => {
         if (formTao.han_nop && formTao.han_dong) {

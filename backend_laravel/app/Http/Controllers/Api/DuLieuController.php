@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GuiTinNhanRequest;
+use App\Models\BaiDang;
 use App\Models\HocKyDk;
 use App\Models\NguoiDung;
 use App\Models\NhiemVu;
@@ -194,20 +195,19 @@ class DuLieuController extends Controller
     public function layDsThongBao()
     {
 
-        $dsThongBao = DB::table('bai_dang')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $dsThongBao = BaiDang::orderBy('created_at', 'desc')->get();
 
-        // // lấy tên tệp từ đường dẫn cloudinary
-        foreach ($dsThongBao as $thongBao) {
-            if ($thongBao->duong_dan_tep) {
-                $thongBao->ten_tep = urldecode(basename($thongBao->duong_dan_tep));
-            } else {
-                $thongBao->ten_tep = null;
+        $dsThongBao = $dsThongBao->map(function($thongBao) {
+            $dsTenTep = [];
+            if ($thongBao->duong_dan_teps) {
+                foreach ($thongBao->duong_dan_teps as $duongDanTep) {
+                    $dsTenTep[] = urldecode(basename($duongDanTep));
+                }
             }
-        }
+            $thongBao->ten_teps = $dsTenTep;
+            return $thongBao;
+        });
 
-        
 
         return response()->json([
             'trangthai' => true,
@@ -228,11 +228,14 @@ class DuLieuController extends Controller
             ], 404);
         }
         // lấy tên tệp từ đường dẫn cloudinary
-        if ($thongBao->duong_dan_tep) {
-            $thongBao->ten_tep = urldecode(basename($thongBao->duong_dan_tep));
-        } else {
-            $thongBao->ten_tep = null;
+        $dsTenTep = [];
+        if ($thongBao->duong_dan_teps) {
+            foreach ($thongBao->duong_dan_teps as $duongDanTep) {
+                $dsTenTep[] = urldecode(basename($duongDanTep));
+            }
         }
+
+        $thongBao->ten_teps = $dsTenTep;
 
         return response()->json([
             'trangthai' => true,
@@ -316,7 +319,7 @@ class DuLieuController extends Controller
                 'created_at'    => now()->getTimestamp() * 1000, 
                 'updated_at'    => now()->getTimestamp() * 1000
             ];
-            // 3. Đẩy lên Firebase Realtime Database
+            
             $this->firebaseDb->getReference('nhom_chat/' . $request->ma_nhom)
                 ->push($dataFirebase);
 
@@ -406,9 +409,7 @@ class DuLieuController extends Controller
             return response()->json([
                 'trangthai' => true,
                 'ds_nhiemvu' => [
-                    // Nhiệm vụ đang mở
                     'con_han' => $nhiemVus->filter(fn($q) => $q->trangthai_nhiemvu === 'con_han')->values(),
-                    // Nhiệm vụ đã đóng hoàn toàn
                     'hoan_thanh' => $nhiemVus->filter(fn($q) => $q->trangthai_nhiemvu === 'hoan_thanh')->values(),
                     'tong_so_sv' => $tongSV
                 ]
@@ -424,49 +425,62 @@ class DuLieuController extends Controller
 
     public function layChiTietNhiemVu($idNhiemVu)
     {
-        $id_nguoidung = Auth::id();
+        $nguoiDung = Auth::user();
+        $laGiangVien = $nguoiDung->vaiTros->contains('id_vaitro', 'GV');
+        $id_nguoidung = $nguoiDung->id_nguoidung;
 
         $nhiemVu = NhiemVu::where('id_nhiemvu', $idNhiemVu)
-                            ->with(['nhomDATN', 'danhSachNopBai' => function($query) use ($id_nguoidung) {
-                                $query->where('ma_sinhvien', $id_nguoidung);
-                            }])
-                            ->first();
+                        ->with([
+                            'nhomDATN', 
+                            'danhSachNopBai' => function($query) use ($id_nguoidung, $laGiangVien) {
+                                if (!$laGiangVien) {
+                                    $query->where('ma_sinhvien', $id_nguoidung);
+                                }
+                            },
+                            'danhSachNopBai.sinhVienNopBai'
+                        ])
+                        ->when($laGiangVien, function($query) {
+                            $query->with(['nhomDATN.sinhViens.nguoiDung']);
+                        })
+                        ->first();
+        if($nhiemVu && $nhiemVu->nhomDATN){
+            $nhiemVu->setRelation('nhom_do_an', $nhiemVu->nhomDATN);
+            
+            $nhiemVu->unsetRelation('nhomDATN');
+        }
 
-
-        if (!$nhiemVu) {
+        if(!$nhiemVu) {
             return response()->json([
                 'trangthai' => false,
                 'thongbao' => 'Không tìm thấy nhiệm vụ.'
             ], 404);
         }
 
-        // Xử lý tên tệp hướng dẫn của giảng viên
+        
         $dsTenTep = [];
         if ($nhiemVu->duong_dan_teps) {
             foreach ($nhiemVu->duong_dan_teps as $duongDanTep) {
                 $dsTenTep[] = urldecode(basename($duongDanTep));
             }
         }
-
         $nhiemVu->ten_teps = $dsTenTep;
 
-        // Xử lý tên tệp nộp bài của sinh viên
-        if ($nhiemVu->danhSachNopBai->isNotEmpty()) {
-            $baiNop = $nhiemVu->danhSachNopBai->first();
-            $dsTenTepSV = [];
-            if ($baiNop->duong_dan_teps) {
-                foreach ($baiNop->duong_dan_teps as $path) {
-                    $dsTenTepSV[] = urldecode(basename($path));
+
+        if ($nhiemVu->danhSachNopBai) {
+            foreach ($nhiemVu->danhSachNopBai as $nopBai) {
+                $dsTenTepSinhVien = [];
+                if ($nopBai->duong_dan_teps) {
+                    foreach ($nopBai->duong_dan_teps as $url) {
+                        $dsTenTepSinhVien[] = urldecode(basename($url));
+                    }
                 }
+                $nopBai->ten_teps = $dsTenTepSinhVien;
             }
-           
-            $baiNop->ten_teps = $dsTenTepSV;
         }
 
         return response()->json([
             'trangthai' => true,
             'nhiem_vu' => $nhiemVu,
-            'bai_nop' => $baiNop ?? null,
         ]);
     }
 }

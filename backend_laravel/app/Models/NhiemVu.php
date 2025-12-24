@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class NhiemVu extends Model
 {
+    use HasFactory;
     protected $table = 'nhiem_vu';
-
     protected $primaryKey = 'id_nhiemvu';
     protected $keyType = 'string';
     public $incrementing = false;
@@ -40,7 +41,6 @@ class NhiemVu extends Model
         return $this->hasMany(NopBai::class, 'ma_nhiemvu', 'id_nhiemvu');
     }
 
-    // Xử lý trạng thái nhiệm vụ
     protected $appends = ['trangthai_nhiemvu'];
 
     public function getTrangthaiNhiemvuAttribute()
@@ -51,7 +51,6 @@ class NhiemVu extends Model
         $vaiTroIds = $nguoiDung->vaiTros->pluck('id_vaitro')->toArray();
 
 
-        // --- Lấy trạng thái nhiệm vụ cho GIẢNG VIÊN ---
         if (in_array('GV', $vaiTroIds)) {
             if ($now <= $this->han_dong) {
                 return 'con_han'; 
@@ -59,16 +58,15 @@ class NhiemVu extends Model
             return 'hoan_thanh';
         }
 
-        // Lấy trạng thái nhiệm vụ cho SINH VIÊN
         $baiNop = $this->danhSachNopBai()->where('ma_sinhvien', $nguoiDung->id_nguoidung)->first();
 
         if ($baiNop) {
-            return 'hoan_thanh'; // 'dung_han' hoặc 'tre_han'
+            return 'hoan_thanh'; 
         }else{
             if ($now > $this->han_dong) {
-                return 'da_dong'; // Quá hạn đóng --> Không thể nộp
+                return 'da_dong'; 
             }else if ($now > $this->han_nop) {
-                return 'dang_tre_han'; // Quá hạn nộp nhưng vẫn nộp trễ được
+                return 'dang_tre_han';
             }
         }
         

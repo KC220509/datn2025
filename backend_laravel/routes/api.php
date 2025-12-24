@@ -22,7 +22,6 @@ Route::middleware('auth:sanctum')->post('/nguoi-dung/doi-mat-khau', [TaiKhoanCon
 
 //Admin 
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:AD'])->prefix('admin')->group(function () {
-   
     Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('ad_dsHocKy');
     Route::get('/ds-nguoidung', [DuLieuController::class, 'dsNguoiDung'])->name('ad_dsNguoiDung');
     Route::get('/ds-khoanganhlop', [DuLieuController::class, 'dsKhoaNganhLop'])->name('ad_dsKhoaNganhLop');
@@ -51,7 +50,6 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:PDT'])->prefix('pdt')->gr
     Route::delete('/xoa-bai/{id_baidang}', [DaoTaoController::class, 'xoaBaiDang'])->name('pdt_xoaBai');
     Route::post('/sua-bai/{id_baidang}', [DaoTaoController::class, 'capNhatBaiDang'])->name('pdt_suaBai');
 });
-
 
 
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:TBM'])->prefix('tbm')->group(function () {
@@ -101,6 +99,7 @@ Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
     // Nhóm - Nhiệm vụ - GV
     Route::middleware(['kiem_tra_dang_nhap:GV'])->group(function () {
         Route::post('/chi-tiet/{idNhom}/tao-nhiem-vu', [GiangVienController::class, 'taoNhiemVu'])->name('gv_taoNhiemVu');
+        // Route::get('/chi-tiet/nhiem-vu/{idNhiemVu}/ds-sinhvien', [GiangVienController::class, 'layDsSinhVienNopBai'])->name('gv_layDsNopBai');
     });
 
     // Nhóm - Nhiệm vụ - SV

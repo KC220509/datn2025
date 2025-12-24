@@ -7,6 +7,24 @@ interface Props {
     onBack: () => void;
 }
 
+interface NguoiDung {
+    id_nguoidung: string;
+    ho_ten: string;
+    email: string;
+    
+}
+
+interface SinhVien{
+    id_sinhvien: string;
+    nguoi_dung: NguoiDung;
+}
+
+interface NhomDATN {
+    id_nhom: string;
+    ten_nhom: string;
+    sinh_viens: SinhVien[];
+}
+
 interface NopBai {
     id_nopbai: string;
     ma_nhom: string;
@@ -30,8 +48,8 @@ interface NhiemVu {
     han_dong: string;
     trangthai_nhiemvu: string;
     danh_sach_nop_bai_count?: number;
-    danh_sach_nop_bai?: NopBai[];
-    bai_nop?: NopBai;
+    danh_sach_nop_bai?: NopBai[]; 
+    nhom_do_an: NhomDATN;
 }
 
 const ChiTietBaiTap = ({ nhiemVuId, laGiangVien, onBack }: Props) => {
@@ -41,9 +59,7 @@ const ChiTietBaiTap = ({ nhiemVuId, laGiangVien, onBack }: Props) => {
     const [tepChon, setTepChon] = useState<File[]>([]);
     
 
-    useEffect(() => {
-        layChiTietNhiemVu(String(nhiemVuId));
-    }, [nhiemVuId]);
+    
 
     const layChiTietNhiemVu = async (nhiemVuId: string) => {
         try {
@@ -57,6 +73,11 @@ const ChiTietBaiTap = ({ nhiemVuId, laGiangVien, onBack }: Props) => {
             console.error("Lỗi lấy chi tiết nhiệm vụ", error);
         }
     };
+
+    useEffect(() => {
+        layChiTietNhiemVu(String(nhiemVuId));
+        
+    }, [nhiemVuId]);
 
     const xuLyXoaTepChon = (indexXoa: number) => {
         setTepChon(prev => prev.filter((_, index) => index !== indexXoa));
@@ -139,6 +160,48 @@ const ChiTietBaiTap = ({ nhiemVuId, laGiangVien, onBack }: Props) => {
                             ))}
                         </div>
                     </div>
+                    {laGiangVien && (
+                        <div className="khung-sinhvien-nopbai flex-col">
+                            <h3><i className="bi bi-people-fill"></i> Danh sách sinh viên đã nộp bài ({baiTap.danh_sach_nop_bai?.length || 0})</h3>
+                            <table className="danh-sach-sinh-vien">
+                                <thead>
+                                    <tr className="tieu-de-bang">
+                                        <th></th>
+                                        <th className='ten-sinhvien'>Sinh viên</th>
+                                        <th>Trạng thái nộp bài</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {baiTap.nhom_do_an?.sinh_viens?.map((item, idx) => (
+                                        <tr key={idx} className="dong-sinh-vien">
+                                            <td><i className="bi bi-person-circle"></i></td>
+                                            <td className='ten-sinhvien'>{item.nguoi_dung.ho_ten}</td>
+                                            <td className='trang-thai-nop-bai'>
+                                                {baiTap.danh_sach_nop_bai?.some(nb => nb.ma_sinhvien === item.id_sinhvien)
+                                                    ? (baiTap.danh_sach_nop_bai.find(nb => nb.ma_sinhvien === item.id_sinhvien)?.trang_thai == 'tre_han' 
+                                                        ? <span className='nop-tre-han'>Đã nộp trễ</span> : <span className='da-nop'>Đã nộp bài</span>)
+                                                    : (baiTap.trangthai_nhiemvu == 'con_han' 
+                                                        ? <span className='chua-nop'>Chưa nộp</span> : <span className='qua-han'>Không nộp</span>)
+                                                }
+                                            </td>
+                                            <td>
+                                                <button className='nut-xem-bai' 
+                                                    disabled={baiTap.danh_sach_nop_bai?.some(nb => nb.ma_sinhvien !== item.id_sinhvien)}
+                                                    onClick={() => {}}
+                                                >
+                                                    {baiTap.danh_sach_nop_bai?.some(nb => nb.ma_sinhvien === item.id_sinhvien)
+                                                        ? 'Xem bài làm' : (baiTap.trangthai_nhiemvu == 'con_han' ? 'Chưa nộp bài' : 'Không nộp bài')
+                                                    }
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                    )}
                 </div>
 
                 {!laGiangVien && (
@@ -165,7 +228,7 @@ const ChiTietBaiTap = ({ nhiemVuId, laGiangVien, onBack }: Props) => {
                                             <div key={idx} className="tep-item flex-row">
                                                 <i className="bi bi-file-earmark-fill"></i>
                                                 <a href={link} target="_blank" rel="noreferrer">
-                                                    {thongTinNopBai.ten_teps[idx]}
+                                                    {thongTinNopBai?.ten_teps?.[idx] || 'Tài liệu'}
                                                 </a>
                                             </div>
                                         ))}

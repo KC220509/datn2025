@@ -24,7 +24,7 @@ class DangBaiRequest extends FormRequest
         return [
             'tieu_de' => 'required|string|max:255',
             'noi_dung' => 'required|string',
-            'tep_dinh_kem' => 'nullable|file|mimes:pdf,doc,docx,jpg,png,xlsx,xls',
+            'tep_dinh_kem.*' => 'nullable|file',
         ];
     }
 }

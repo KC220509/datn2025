@@ -16,12 +16,14 @@ class BaiDang extends Model
         'ma_phongdaotao',
         'tieu_de',
         'noi_dung',
-        'duong_dan_tep',
+        'duong_dan_teps',
         'created_at',
         'updated_at'
     ];
 
-
+    protected $casts = [
+        'duong_dan_teps' => 'array',
+    ];
 
     public function nguoiDang()
     {

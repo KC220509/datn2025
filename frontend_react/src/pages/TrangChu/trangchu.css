@@ -4,13 +4,12 @@
     height: auto;
     justify-content: space-between;
     gap: clamp(15px, 2vw, 20px);
-    /* padding: clamp(10px, 2vw, 20px); */
     box-sizing: border-box;
 }
 
 
 .khung-trang-chu .trai{
-    flex: 1 1 auto;
+    flex: 1 1 400px;
     min-width: 400px;
     min-height: max-content;
     background-color: #ffffff;

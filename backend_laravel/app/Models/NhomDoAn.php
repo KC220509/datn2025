@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NhomDoAn extends Model
 {
+    use HasFactory;
     protected $table = 'nhom_do_an';
     protected $primaryKey = 'id_nhom';
     protected $keyType = 'string';

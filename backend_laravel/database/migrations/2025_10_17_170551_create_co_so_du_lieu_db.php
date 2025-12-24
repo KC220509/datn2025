@@ -53,7 +53,7 @@ return new class extends Migration
             $table->uuid('ma_phongdaotao');
             $table->string('tieu_de');
             $table->text('noi_dung');
-            $table->string('duong_dan_tep')->nullable();
+            $table->json('duong_dan_teps')->nullable();
             $table->timestamps();
 
             $table->foreign('ma_phongdaotao')

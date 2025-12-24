@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DangBaiRequest;
+use App\Models\BaiDang;
 use App\Models\HocKyDk;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests\ImportDanhSachGvRequest;
 use App\Http\Requests\ImportDanhSachSvRequest;
 use App\Imports\GiangViensImport;
 use App\Imports\SinhViensImport;
-
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -192,52 +191,57 @@ class DaoTaoController extends Controller
 
     public function dangBai(DangBaiRequest $dangBaiRequest)
     {
-        // $duLieu = $dangBaiRequest->validated();
-        $maPhongDaoTao = Auth::id();
+        ini_set('max_execution_time', 300); // Tăng thời gian làm việc
         
+        $maPhongDaoTao = Auth::id();
+        $baiDangMoi = null;
 
-        DB::transaction(function () use ($dangBaiRequest, $maPhongDaoTao) {
-            $tep = $dangBaiRequest->file('tep_dinh_kem');
-            
-            if ($tep) {
-                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME); 
-                $duoiTep = $tep->getClientOriginalExtension(); 
-                $newTenTep = $gocTenTep . '.' . $duoiTep; 
+        DB::transaction(function () use ($dangBaiRequest, $maPhongDaoTao, &$baiDangMoi) {
+            $dsDuongDanTep = [];
+            if($dangBaiRequest->hasFile('tep_dinh_kem')){
+                $dsTep = $dangBaiRequest->file('tep_dinh_kem');
 
-                $duongDanTepMoi = $tep->move(
-                    sys_get_temp_dir(), 
-                    $newTenTep  
-                );
+                foreach($dsTep as $tep){
+                    $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
+                    $duoiTep = $tep->getClientOriginalExtension();
+                    $newTenTep = $gocTenTep . '.' . $duoiTep;
 
-                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
-                    [
-                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                        'resource_type' => 'auto',
-                        'use_filename' => true,
-                    ]
-                );
+                    $duongDanTepTam = $tep->move(sys_get_temp_dir(), $newTenTep);
 
-                $duongDanTep = $taiLenCloud['secure_url'];
-            }else{
-                $duongDanTep = null;
+                    $taiLenCloud = cloudinary()->uploadApi()->upload(
+                        $duongDanTepTam->getRealPath(),
+                        [
+                            'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+                            'resource_type' => 'auto',
+                            'use_filename' => true,
+                        ]
+                    );
+
+                    $dsDuongDanTep[] = $taiLenCloud['secure_url'];
+
+                    if (file_exists($duongDanTepTam->getRealPath())) {
+                        unlink($duongDanTepTam->getRealPath());
+                    }
+                }
             }
 
-            
 
-            DB::table('bai_dang')->insert([
+            $baiDangMoi = BaiDang::create([
                 'id_baidang' => (string) Str::uuid(),
                 'ma_phongdaotao' => $maPhongDaoTao,
                 'tieu_de' => $dangBaiRequest->input('tieu_de'),
                 'noi_dung' => $dangBaiRequest->input('noi_dung'),
-                'duong_dan_tep' => $duongDanTep,
+                'duong_dan_teps' => $dsDuongDanTep,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         });
+        
 
         return response()->json([
             'trangthai' => true,
-            'thongbao' => 'Đăng bài mới thành công.'
+            'thongbao' => 'Đăng bài mới thành công.',
+            'baidang_moi' => $baiDangMoi,
         ]);
     }
 
@@ -270,10 +274,11 @@ class DaoTaoController extends Controller
 
 
     public function capNhatBaiDang(DangBaiRequest $dangBaiRequest, $id_baidang){
+        ini_set('max_execution_time', 300); // Tăng thời gian làm việc
+        
         $maPhongDaoTao = Auth::id();
 
-        $baiDang = DB::table('bai_dang')
-            ->where('id_baidang', $id_baidang)
+        $baiDang = BaiDang::where('id_baidang', $id_baidang)
             ->where('ma_phongdaotao', $maPhongDaoTao)
             ->first();
 
@@ -284,20 +289,20 @@ class DaoTaoController extends Controller
             ], 404);
         }
 
-        DB::transaction(function () use ($dangBaiRequest, $maPhongDaoTao, $baiDang) {
-            $tep = $dangBaiRequest->file('tep_dinh_kem');
-            
-            if ($tep) {
-                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME); 
-                $duoiTep = $tep->getClientOriginalExtension(); 
-                $newTenTep = $gocTenTep . '.' . $duoiTep; 
+        $baiDang->tieu_de = $dangBaiRequest->input('tieu_de');
+        $baiDang->noi_dung = $dangBaiRequest->input('noi_dung');
 
-                $duongDanTepMoi = $tep->move(
-                    sys_get_temp_dir(), 
-                    $newTenTep  
-                );
+        $dsDuongDanTep = [];
+        if($dangBaiRequest->hasFile('tep_dinh_kem')){
+            $dsTep = $dangBaiRequest->file('tep_dinh_kem');
+            foreach($dsTep as $tep){
+                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
+                $duoiTep = $tep->getClientOriginalExtension();
+                $newTenTep = $gocTenTep . '.' . $duoiTep;
 
-                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
+                $duongDanTepTam = $tep->move(sys_get_temp_dir(), $newTenTep);
+                $taiLenCloud = cloudinary()->uploadApi()->upload(
+                    $duongDanTepTam->getRealPath(),
                     [
                         'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
                         'resource_type' => 'auto',
@@ -305,33 +310,32 @@ class DaoTaoController extends Controller
                     ]
                 );
 
-                $duongDanTep = $taiLenCloud['secure_url'];
-            }else{
-                $duongDanTep = $baiDang->duong_dan_tep;
+                $dsDuongDanTep[] = $taiLenCloud['secure_url'];
+
+                if (file_exists($duongDanTepTam->getRealPath())) {
+                    unlink($duongDanTepTam->getRealPath());
+                }
             }
+        }
+        if(count($dsDuongDanTep) > 0){
+            $baiDang->duong_dan_teps = $dsDuongDanTep;
+        }
+        $baiDang->save();
 
-            DB::table('bai_dang')
-                ->where('id_baidang', $baiDang->id_baidang)
-                ->where('ma_phongdaotao', $maPhongDaoTao)
-                ->update([
-                    'tieu_de' => $dangBaiRequest->input('tieu_de'),
-                    'noi_dung' => $dangBaiRequest->input('noi_dung'),
-                    'duong_dan_tep' => $duongDanTep,
-                    'updated_at' => now(),
-                ]);
-        });
 
-        $baiDangMoi = DB::table('bai_dang')
-            ->where('id_baidang', $id_baidang)
-            ->where('ma_phongdaotao', $maPhongDaoTao)
-            ->first();
+        $dsTenTep = [];
+        if ($baiDang->duong_dan_teps) {
+            foreach ($baiDang->duong_dan_teps as $duongDanTep) {
+                $dsTenTep[] = urldecode(basename($duongDanTep));
+            }
+        }
 
-        $baiDangMoi->ten_tep = urldecode(basename($baiDangMoi->duong_dan_tep));
-
+        $baiDang->ten_teps = $dsTenTep;
+        
         return response()->json([
             'trangthai' => true,
             'thongbao' => 'Cập nhật bài đăng thành công.',
-            'baidang_moi' => $baiDangMoi,
+            'baidang_moi' => $baiDang,
         ]);
     }
 }
