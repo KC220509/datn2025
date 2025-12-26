@@ -267,6 +267,7 @@ return new class extends Migration
             $table->datetime('han_nop');
             $table->datetime('han_dong');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('ma_nhom')
                 ->references('id_nhom')
@@ -284,6 +285,7 @@ return new class extends Migration
             $table->enum('trang_thai', ['dung_han', 'tre_han']);
             $table->text('nhan_xet')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->unique(['ma_nhiemvu', 'ma_sinhvien']); 
 

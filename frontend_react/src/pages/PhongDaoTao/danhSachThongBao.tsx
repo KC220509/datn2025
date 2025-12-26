@@ -15,8 +15,6 @@ interface BaiDang{
 
 }
 const DanhSachThongBao = () => {
-
-
     const [dsThongBao, setDsThongBao] = useState<BaiDang[]>([]);
 
     const layDsThongBao = async () => {
@@ -95,9 +93,8 @@ const DanhSachThongBao = () => {
     }
 
 
-     // Xử lý chọn tệp đính kèm
+    // Xử lý chọn tệp đính kèm
     const [danhSachTep, setDanhSachTep] = useState<File[]>([]);
-    // const [tenTep, setTenTep] = useState("");
 
     const xuLyChonTep = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {

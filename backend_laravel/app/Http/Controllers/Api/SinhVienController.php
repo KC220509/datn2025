@@ -11,6 +11,7 @@ use App\Models\NopBai;
 use App\Models\PhanCong;
 use App\Models\SinhVien;
 use App\Models\ThanhVienNhom;
+use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -18,9 +19,11 @@ class SinhVienController extends Controller
 {
 
     protected $sinhVienModel;
-    public function __construct(SinhVien $sinhVienModel)
+    protected $cloudinaryService;
+    public function __construct(SinhVien $sinhVienModel, CloudinaryService $cloudinaryService)
     {
         $this->sinhVienModel = $sinhVienModel;
+        $this->cloudinaryService = $cloudinaryService;
     }
     public function layThongTinSV(){
         $id_sinhvien = Auth::id();
@@ -127,26 +130,8 @@ class SinhVienController extends Controller
         $dsDuongDanTep = [];
         if($request->hasFile('tep_dinh_kem')){
             $dsTep = $request->file('tep_dinh_kem');
-
-            foreach($dsTep as $tep){
-                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
-                $duoiTep = $tep->getClientOriginalExtension();
-                $newTenTep = $gocTenTep . '.' . $duoiTep;
-                $duongDanTepTam = $tep->move(sys_get_temp_dir(), $newTenTep);
-                $taiLenCloud = cloudinary()->uploadApi()->upload(
-                    $duongDanTepTam->getRealPath(),
-                    [
-                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                        'resource_type' => 'auto',
-                        'use_filename' => true,
-                    ]
-                );
-
-                $dsDuongDanTep[] = $taiLenCloud['secure_url'];
-                if (file_exists($duongDanTepTam->getRealPath())) {
-                    unlink($duongDanTepTam->getRealPath());
-                }
-            }
+            $tenThuMuc = 'nhiem_vu/nhom_' . $nhiemvu->ma_nhom . '/' . 'nop_bai_sv' .$id_sinhvien;
+            $dsDuongDanTep = $this->cloudinaryService->uploadNhieuTep($dsTep, $tenThuMuc);
         }
 
         $ketQua = NopBai::updateOrCreate(

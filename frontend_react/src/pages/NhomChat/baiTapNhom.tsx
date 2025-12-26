@@ -39,6 +39,7 @@ const QuanLyBaiTap = () => {
     const laGiangVien = nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV');
     
     const [danhSachTep, setDanhSachTep] = useState<File[]>([]);
+
     const [formTao, setFormTao] = useState({
         ten_nhiemvu: '',
         noi_dung: '',
@@ -66,25 +67,31 @@ const QuanLyBaiTap = () => {
         hoan_thanh: [],
         tong_so_sv: 0
     });
+    
 
     type tabBaiTap = 'con_han' | 'qua_han' | 'hoan_thanh';
     const [tabHienTai, setTabHienTai] = useState<tabBaiTap>('con_han');
+    const xuLyChonTab = async (tab: tabBaiTap) => {
+        setTabHienTai(tab);
+        await layDanhSachBaiTap(String(id_nhom));
+    };
 
-    useEffect(() => {
-        layDanhSachBaiTap(String(id_nhom));
-    }, [id_nhom]);
-
+    
     const layDanhSachBaiTap = async (id_nhom: string) => {
         try {
             const phanhoi = await ketNoiAxios.get(`/nhom/chi-tiet/${id_nhom}/nhiem-vu`);
             if (phanhoi.data.trangthai) {
-             
+                
                 setDsTrangThaiBaiTap(phanhoi.data.ds_nhiemvu);
             }
         } catch (error) {
             console.error("Lỗi lấy danh sách bài tập", error);
         }
     };
+    useEffect(() => {
+        layDanhSachBaiTap(String(id_nhom));
+    }, [id_nhom]);
+
 
 
     useEffect(() => {
@@ -169,7 +176,6 @@ const QuanLyBaiTap = () => {
             );
         }
         switch (bt.trangthai_nhiemvu) {
-
             // Đang diễn ra
             case 'con_han': return <span className="nhan-trang-thai cho-nop">Đang diễn ra</span>;
             case 'dang_tre_han': return <span className="nhan-trang-thai tre-han">Nộp trễ</span>;
@@ -199,17 +205,17 @@ const QuanLyBaiTap = () => {
                 <>
                     <div className="thanh-dieu-huong-tab">
                         <div className="nhom-tab">
-                            <button className={tabHienTai === 'con_han' ? 'active' : ''} onClick={() => setTabHienTai('con_han')}>
+                            <button className={tabHienTai === 'con_han' ? 'active' : ''} onClick={() => xuLyChonTab('con_han')}>
                                 Đang diễn ra ({dsTrangThaiBaiTap.con_han.length})
                             </button>
                             {!laGiangVien && (
                                 <>
-                                    <button className={tabHienTai === 'qua_han' ? 'active' : ''} onClick={() => setTabHienTai('qua_han')}>
+                                    <button className={tabHienTai === 'qua_han' ? 'active' : ''} onClick={() => xuLyChonTab('qua_han')}>
                                         Quá hạn ({dsTrangThaiBaiTap.qua_han.length})
                                     </button>
                                 </>
                             )}
-                            <button className={tabHienTai === 'hoan_thanh' ? 'active' : ''} onClick={() => setTabHienTai('hoan_thanh')}>
+                            <button className={tabHienTai === 'hoan_thanh' ? 'active' : ''} onClick={() => xuLyChonTab('hoan_thanh')}>
                                 Hoàn thành ({dsTrangThaiBaiTap.hoan_thanh.length})
                             </button>
                             

@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NopBai extends Model
 {
+    use  SoftDeletes;
     protected $table = 'nop_bai';
 
     protected $primaryKey = 'id_nopbai';
@@ -23,6 +25,7 @@ class NopBai extends Model
         'nhan_xet',
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     protected $casts = [

@@ -11,6 +11,7 @@ use App\Models\NhiemVu;
 use App\Models\NhomDoAn;
 use App\Models\ThanhVienNhom;
 use App\Models\TinNhanNhom;
+use App\Services\CloudinaryService;
 use App\Services\KhoaNganhLopService;
 use App\Services\NguoiDungService;
 use Illuminate\Support\Facades\Auth;
@@ -26,13 +27,19 @@ class DuLieuController extends Controller
     protected $khoaNganhLopService;
 
     protected $firebaseDb;
+    protected $cloudinaryService;
 
 
-    public function __construct(NguoiDungService $nguoiDungService, KhoaNganhLopService $khoaNganhLopService, Database $firebaseDb)
+
+    public function __construct(NguoiDungService $nguoiDungService,
+                                KhoaNganhLopService $khoaNganhLopService, 
+                                Database $firebaseDb,
+                                CloudinaryService $cloudinaryService)
     {
         $this->nguoiDungService = $nguoiDungService;
         $this->khoaNganhLopService = $khoaNganhLopService;
         $this->firebaseDb = $firebaseDb;
+        $this->cloudinaryService = $cloudinaryService;
     }
 
     public function dsHocKy()
@@ -270,24 +277,12 @@ class DuLieuController extends Controller
         DB::transaction(function () use ($request, $id_nguoidung, $nguoiDung) {
             $tep = $request->file('tinnhan_tep');
             if($tep) {
-                $gocTenTep = pathinfo($request->tinnhan_tep->getClientOriginalName(), PATHINFO_FILENAME); 
-                $duoiTep = $request->tinnhan_tep->getClientOriginalExtension(); 
+                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
+                $duoiTep = $tep->getClientOriginalExtension();
+                $tenTep = $gocTenTep . '.' . $duoiTep;
 
-                $newTenTep = $gocTenTep . '.' . $duoiTep; 
-                $duongDanTepMoi = $tep->move(
-                    sys_get_temp_dir(), 
-                    $newTenTep  
-                );
-
-                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
-                    [
-                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                        'resource_type' => 'auto',
-                        'use_filename' => true,
-                    ]
-                );
-
-                $duongDanTep = $taiLenCloud['secure_url'];
+                $tenThuMuc = 'nhom_chat/nhom_' . $request->ma_nhom . '/nguoi_' . $id_nguoidung;
+                $duongDanTep = $this->cloudinaryService->uploadTep($tep, $tenThuMuc);
             } else {
                 $duongDanTep = null;
             }
@@ -311,7 +306,7 @@ class DuLieuController extends Controller
                 'id_nguoigui'   => (string) $tinNhan->ma_nguoigui,
                 'ho_ten'        => $nguoiDung->ho_ten, 
                 'noi_dung'      => $tinNhan->noi_dung ?? "",
-                'ten_tep'       => $tep ? $gocTenTep . '.' . $duoiTep : "",
+                'ten_tep'       => $tep ? $tenTep : "",
                 'duong_dan_tep' => $tinNhan->duong_dan_tep ?? "",
                 'da_xem'        => false,
                 'tinnhan_ghim'  => false,
@@ -348,7 +343,6 @@ class DuLieuController extends Controller
            return response()->json([
                'thongbao' => 'Không có quyền truy cập nhóm.'
            ], 403);
-    
 
     }
 
@@ -408,6 +402,7 @@ class DuLieuController extends Controller
 
             return response()->json([
                 'trangthai' => true,
+                'thongbao' => 'Danh sách nhiệm vụ được lấy thành công.',
                 'ds_nhiemvu' => [
                     'con_han' => $nhiemVus->filter(fn($q) => $q->trangthai_nhiemvu === 'con_han')->values(),
                     'hoan_thanh' => $nhiemVus->filter(fn($q) => $q->trangthai_nhiemvu === 'hoan_thanh')->values(),

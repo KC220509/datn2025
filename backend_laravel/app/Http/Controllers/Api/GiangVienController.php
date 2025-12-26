@@ -10,11 +10,17 @@ use App\Models\NhiemVu;
 use App\Models\NhomDoAn;
 use App\Models\PhanCong;
 use App\Models\ThanhVienNhom;
+use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class GiangVienController extends Controller
 {
+    protected $cloudinaryService;
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
     public function layDanhSachNhom()
     {
         $id_giangvien = Auth::id();
@@ -176,7 +182,7 @@ class GiangVienController extends Controller
     
 
     public function taoNhiemVu(TaoNhiemVuRequest $request, $idNhom){
-        $requestData = $request->validated();
+        $duLieu = $request->validated();
 
         if($idNhom){
             $nhom = NhomDoAn::find($idNhom);
@@ -188,44 +194,23 @@ class GiangVienController extends Controller
             }
         }
 
-        // Xử lý tạo nhiệm vụ ở đây
         try{
             $dsDuongDanTep = [];
+            $idNhiemVu = Str::uuid();
             if($request->hasFile('tep_dinh_kem')){
                 $dsTep = $request->file('tep_dinh_kem');
-
-                foreach($dsTep as $tep){
-                    $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
-                    $duoiTep = $tep->getClientOriginalExtension();
-                    $newTenTep = $gocTenTep . '.' . $duoiTep;
-
-                    $duongDanTepTam = $tep->move(sys_get_temp_dir(), $newTenTep);
-
-                    $taiLenCloud = cloudinary()->uploadApi()->upload(
-                        $duongDanTepTam->getRealPath(),
-                        [
-                            'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                            'resource_type' => 'auto',
-                            'use_filename' => true,
-                        ]
-                    );
-
-                    $dsDuongDanTep[] = $taiLenCloud['secure_url'];
-
-                    if (file_exists($duongDanTepTam->getRealPath())) {
-                        unlink($duongDanTepTam->getRealPath());
-                    }
-                }
+                $tenThuMuc = "nhiem_vu/nhom_" . $idNhom . 'nv_' . $idNhiemVu;
+                $dsDuongDanTep = $this->cloudinaryService->uploadNhieuTep($dsTep, $tenThuMuc);
             }
 
             $nhiemVu = NhiemVu::create([
-                'id_nhiemvu' => Str::uuid(),
+                'id_nhiemvu' => $idNhiemVu,
                 'ma_nhom' => $idNhom,
-                'ten_nhiemvu' => $requestData['ten_nhiemvu'],
-                'noi_dung' => $requestData['noi_dung'] ?? null,
+                'ten_nhiemvu' => $duLieu['ten_nhiemvu'],
+                'noi_dung' => $duLieu['noi_dung'] ?? null,
                 'duong_dan_teps' => $dsDuongDanTep,
-                'han_nop' => $requestData['han_nop'],
-                'han_dong' => $requestData['han_dong'],
+                'han_nop' => $duLieu['han_nop'],
+                'han_dong' => $duLieu['han_dong'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -243,5 +228,71 @@ class GiangVienController extends Controller
         }
     }
 
+    public function xoaNhiemVu($id_nhiemvu){
+        $nhiemVu = NhiemVu::find($id_nhiemvu);
+        if(!$nhiemVu){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Nhiệm vụ không tồn tại.'
+            ], 404);
+        }
 
+        $nhiemVu->delete();
+
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Xóa nhiệm vụ thành công.'
+        ]);
+    }
+
+    public function capNhatNhiemVu(TaoNhiemVuRequest $request, $id_nhiemvu){
+        $duLieu = $request->validated();
+
+        $nhiemVu = NhiemVu::find($id_nhiemvu);
+        if(!$nhiemVu){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Nhiệm vụ không tồn tại.'
+            ], 404);
+        }
+
+        try{
+            $dsDuongDanTep = $nhiemVu->duong_dan_teps;
+            if($request->hasFile('tep_dinh_kem')){
+                $dsTep = $request->file('tep_dinh_kem');
+                $tenThuMuc = "nhiem_vu/nhom_" . $nhiemVu->ma_nhom . '/nv_' . $nhiemVu->id_nhiemvu;
+                $dsDuongDanTep = $this->cloudinaryService->uploadNhieuTep($dsTep, $tenThuMuc);
+            }
+
+            $nhiemVu->update([
+                'ten_nhiemvu' => $duLieu['ten_nhiemvu'],
+                'noi_dung' => $duLieu['noi_dung'] ?? null,
+                'duong_dan_teps' => $dsDuongDanTep,
+                'han_nop' => $duLieu['han_nop'],
+                'han_dong' => $duLieu['han_dong'],
+                'updated_at' => now(),
+            ]);
+
+            $danhSachNop = $nhiemVu->danhSachNopBai;
+
+            foreach ($danhSachNop as $nopBai) {
+                $trangThaiMoi = ($nopBai->thoigian_nop <= $duLieu['han_nop']) ? 'dung_han' : 'tre_han';
+                
+                $nopBai->update(['trang_thai' => $trangThaiMoi]);
+            }
+
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Cập nhật nhiệm vụ thành công.',
+                'nhiemvu' => $nhiemVu
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Lỗi xử lý: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+    
 }

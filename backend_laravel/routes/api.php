@@ -99,7 +99,8 @@ Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
     // Nhóm - Nhiệm vụ - GV
     Route::middleware(['kiem_tra_dang_nhap:GV'])->group(function () {
         Route::post('/chi-tiet/{idNhom}/tao-nhiem-vu', [GiangVienController::class, 'taoNhiemVu'])->name('gv_taoNhiemVu');
-        // Route::get('/chi-tiet/nhiem-vu/{idNhiemVu}/ds-sinhvien', [GiangVienController::class, 'layDsSinhVienNopBai'])->name('gv_layDsNopBai');
+        Route::post('/chi-tiet/nhiem-vu/{idNhiemVu}/cap-nhat', [GiangVienController::class, 'capNhatNhiemVu'])->name('gv_capNhatNhiemVu');
+        Route::delete('/chi-tiet/nhiem-vu/{idNhiemVu}/xoa', [GiangVienController::class, 'xoaNhiemVu'])->name('gv_xoaNhiemVu');
     });
 
     // Nhóm - Nhiệm vụ - SV

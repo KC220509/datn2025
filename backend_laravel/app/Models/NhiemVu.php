@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class NhiemVu extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'nhiem_vu';
     protected $primaryKey = 'id_nhiemvu';
     protected $keyType = 'string';
@@ -24,6 +25,7 @@ class NhiemVu extends Model
         'han_dong',
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     protected $casts = [
@@ -72,4 +74,5 @@ class NhiemVu extends Model
         
         return 'con_han';
     }
+
 }

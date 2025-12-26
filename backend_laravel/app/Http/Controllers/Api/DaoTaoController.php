@@ -12,6 +12,7 @@ use App\Http\Requests\ImportDanhSachGvRequest;
 use App\Http\Requests\ImportDanhSachSvRequest;
 use App\Imports\GiangViensImport;
 use App\Imports\SinhViensImport;
+use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Auth;
 
 class DaoTaoController extends Controller
 {
+    protected $cloudinaryService;
+    public function __construct(CloudinaryService $cloudinaryService)
+    {
+        $this->cloudinaryService = $cloudinaryService;
+    }
     
     public function importDsSinhVien(ImportDanhSachSvRequest $importDanhSachSvRequest){
         $hocKyId = $importDanhSachSvRequest->input('id_hocky');
@@ -43,24 +49,11 @@ class DaoTaoController extends Controller
                 }
 
                 // Upload tệp lên Cloudinary
-                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME); 
-                $duoiTep = $tep->getClientOriginalExtension(); 
                 $tenHocKy = HocKyDk::where('id_hocky', $hocKyId)->value('ten_hoc_ky');
-                $newTenTep = $gocTenTep . '_' . $tenHocKy . '.' . $duoiTep; 
+                
+                $tenThuMuc = 'danh-sach-sinh-vien/' . $tenHocKy;
 
-                $duongDanTepMoi = $tep->move(
-                    sys_get_temp_dir(), 
-                    $newTenTep  
-                );
-
-                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
-                    [
-                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                        'resource_type' => 'auto',
-                    ]
-                );
-
-                $duongDanTep = $taiLenCloud['secure_url'];
+                $duongDanTep = $this->cloudinaryService->uploadTep($tep, $tenThuMuc);
 
                 DB::table('tep_dulieu_hocky')->insert([
                     'id_tep' => (string) Str::uuid(),
@@ -125,24 +118,10 @@ class DaoTaoController extends Controller
                     throw ValidationException::withMessages($chiTietLoi);
                 }
                 // Upload tệp lên Cloudinary
-                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME); 
-                $duoiTep = $tep->getClientOriginalExtension(); 
                 $tenHocKy = HocKyDk::where('id_hocky', $hocKyId)->value('ten_hoc_ky');
-                $newTenTep = $gocTenTep . '_' . $tenHocKy . '.' . $duoiTep;  
-
-                $duongDanTepMoi = $tep->move(
-                    sys_get_temp_dir(), 
-                    $newTenTep  
-                );
-
-                $taiLenCloud = cloudinary()->uploadApi()->upload($duongDanTepMoi->getRealPath(),
-                    [
-                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                        'resource_type' => 'auto',
-                    ]
-                );
-
-                $duongDanTep = $taiLenCloud['secure_url'];
+                
+                $tenThuMuc = 'danh-sach-giang-vien/' . $tenHocKy;
+                $duongDanTep = $this->cloudinaryService->uploadTep($tep, $tenThuMuc);
 
                 DB::table('tep_dulieu_hocky')->insert([
                     'id_tep' => (string) Str::uuid(),
@@ -191,7 +170,7 @@ class DaoTaoController extends Controller
 
     public function dangBai(DangBaiRequest $dangBaiRequest)
     {
-        ini_set('max_execution_time', 300); // Tăng thời gian làm việc
+        ini_set('max_execution_time', 300); 
         
         $maPhongDaoTao = Auth::id();
         $baiDangMoi = null;
@@ -201,28 +180,8 @@ class DaoTaoController extends Controller
             if($dangBaiRequest->hasFile('tep_dinh_kem')){
                 $dsTep = $dangBaiRequest->file('tep_dinh_kem');
 
-                foreach($dsTep as $tep){
-                    $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
-                    $duoiTep = $tep->getClientOriginalExtension();
-                    $newTenTep = $gocTenTep . '.' . $duoiTep;
-
-                    $duongDanTepTam = $tep->move(sys_get_temp_dir(), $newTenTep);
-
-                    $taiLenCloud = cloudinary()->uploadApi()->upload(
-                        $duongDanTepTam->getRealPath(),
-                        [
-                            'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                            'resource_type' => 'auto',
-                            'use_filename' => true,
-                        ]
-                    );
-
-                    $dsDuongDanTep[] = $taiLenCloud['secure_url'];
-
-                    if (file_exists($duongDanTepTam->getRealPath())) {
-                        unlink($duongDanTepTam->getRealPath());
-                    }
-                }
+                $tenThuMuc = 'thong_bao/phong_dao_tao_' . $maPhongDaoTao;
+                $dsDuongDanTep = $this->cloudinaryService->uploadNhieuTep($dsTep, $tenThuMuc);
             }
 
 
@@ -274,7 +233,7 @@ class DaoTaoController extends Controller
 
 
     public function capNhatBaiDang(DangBaiRequest $dangBaiRequest, $id_baidang){
-        ini_set('max_execution_time', 300); // Tăng thời gian làm việc
+        ini_set('max_execution_time', 300);
         
         $maPhongDaoTao = Auth::id();
 
@@ -295,28 +254,11 @@ class DaoTaoController extends Controller
         $dsDuongDanTep = [];
         if($dangBaiRequest->hasFile('tep_dinh_kem')){
             $dsTep = $dangBaiRequest->file('tep_dinh_kem');
-            foreach($dsTep as $tep){
-                $gocTenTep = pathinfo($tep->getClientOriginalName(), PATHINFO_FILENAME);
-                $duoiTep = $tep->getClientOriginalExtension();
-                $newTenTep = $gocTenTep . '.' . $duoiTep;
-
-                $duongDanTepTam = $tep->move(sys_get_temp_dir(), $newTenTep);
-                $taiLenCloud = cloudinary()->uploadApi()->upload(
-                    $duongDanTepTam->getRealPath(),
-                    [
-                        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
-                        'resource_type' => 'auto',
-                        'use_filename' => true,
-                    ]
-                );
-
-                $dsDuongDanTep[] = $taiLenCloud['secure_url'];
-
-                if (file_exists($duongDanTepTam->getRealPath())) {
-                    unlink($duongDanTepTam->getRealPath());
-                }
-            }
+            
+            $tenThuMuc = 'thong_bao/phong_dao_tao_' . $maPhongDaoTao;
+            $dsDuongDanTep = $this->cloudinaryService->uploadNhieuTep($dsTep, $tenThuMuc);
         }
+        
         if(count($dsDuongDanTep) > 0){
             $baiDang->duong_dan_teps = $dsDuongDanTep;
         }

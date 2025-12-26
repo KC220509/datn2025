@@ -907,6 +907,7 @@
     cursor: pointer;
     margin-bottom: 10px;
     font-weight: 600;
+    line-height: 1.5;
 }
 
 .khung-quan-ly-bai-tap .lop-phu-modal .khung-modal-tao-bt .o-nhap .nut-chon-file-gia:hover {
@@ -917,10 +918,25 @@
 .khung-quan-ly-bai-tap .lop-phu-modal .khung-modal-tao-bt .o-nhap .khung-danh-sach-tep-da-chon {
     max-height: 130px; 
     overflow-y: auto; 
+    overflow-x: hidden;
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
+}
+
+.khung-danh-sach-tep-da-chon .item-tep-cho-upload a{
+    text-decoration: none;
+    color: #3171e7;
+    font-weight: 500;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.khung-danh-sach-tep-da-chon .item-tep-cho-upload a:hover{
+    background-color: #cfe1f3;
+    text-decoration: underline;
 }
 
 .khung-quan-ly-bai-tap .lop-phu-modal .khung-modal-tao-bt .o-nhap .item-tep-cho-upload {
@@ -1028,12 +1044,17 @@
 .dau-trang .chuc-nang .nut-back:hover{
     background: #ff5252;
 }
-
-.dau-trang .chuc-nang .mokhung-cap-nhat{
+.dau-trang .chuc-nang .chucnang-nhom{
+    gap: 10px; 
+    align-items: center;
+}
+.chucnang-nhom .mokhung-cap-nhat,
+.chucnang-nhom .nut-xoa-nhiem-vu{
     width: fit-content;
+    min-width: 90px;
     gap: 5px; 
     padding: 8px 10px;
-    background: #0384ee; 
+    background: #0d86e9; 
     border: none; 
     font-size: 13px; 
     color: #ffffff; 
@@ -1041,8 +1062,15 @@
     cursor: pointer; 
 }
 
-.dau-trang .chuc-nang .mokhung-cap-nhat:hover{
-    background: #026edc;
+.chucnang-nhom .nut-xoa-nhiem-vu{
+    background: #ec4c3d;
+}
+.chucnang-nhom  .mokhung-cap-nhat:hover{
+    background: #036ed9;
+}
+
+.chucnang-nhom  .nut-xoa-nhiem-vu:hover{
+    background: #c73224;
 }
 
 .dau-trang .tieu-de-nhiem-vu{
@@ -1051,7 +1079,11 @@
     color: #0267cc; 
 }
 
-
+.dau-trang .thoigian-nhiemvu{
+    gap: 20px;
+    font-size: 14px; 
+    color: #555;
+}
 .than-trang { 
     gap: 25px; 
 }

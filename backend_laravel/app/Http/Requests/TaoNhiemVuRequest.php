@@ -23,8 +23,8 @@ class TaoNhiemVuRequest extends FormRequest
     {
         return [
             'ten_nhiemvu' => 'required|string|max:255',
-            'noi_dung' => 'required_without:tep_dinh_kem|nullable|string',
-            'tep_dinh_kem.*' => 'required_without:noi_dung|nullable|file|max:20480',
+            'noi_dung' => 'nullable|string',
+            'tep_dinh_kem.*' => 'nullable|file|max:20480',
             'han_nop' => 'required|date',
             'han_dong' => 'required|date|after_or_equal:today',
         ];
