@@ -501,15 +501,13 @@
 }
 
 .khung-ql-thongbao .menu-ql-thongbao {
-    width: clamp(180px, 20vw, 220px);
+    width: clamp(180px, 25vw, 240px);
     min-width: 180px;
     padding: 10px;
     background-color: #ffc61d;
     gap: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     flex-shrink: 0;
-    /* display: flex;
-    flex-direction: column; */
 } 
 
 .khung-ql-thongbao .menu-ql-thongbao .tieude-menu{
@@ -876,7 +874,7 @@
 
 .noidung-ql-thongbao .khung-chitiet-thongbao{
     gap: 15px;
-    padding: 30px;
+    padding: 30px 50px;
     font-size: 14px;
 }
 
@@ -930,7 +928,7 @@
     color: #1275ff;
 }
 .khung-tepdinhkem .muc-tep-xem{
-    margin: 0 20px;
+    /* margin: 0 20px; */
     padding: 8px 12px;
     justify-content: space-between;
     align-items: center;

@@ -61,6 +61,8 @@
     align-items: center;
     cursor: pointer;
     font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 .tieu-de-tren .tieu-de-phai .khung-thongbao:hover {

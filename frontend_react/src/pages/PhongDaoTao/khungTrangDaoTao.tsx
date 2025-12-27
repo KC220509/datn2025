@@ -9,12 +9,7 @@ const KhungTrangDaoTao: React.FC = () => {
                     <nav>
                         <ul className="danhsach-menu flex-row">
                             <li>
-                                <NavLink to="/dao-tao" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
-                                    Tổng Quan
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dao-tao/ql-sinhvien" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
+                                <NavLink to="/dao-tao/ql-sinhvien" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                                     Danh Sách Sinh Viên
                                 </NavLink>
                             </li>

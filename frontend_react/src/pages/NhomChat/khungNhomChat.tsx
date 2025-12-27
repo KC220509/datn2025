@@ -74,7 +74,7 @@ const KhungNhomChat = () => {
     useEffect(() => {
         if (!id_nhom) return;
 
-        const tinNhanHienTai = ref(db, `nhom_chat/${id_nhom}`);
+        const tinNhanHienTai = ref(db, `nhom_chat/${id_nhom}/tin_nhan`);
         
         const q = query(tinNhanHienTai, limitToLast(50));
 
@@ -82,8 +82,8 @@ const KhungNhomChat = () => {
             const data = snapshot.val();
             if (data) {
                 const dsTinNhan = Object.keys(data).map(key => ({
+                    ...data[key],
                     id_firebase: key,
-                    ...data[key]
                 }));
 
                 const dsTep = dsTinNhan.filter(item => 
@@ -93,7 +93,7 @@ const KhungNhomChat = () => {
                                         )
                                         .reverse();
 
-                console.log("Dữ liệu nhận từ Firebase:", dsTep);
+                console.log('Danh sách tệp đính kèm cập nhật:', dsTep);
                 setTepDinhKem(dsTep);
             } else {
                 setTepDinhKem([]); 

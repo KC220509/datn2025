@@ -130,7 +130,7 @@ class SinhVienController extends Controller
         $dsDuongDanTep = [];
         if($request->hasFile('tep_dinh_kem')){
             $dsTep = $request->file('tep_dinh_kem');
-            $tenThuMuc = 'nhiem_vu/nhom_' . $nhiemvu->ma_nhom . '/' . 'nop_bai_sv' .$id_sinhvien;
+            $tenThuMuc = 'nhiem_vu/nhom_' . $nhiemvu->ma_nhom . '/nv_' . $idNhiemVu . '/nop_bai_sv' .$id_sinhvien;
             $dsDuongDanTep = $this->cloudinaryService->uploadNhieuTep($dsTep, $tenThuMuc);
         }
 

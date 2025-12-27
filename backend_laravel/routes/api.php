@@ -91,6 +91,8 @@ Route::middleware(['auth:sanctum'])->prefix('nhom')->group(function () {
     // Nhóm - Tin nhắn
     Route::get('/chi-tiet/tinnhan/{idNhom}', [DuLieuController::class, 'layTinNhanNhom'])->name('layTinNhanNhom');
     Route::post('/chi-tiet/tinnhan/gui', [DuLieuController::class, 'guiTinNhan'])->name('guiTinNhanNhom');
+    Route::post('/chi-tiet/tinnhan/ghim', [DuLieuController::class, 'ghimTinNhan'])->name('ghimTinNhanNhom');
+    Route::post('/chi-tiet/tinnhan/xoa/{idTinNhan}', [DuLieuController::class, 'xoaTinNhan'])->name('xoaTinNhanNhom');
     
     // Nhóm - Nhiệm vụ - Chung
     Route::get('/chi-tiet/{idNhom}/nhiem-vu', [DuLieuController::class, 'layDsNhiemVu'])->name('layDsNhiemVu');

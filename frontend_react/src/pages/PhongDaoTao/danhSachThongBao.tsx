@@ -216,7 +216,7 @@ const DanhSachThongBao = () => {
                                     ))}
                                 </div>
 
-                                <div className="vung-xem-truc-tiep" style={{ width: '100%', border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f9f9f9' }}>
+                                <div className="vung-xem-truc-tiep" style={{ width: '100%', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#f9f9f9', margin: '0 auto' }}>
                                     {chiTietTB?.duong_dan_teps ? (
                                         
                                         <div key={mucTep}>

@@ -62,6 +62,8 @@ const DanhSachNhom = () => {
             
             if(phanhoi.data.trangthai){
                 setDsNhom(phanhoi.data.ds_nhom); 
+            }else{
+                setDsNhom([]);
             }
         }catch(error){
             console.error('Lỗi khi lấy danh sách nhóm:', error);
@@ -199,19 +201,18 @@ const DanhSachNhom = () => {
 
     const xuLyXoaNhom = (id_nhom: string) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa nhóm này?')) {
-            ketNoiAxios.delete(`/gv/xoa-nhom/${id_nhom}`)
-                .then(phanhoi => {
-                    if (phanhoi.data.trangthai) {
-                        alert(phanhoi.data.thongbao);
-                        layDsNhom();
-                    } else {
-                        alert(`Xóa nhóm thất bại: ${phanhoi.data.thongbao || 'Lỗi không xác định'}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Lỗi khi xóa nhóm:', error);
-                    alert('Đã xảy ra lỗi khi xóa nhóm. Vui lòng thử lại.');
-                });
+            ketNoiAxios.delete(`/gv/xoa-nhom/${id_nhom}`).then(phanhoi => {
+                if (phanhoi.data.trangthai) {
+                    alert(phanhoi.data.thongbao);
+                    layDsNhom();
+                } else {
+                    alert(`Xóa nhóm thất bại: ${phanhoi.data.thongbao || 'Lỗi không xác định'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi xóa nhóm:', error);
+                alert('Đã xảy ra lỗi khi xóa nhóm. Vui lòng thử lại.');
+            });
         }
     };
 

@@ -98,8 +98,8 @@ const DanhSachSinhVienPc = () => {
                                 <td className='cot-msv' style={{textAlign: 'center'}}>{dspc.sinh_vien.msv}</td>
                                 <td className='cot-hocky' style={{textAlign: 'center'}}>{dspc.hoc_ky.ten_hoc_ky}</td>
                                 <td className='cot-chucnang chuc-nang-nhom flex-row'>
-                                    <span className="nut-chuc-nang xem-nhom">Xem</span>
-                                    <span className="nut-chuc-nang sua-nhom">Sửa</span>
+                                    {/* <span className="nut-chuc-nang xem-nhom">Xem</span>
+                                    <span className="nut-chuc-nang sua-nhom">Sửa</span> */}
                                     <span className="nut-chuc-nang xoa-nhom">Xóa</span>
                                 </td>
                             </tr>

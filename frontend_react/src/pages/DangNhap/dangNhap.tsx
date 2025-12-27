@@ -35,9 +35,10 @@ const DangNhap: React.FC = () => {
     layDsThongBao();
   }, []);
 
-  // const xuLyXemThongBao = (id_baidang: BaiDang) => {
-  //   console.log("Xem chi tiết thông báo:", id_baidang); 
-  // }
+  const navigate = useNavigate();
+  const xuLyXemThongBao = (id_baidang: string) => {
+    navigate("/trang-chu/thong-bao", { state: { id_baidang } });
+  }
 
   const DANH_SACH_LIEN_KET = [
     { ten: "Bộ Giáo dục và Đào tạo", link: "http://moet.gov.vn/", anh: "v1761665186/bo_gd_dt.png" },
@@ -164,7 +165,7 @@ const DangNhap: React.FC = () => {
                     <p className="nam-tao">{new Date(tb.created_at).getFullYear()}</p>
                   </div>
                   <div className="noidung-thongbao flex-col">
-                    <p className="tieude-thongbao">{tb.tieu_de}</p>
+                    <p className="tieude-thongbao" onClick={() => xuLyXemThongBao(tb.id_baidang)}>{tb.tieu_de}</p>
                     <p className="mota-thongbao">{tb.noi_dung}</p>
                   </div>
                 </div>

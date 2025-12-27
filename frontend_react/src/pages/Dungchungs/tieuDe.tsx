@@ -41,7 +41,7 @@ function TieuDe() {
             if(phanHoi.data.trangthai){
                 alert(phanHoi.data.thongbao);
                 xuLyLamMoi();
-                // Tiến hành đăng nhập lại
+
                 await dangNhap(nguoiDung!.email, matKhauMoi, true);
 
                 window.location.reload();
@@ -86,13 +86,13 @@ function TieuDe() {
                 <div className="tieu-de-trai flex-row">
                     <img className="tieu-de-anh" src="https://res.cloudinary.com/dpkysexsr/image/upload/v1761588789/logo_UTE_eyd2d4.png" alt="Logo trường ĐHSPKT" />
                     
-                    <NavLink to="/trang-chu" className="tieu-de-hethong">Hệ thống hỗ trợ thực hiện Đồ án tốt nghiệp Trường ĐHSPKT</NavLink>
+                    <NavLink to="/trang-chu/thong-bao" className="tieu-de-hethong">Hệ thống hỗ trợ thực hiện Đồ án tốt nghiệp Trường ĐHSPKT</NavLink>
                 </div>
                 <div className="tieu-de-phai flex-row">
-                    <div className="khung-thongbao flex-row">
+                    <NavLink to="/trang-chu/thong-bao" className="khung-thongbao flex-row">
                         <i className="icon-thongbao bi bi-bell-fill"></i>
                         <span className="tieu-de-thongbao">Thông báo</span>
-                    </div>
+                    </NavLink>
 
                     {nguoiDung ? (null) : <NavLink to="/dang-nhap" className="lienket-dang-nhap">Đăng Nhập</NavLink>}
                 </div>

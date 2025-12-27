@@ -1,7 +1,7 @@
 
 
 import './App.css';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import Khung from './pages/Dungchungs/khung';
 import DangNhap from './pages/DangNhap/dangNhap';
 import VaiTroNguoiDung from './pages/Xacthuc/vaiTroNguoidung';
@@ -15,7 +15,6 @@ import TrangQlSinhVienAd from './pages/QuanTriVien/trangQlSinhVienAd';
 import TrangQlGiangVienAd from './pages/QuanTriVien/trangQlGiangVienAd';
 
 // Phòng đào tạo
-import PhongDaoTao from './pages/PhongDaoTao/phongDaoTao';
 import KhungTrangDaoTao from './pages/PhongDaoTao/khungTrangDaoTao';
 import QlSinhVien from './pages/PhongDaoTao/qlSinhVien';
 import QlGiangVien from './pages/PhongDaoTao/qlGiangVien';
@@ -51,7 +50,7 @@ function App() {
 
           {/* Không yêu cầu xác thực */}
           <Route index element={<TrangChuyenHuongMacDinh />} />
-          <Route path='/trang-chu' element={<TrangChu />} />
+          <Route path='/trang-chu/thong-bao' element={<TrangChu />} />
           <Route path="/dang-nhap" element={<DangNhap />} />
 
           {/* Yêu cầu xác thực vai trò */}
@@ -69,8 +68,9 @@ function App() {
           <Route path='/dao-tao' element={
               <VaiTroNguoiDung trangcon={<KhungTrangDaoTao />} vaitros={['PDT']} />
             }>
-              <Route index element={<PhongDaoTao />} />
-              <Route path='ql-sinhvien' element={<QlSinhVien />} />
+              <Route index element={<Navigate to="ql-sinhvien" replace />} />
+
+              <Route  path='ql-sinhvien' element={<QlSinhVien />} />
               <Route path='ql-giangvien' element={<QlGiangVien />} />
               <Route path='ql-thongbao' element={<QuanLyThongBao />} 
               >

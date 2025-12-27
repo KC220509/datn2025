@@ -13,13 +13,17 @@ use App\Models\ThanhVienNhom;
 use App\Services\CloudinaryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Kreait\Firebase\Contract\Database;
 
 class GiangVienController extends Controller
 {
     protected $cloudinaryService;
-    public function __construct(CloudinaryService $cloudinaryService)
+    protected $firebaseDb;
+
+    public function __construct(CloudinaryService $cloudinaryService, Database $firebaseDb)
     {
         $this->cloudinaryService = $cloudinaryService;
+        $this->firebaseDb = $firebaseDb;
     }
     public function layDanhSachNhom()
     {
@@ -94,6 +98,13 @@ class GiangVienController extends Controller
             
             ThanhVienNhom::insert($duLieuThanhVien);
         }
+
+        $this->firebaseDb->getReference('nhom_chat/' . $nhomMoi->id_nhom . '/thong_tin')
+        ->set([
+            'ten_nhom' => $duLieu['ten_nhom'],
+            'id_nguoitao'  => (string) $maNguoiTao,
+            'created_at' => now()->getTimestamp() * 1000
+        ]);
 
 
         
@@ -199,7 +210,7 @@ class GiangVienController extends Controller
             $idNhiemVu = Str::uuid();
             if($request->hasFile('tep_dinh_kem')){
                 $dsTep = $request->file('tep_dinh_kem');
-                $tenThuMuc = "nhiem_vu/nhom_" . $idNhom . 'nv_' . $idNhiemVu;
+                $tenThuMuc = "nhiem_vu/nhom_" . $idNhom . '/nv_' . $idNhiemVu;
                 $dsDuongDanTep = $this->cloudinaryService->uploadNhieuTep($dsTep, $tenThuMuc);
             }
 

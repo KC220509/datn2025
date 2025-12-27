@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GhimTinNhanRequest;
 use App\Http\Requests\GuiTinNhanRequest;
 use App\Models\BaiDang;
 use App\Models\HocKyDk;
@@ -222,11 +223,13 @@ class DuLieuController extends Controller
         ]);
     }
 
-    public function layChiTietThongBao($id_baidang)
+    public function layChiTietThongBao($id_baidang = null)
     {
-        $thongBao = DB::table('bai_dang')
-            ->where('id_baidang', $id_baidang)
-            ->first();
+        if(!$id_baidang){
+            $thongBao = BaiDang::orderBy('created_at', 'desc')->first();
+        }else{
+            $thongBao = BaiDang::find($id_baidang);
+        }
 
         if (!$thongBao) {
             return response()->json([
@@ -234,7 +237,7 @@ class DuLieuController extends Controller
                 'thongbao' => 'Không tìm thấy thông báo.'
             ], 404);
         }
-        // lấy tên tệp từ đường dẫn cloudinary
+       
         $dsTenTep = [];
         if ($thongBao->duong_dan_teps) {
             foreach ($thongBao->duong_dan_teps as $duongDanTep) {
@@ -315,7 +318,8 @@ class DuLieuController extends Controller
                 'updated_at'    => now()->getTimestamp() * 1000
             ];
             
-            $this->firebaseDb->getReference('nhom_chat/' . $request->ma_nhom)
+
+            $this->firebaseDb->getReference('nhom_chat/' . $request->ma_nhom . '/tin_nhan')
                 ->push($dataFirebase);
 
         });
@@ -327,6 +331,59 @@ class DuLieuController extends Controller
         ]);
     }
     
+    public function ghimTinNhan(GhimTinNhanRequest $request)
+    {
+        $duLieu = $request->validated();
+
+        $id_tinnhan = $duLieu['id_tinnhan'];
+        $tinnhan_ghim = $duLieu['tinnhan_ghim'];
+
+        try {
+            $tinNhan = TinNhanNhom::where('id_tinnhan', $id_tinnhan)->first();
+
+            if ($tinNhan) {
+                $tinNhan->update([
+                    'tinnhan_ghim' => $tinnhan_ghim,
+                    'updated_at' => now(),
+                ]);
+            }
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Cập nhật trạng thái ghim tin nhắn thành công.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Lỗi khi cập nhật trạng thái ghim tin nhắn: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function xoaTinNhan($id_tinnhan)
+    {
+        try {
+            $tinNhan = TinNhanNhom::where('id_tinnhan', $id_tinnhan)->first();
+
+            if ($tinNhan) {
+                $tinNhan->update([
+                    'tinnhan_xoa' => true,
+                    'updated_at' => now(),
+                ]);
+            }
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Xóa tin nhắn thành công.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'trangthai' => false,
+                'thongbao' => 'Lỗi khi cập nhật trạng thái xóa tin nhắn: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function layDsNhiemVu($idNhom) {
         $nguoiDung = Auth::user();

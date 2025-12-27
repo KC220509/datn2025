@@ -416,7 +416,7 @@ const ChiTietBaiTap = ({ nhiemVuId, laGiangVien, onBack }: Props) => {
                                             </td>
                                             <td>
                                                 <button className='nut-xem-bai' 
-                                                    disabled={baiTap.danh_sach_nop_bai?.some(nb => nb.ma_sinhvien !== item.id_sinhvien)}
+                                                    disabled={!baiTap.danh_sach_nop_bai?.some(nb => nb.ma_sinhvien === item.id_sinhvien)}
                                                     onClick={() => {}}
                                                 >
                                                     {baiTap.danh_sach_nop_bai?.some(nb => nb.ma_sinhvien === item.id_sinhvien)

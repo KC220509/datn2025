@@ -1,23 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import ketNoiAxios from "../../tienichs/ketnoiAxios";
 import { useParams } from "react-router-dom";
-import { limitToLast, onValue, query, ref } from "firebase/database";
+import { limitToLast, onValue, query, ref, update } from "firebase/database";
 import { db } from "../../firebase";
 import { useNguoiDung } from "../../hooks/useNguoiDung";
 
 
-interface NguoiDung{
-    id_nguoidung: string;
-    ho_ten: string;
-    email: string;
+// interface NguoiDung{
+//     id_nguoidung: string;
+//     ho_ten: string;
+//     email: string;
 
-}
+// }
 
 
 interface TinNhanNhom{
+    id_firebase?: string;
     id_tinnhan: string;
     ma_nhom: string;
-    nguoi_gui: NguoiDung;
+    id_nguoigui: string;
     ho_ten: string;
     noi_dung: string;
     ten_tep: string;
@@ -34,6 +35,7 @@ const NhomChat = () => {
 
     // Lấy tin nhắn nhóm
     const { nguoiDung } = useNguoiDung();
+    const la_giangvien = nguoiDung?.vai_tros.some(vt => vt.id_vaitro === 'GV');
     const { id_nhom } = useParams<{ id_nhom: string }>();
     const [tinNhanNhom, setTinNhanNhom] = useState<TinNhanNhom[]>([]);
 
@@ -55,11 +57,11 @@ const NhomChat = () => {
     };
 
 
-    
+    // Lấy tin nhắn nhóm từ Firebase
     useEffect(() => {
         if (!id_nhom) return;
 
-        const tinNhanHienTai = ref(db, `nhom_chat/${id_nhom}`);
+        const tinNhanHienTai = ref(db, `nhom_chat/${id_nhom}/tin_nhan`);
         
         const q = query(tinNhanHienTai, limitToLast(50));
 
@@ -67,13 +69,26 @@ const NhomChat = () => {
             const data = snapshot.val();
             if (data) {
                 const dsTinNhan = Object.keys(data).map(key => ({
+                    ...data[key],
                     id_firebase: key,
-                    id_tinnhan: data[key].id_tinnhan || key,
-                    ...data[key]
                 }));
 
-                console.log("Dữ liệu nhận từ Firebase:", dsTinNhan);
+                dsTinNhan.sort((a, b) => {
+                    const dangGhimA = a.tinnhan_ghim && !a.tinnhan_xoa;
+                    const dangGhimB = b.tinnhan_ghim && !b.tinnhan_xoa;
+
+                    if (dangGhimA !== dangGhimB) {
+                        return dangGhimA ? 1 : -1;
+                    }
+                    if (dangGhimA && dangGhimB) {
+                        return (a.updated_at || 0) - (b.updated_at || 0);
+                    }else {
+                        return (a.created_at || 0) - (b.created_at || 0);
+                    }
+                });
+
                 setTinNhanNhom(dsTinNhan);
+                console.log("Tin nhắn nhóm cập nhật:", dsTinNhan);
             } else {
                 setTinNhanNhom([]); 
             }
@@ -102,11 +117,7 @@ const NhomChat = () => {
         const tinNhanTamThoi: TinNhanNhom = {
             id_tinnhan: idTamThoi,
             ma_nhom: id_nhom || "",
-            nguoi_gui: { 
-                id_nguoidung: String(nguoiDung?.id_nguoidung || ""), 
-                ho_ten: nguoiDung?.ho_ten || "", 
-                email: nguoiDung?.email || "" 
-            },
+            id_nguoigui: String(nguoiDung?.id_nguoidung || ""),
             ho_ten: nguoiDung?.ho_ten || "", 
             noi_dung: noiDung,
             ten_tep: "",
@@ -123,7 +134,6 @@ const NhomChat = () => {
         setNoiDung("");
         setTepChon(null);
 
-        // --- GỬI TIN NHẮN THẬT LÊN SERVER ---
         const formData = new FormData();
         formData.append('ma_nhom', String(id_nhom));
         formData.append('noi_dung', noiDung);
@@ -147,6 +157,52 @@ const NhomChat = () => {
         }
     };
 
+    const xuLyGhimTinNhan = async (maNhom: string, idFirebase: string, idTinnhan: string, trangThaiGhimHienTai: boolean) => {
+        try {
+            const tinNhanRef = ref(db, `nhom_chat/${maNhom}/tin_nhan/${idFirebase}`);
+            await update(tinNhanRef, {
+                tinnhan_ghim: !trangThaiGhimHienTai,
+                updated_at: Date.now()
+            });
+
+            const res = await ketNoiAxios.post(`/nhom/chi-tiet/tinnhan/ghim`, {
+                id_tinnhan: idTinnhan,
+                tinnhan_ghim: !trangThaiGhimHienTai,
+            });
+
+            if (res.data.trangthai) {
+                console.log(res.data.thongbao);
+            }
+
+        } catch (error) {
+            console.error("Lỗi ghim tin nhắn:", error);
+            alert("Bạn không có quyền thực hiện thao tác này.");
+        }
+    }
+
+    
+    const xuLyXoaTinNhan = async (maNhom: string, idFirebase: string, idTinnhan: string) => {
+        if (!window.confirm("Bạn có chắc chắn muốn xóa tin nhắn này?")) return;
+        try {
+            const tinNhanRef = ref(db, `nhom_chat/${maNhom}/tin_nhan/${idFirebase}`);
+            await update(tinNhanRef, {
+                tinnhan_xoa: true,
+                updated_at: Date.now()
+            });
+
+            const res = await ketNoiAxios.post(`/nhom/chi-tiet/tinnhan/xoa/${idTinnhan}`);
+
+            if (res.data.trangthai) {
+                console.log(res.data.thongbao);
+            }
+
+        } catch (error) {
+            console.error("Lỗi xóa tin nhắn:", error);
+            alert("Bạn không có quyền thực hiện thao tác này.");
+        }
+    }
+
+
     return (
         <div className="khu-vuc-nhan-tin flex-col">
             <div className="hien-thi-tin-nhan flex-col">
@@ -154,39 +210,78 @@ const NhomChat = () => {
                     
                     {tinNhanNhom.length > 0 ? (
                         tinNhanNhom.map((tn) => (
-                            <div key={tn.id_tinnhan} className={`tin-nhan-dong flex-row ${tn.dang_gui ? 'opacity-50' : ''}`}>
+                            <div key={tn.id_tinnhan} 
+                                className={`tin-nhan-dong flex-row ${tn.dang_gui ? 'opacity-50' : ''}`}
+                                
+                            >
                                 <div className="avt-tin-nhan">
                                     <i className="bi bi-person-circle"></i>
                                 </div>
-                                <div className="noi-dung-tin-nhan flex-col">
+                                <div className="noi-dung-tin-nhan flex-col"
+                                    style={tn.tinnhan_xoa ? { opacity: 0.6, fontStyle: 'italic', cursor: 'default'} : {}}
+                                >
                                     <div className="thong-tin-nguoi-gui flex-row">
                                         <span className="ten-nguoi-gui">{tn.ho_ten}</span>
                                         <span className="thoi-gian-gui">
                                             {tn.dang_gui ? "Đang gửi..." : (tn.created_at ? new Date(tn.created_at).toLocaleTimeString() : "")}
                                         </span>
                                     </div>
-                                    <div className="noi-dung-tin-nhan-gui">{tn.noi_dung}</div>
-                                    <div className="noi-dung-tep-gui">
-                                        {tn.duong_dan_tep && (
-                                            laHinhAnh(tn.duong_dan_tep) ? (
-                                                <div className="noi-dung-anh-gui">
-                                                    <img 
-                                                        src={tn.duong_dan_tep} 
-                                                        alt="đính kèm" 
-                                                        onClick={() => window.open(tn.duong_dan_tep, '_blank')}
-                                                    />
+                                    {!tn.tinnhan_xoa ? (
+                                        <>
+                                            <div className="noi-dung-tin-nhan-gui">{tn.noi_dung}</div>
+                                            <div className="noi-dung-tep-gui">
+                                                {tn.duong_dan_tep && (
+                                                    laHinhAnh(tn.duong_dan_tep) ? (
+                                                        <div className="noi-dung-anh-gui">
+                                                            <img 
+                                                                src={tn.duong_dan_tep} 
+                                                                alt="đính kèm" 
+                                                                onClick={() => window.open(tn.duong_dan_tep, '_blank')}
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="tep-dinh-kem">
+                                                            <a href={tn.duong_dan_tep} target="_blank" rel="noreferrer" className="flex-row">
+                                                                <i className="bi bi-file-earmark-arrow-down-fill"></i>
+                                                                <span>{tn.ten_tep}</span>
+                                                            </a>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </div>
+                                        
+                                        
+                                            {tn.tinnhan_ghim && (
+                                                <div className="tin-nhan-ghim flex-row">
+                                                    <i className="bi bi-pin-angle-fill"></i>
                                                 </div>
-                                            ) : (
-                                                <div className="tep-dinh-kem">
-                                                    <a href={tn.duong_dan_tep} target="_blank" rel="noreferrer" className="flex-row">
-                                                        <i className="bi bi-file-earmark-arrow-down-fill"></i>
-                                                        <span>{tn.ten_tep}</span>
-                                                    </a>
-                                                </div>
-                                            )
-                                        )}
-                                    </div>
-                                    
+                                            )}
+                                            
+                                            <div className="chuc-nang-tin-nhan flex-row">
+                                                <span 
+                                                    className="ghim-tn"
+                                                    onClick={() => xuLyGhimTinNhan(String(id_nhom), tn.id_firebase!, tn.id_tinnhan, tn.tinnhan_ghim)}
+                                                >
+                                                    <i className={`bi ${tn.tinnhan_ghim ? 'bi-pin' : 'bi-pin-fill'}`}></i> 
+                                                    {tn.tinnhan_ghim ? " Bỏ ghim" : " Ghim"}
+                                                </span>
+                                                <span className="sua-tn">
+                                                    <i className="bi bi-pencil-fill"></i> Sửa
+                                                </span>
+                                                {(tn.id_nguoigui === String(nguoiDung?.id_nguoidung) || la_giangvien) &&  (
+                                                    <span className="xoa-tn" 
+                                                        onClick={() => xuLyXoaTinNhan(String(id_nhom), tn.id_firebase!, tn.id_tinnhan)}
+                                                    >
+                                                        <i className="bi bi-trash3-fill"></i> Xóa
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="tin-nhan-xoa flex-row">
+                                            <i className="bi bi-trash3-fill"></i> Tin nhắn này đã bị xóa
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))

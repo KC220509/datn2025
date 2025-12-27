@@ -432,6 +432,7 @@
 .hien-thi-tin-nhan .khung-tin-nhan-cuon{
     padding-right: 20px;
     gap: 20px;
+    margin-top: 25px;
 }
 
 .khung-tin-nhan-cuon .tin-nhan-dong{
@@ -444,13 +445,72 @@
 }
 
 .khung-tin-nhan-cuon .tin-nhan-dong .noi-dung-tin-nhan{
+    position: relative;
     flex: 1;
     background-color: #e1f0ff;
     padding: 5px 15px 10px;
     border-radius: 8px;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
     gap: 5px;
     cursor: pointer;
 }
+
+.noi-dung-tin-nhan .chuc-nang-tin-nhan{
+    position: absolute;
+    top: -24px;
+    right: 0px;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    align-items: center;
+    background-color: #f6fbff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-size: 11px;
+}
+.noi-dung-tin-nhan .chuc-nang-tin-nhan span{
+    padding: 5px 8px;
+}
+
+
+.noi-dung-tin-nhan .chuc-nang-tin-nhan .ghim-tn:hover{
+    color: #ffffff;
+    background-color: #f1c40f;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.noi-dung-tin-nhan .tin-nhan-ghim{
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    font-size: 20px;
+    color: #f1c40f;
+}
+
+.noi-dung-tin-nhan .tin-nhan-xoa{
+    font-size: 14px;
+    color: #e74c3c;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.noi-dung-tin-nhan .chuc-nang-tin-nhan .sua-tn:hover{
+    color: #ffffff;
+    background-color: #0f53f1;
+    cursor: pointer;
+    font-weight: bold;
+}
+.noi-dung-tin-nhan .chuc-nang-tin-nhan .xoa-tn:hover{
+    color: #ffffff;
+    background-color: #f10f0f;
+    cursor: pointer;
+    font-weight: bold;
+}
+.noi-dung-tin-nhan:hover .chuc-nang-tin-nhan{
+    opacity: 1;
+}
+
 
 .tin-nhan-dong .noi-dung-tin-nhan .thong-tin-nguoi-gui{
     gap: 20px;
@@ -683,22 +743,12 @@
 }
 
 
-/* Khung quản lý bài tập */
-
-/* .khung-bai-tap-nhom {
-    overflow: hidden;
-    background-color: #ffffff;
-
-} */
-
-/* Tên file: QuanLyBaiTap.css */
 
 .khung-quan-ly-bai-tap {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 20px 20px 10px;
     background-color: #f8f9fa;
     box-sizing: border-box;
 }
