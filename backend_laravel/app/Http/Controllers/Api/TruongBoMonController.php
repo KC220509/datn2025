@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PhanCongNgauNhienRequest;
 use App\Models\HocKyDk;
 use App\Models\PhanCong;
-use App\Models\PhanCongHuongDan;
 use App\Services\NguoiDungService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

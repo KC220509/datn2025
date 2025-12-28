@@ -267,6 +267,54 @@
 }
 
 
+.khung-ql-chucnang .khung-timkiem {
+    display: flex;
+    align-items: center;
+    border: 1px solid #f2f2f2;
+    border-radius: 3px;
+    overflow: hidden; 
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.khung-timkiem:focus-within {
+    border-color: #b8ccd9;
+}
+
+.nhap-timkiem {
+    border: none;
+    outline: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    flex-grow: 1;
+    background-color: transparent;
+}
+
+.nhap-timkiem::placeholder {
+    color: #999;
+}
+
+.nut-timkiem {
+    border: none;
+    background-color: #bebebe;
+    color: #555;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nut-timkiem:hover {
+    background-color: #0095ff;
+}
+.nut-timkiem i {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+
 .khung-ds-taikhoan{
     width: 100%;
     height: 100%;
@@ -374,10 +422,12 @@
 }
 
 .mokhung-tao-tk .khung-tao-tk {
-    flex: 1;
+    /* flex: 1; */
     /* height: calc(100% - 10px); */
+    min-width: 500px;
     max-height: 90%;
     background-color: #fff;
+    margin: 0 50px;
     padding: 20px 50px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -445,8 +495,8 @@
     width: 100%;
     border: 1px solid #ccc;
     overflow: hidden;
+    overflow-y: auto;
 }
-
 
 .khung-ds-hocky .bang-ds-ndhk-chitiet{
     width: 100%;
@@ -561,53 +611,103 @@
     
 }
 
-
-.khung-ql-chucnang .khung-timkiem {
-    display: flex;
-    align-items: center;
-    border: 1px solid #f2f2f2;
-    border-radius: 3px;
-    overflow: hidden; /* Đảm bảo các thành phần con không tràn ra ngoài border-radius */
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+.khung-tao-tk .khung-nhap-thong-tin{
+    /* padding: 0 10px; */
+    gap: 15px;
 }
 
-.khung-timkiem:focus-within {
-    border-color: #b8ccd9;
-}
 
-.nhap-timkiem {
-    border: none;
-    outline: none;
-    padding: 8px 12px;
+.khung-tao-tk .khung-nhap-thong-tin .thong-tin-item{
+    gap: 5px;
     font-size: 14px;
-    flex-grow: 1;
-    background-color: transparent;
 }
 
-.nhap-timkiem::placeholder {
+.khung-nhap-thong-tin .thong-tin-item label{
+    font-size: 15px;
+    font-weight: 600;
+    color: #3e3e3f;
+    cursor: pointer;
+}
+.khung-nhap-thong-tin .thong-tin-item .thong-tin-nhap{
+    width: 100%;
+    height: 36px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #697fa4;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+    cursor: pointer;
+}
+
+.khung-nhap-thong-tin .thong-tin-item .thong-tin-nhap:focus{
+    border-color: #1275ff;
+    box-shadow: 0 8px 20px rgba(18, 117, 255, 0.06);
+    transform: translateY(-1px);
+}
+
+.khung-nhap-thong-tin .thong-tin-item .thong-tin-nhap::placeholder{
     color: #999;
 }
-
-.nut-timkiem {
-    border: none;
-    background-color: #bebebe;
-    color: #555;
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: flex;
+.khung-nhap-thong-tin .thong-tin-tbm{
+    gap: 10px;
     align-items: center;
-    justify-content: center;
-}
-.nut-timkiem:hover {
-    background-color: #0095ff;
-}
-.nut-timkiem i {
     font-size: 14px;
-    color: #ffffff;
 }
+
+.khung-nhap-thong-tin .thong-tin-tbm label{
+    font-size: 14px;
+    font-weight: 600;
+    color: #e4942c;
+    cursor: pointer;
+    line-height: 1.2;
+}
+.khung-nhap-thong-tin .thong-tin-tbm label span{
+    font-style: italic;
+    font-weight: 400;
+    color: #717477;
+}
+
+.khung-nhap-thong-tin .thong-tin-tbm input{
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+
+.khung-nhap-thong-tin .thong-tin-item-sl{
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.khung-nhap-thong-tin .thong-tin-item-sl .thong-tin-select{
+    flex: 1;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.thong-tin-item-sl .thong-tin-select label{
+    font-size: 15px;
+    font-weight: 600;
+    color: #3e3e3f;
+    cursor: pointer;
+}
+
+.thong-tin-item-sl .thong-tin-select .chon-thong-tin{
+    width: 100%;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #697fa4;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.12s ease;
+    cursor: pointer;
+}
+
 
 
 

@@ -50,7 +50,6 @@ class DaoTaoController extends Controller
 
                 // Upload tệp lên Cloudinary
                 $tenHocKy = HocKyDk::where('id_hocky', $hocKyId)->value('ten_hoc_ky');
-                
                 $tenThuMuc = 'danh-sach-sinh-vien/' . $tenHocKy;
 
                 $duongDanTep = $this->cloudinaryService->uploadTep($tep, $tenThuMuc);
@@ -95,13 +94,11 @@ class DaoTaoController extends Controller
         }
     }
 
-
     public function importDsGiangVien(ImportDanhSachGvRequest $importDanhSachGvRequest){
         $hocKyId = $importDanhSachGvRequest->input('id_hocky');
         $tep = $importDanhSachGvRequest->file('file_giangvien');
 
         $importGiangViens = new GiangViensImport($hocKyId);
-
 
         try {
             DB::transaction(function () use ($importGiangViens, $tep, $hocKyId) {
@@ -117,7 +114,7 @@ class DaoTaoController extends Controller
 
                     throw ValidationException::withMessages($chiTietLoi);
                 }
-                // Upload tệp lên Cloudinary
+
                 $tenHocKy = HocKyDk::where('id_hocky', $hocKyId)->value('ten_hoc_ky');
                 
                 $tenThuMuc = 'danh-sach-giang-vien/' . $tenHocKy;

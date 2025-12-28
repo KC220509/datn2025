@@ -169,7 +169,6 @@ class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
                 );
             }
 
-
             return $giangVien;
         });
 
@@ -177,6 +176,6 @@ class GiangViensImport implements ToModel, WithHeadingRow, WithChunkReading, Wit
 
     public function chunkSize(): int
     {
-        return 1000;
+        return 1000; // Xử lý mỗi lần 1000 dòng
     }
 }

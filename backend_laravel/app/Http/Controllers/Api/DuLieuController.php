@@ -26,7 +26,6 @@ class DuLieuController extends Controller
 {
     protected $nguoiDungService;
     protected $khoaNganhLopService;
-
     protected $firebaseDb;
     protected $cloudinaryService;
 

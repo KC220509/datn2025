@@ -25,13 +25,17 @@ Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:AD'])->prefix('admin')->g
     Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('ad_dsHocKy');
     Route::get('/ds-nguoidung', [DuLieuController::class, 'dsNguoiDung'])->name('ad_dsNguoiDung');
     Route::get('/ds-khoanganhlop', [DuLieuController::class, 'dsKhoaNganhLop'])->name('ad_dsKhoaNganhLop');
+
     Route::get('/ds-sinhvien', [DuLieuController::class, 'dsSinhVien'])->name('ad_dsSinhVien');
     Route::get('/ds-giangvien', [DuLieuController::class, 'dsGiangVien'])->name('ad_dsGiangVien');
 
     Route::post('/tao-ds-taikhoan-sv', [AdminController::class, 'taoDsTaiKhoanSv'])->name('ad_taoDsTaiKhoanSv');
+    Route::post('/tao-taikhoan-sv', [AdminController::class, 'taoTaiKhoanSv'])->name('ad_taoTaiKhoanSv');
     Route::post('/tao-ds-taikhoan-gv', [AdminController::class, 'taoDsTaiKhoanGv'])->name('ad_taoDsTaiKhoanGv');
+    Route::post('/tao-taikhoan-gv', [AdminController::class, 'taoTaiKhoanGv'])->name('ad_taoTaiKhoanGv');
 
     Route::delete('/xoa-taikhoan-gv/{id_giangvien}', [AdminController::class, 'xoaTkGiangVien'])->name('ad_xoaTaiKhoanGv');
+    Route::delete('/xoa-taikhoan-sv/{id_sinhvien}', [AdminController::class, 'xoaTkSinhVien'])->name('ad_xoaTaiKhoanSv');
 
 
     Route::put('/khoa-taikhoan/{id_nguoidung}', [AdminController::class, 'khoaTaiKhoan'])->name('ad_khoaTaiKhoan');

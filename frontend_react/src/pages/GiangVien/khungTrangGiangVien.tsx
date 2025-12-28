@@ -30,11 +30,11 @@ const KhungGiangVien: React.FC = () => {
                 <aside className="thanh-dieuhuong">
                     <nav>
                         <ul className="danh-sach-menu flex-row">
-                            <li>
+                            {/* <li>
                                 <NavLink to="/giang-vien" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                                     Tổng Quan Giảng Viên
                                 </NavLink>
-                            </li>
+                            </li> */}
                             <li>
                                 <NavLink to="/giang-vien/sinh-vien-phan-cong" className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
                                     Quản Lý Sinh Viên Phân Công

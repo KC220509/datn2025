@@ -55,6 +55,7 @@ const TrangQlGiangVienAd = () => {
 
     const [dsHocKy, setDsHocKy] = useState<HocKy[]>([]);
     const [id_hocky, setIdHocKy] = useState<string>("");
+    const [dsNganh, setDsNganh] = useState<Nganh[]>([]);
 
     const layDsHocKy = useCallback(async () => {
         try{
@@ -70,21 +71,37 @@ const TrangQlGiangVienAd = () => {
         }
     }, []);
 
+    const layDanhSachNganh = async () => {
+        try{
+            const phanhoi = await ketNoiAxios.get('/admin/ds-khoanganhlop');
+
+            if (!phanhoi){
+                console.log('Lấy danh sách lớp không thành công');
+                return;
+            }
+            setDsNganh(phanhoi.data.ds_nganh);
+        }catch(error){
+            console.error('Lỗi khi lấy danh sách ngành:', error);
+        }
+        
+    }
+
     useEffect(() => {
         layDsTkGiangVien();
         layDsHocKy();
+        layDanhSachNganh();
     }, [layDsTkGiangVien, layDsHocKy]);
 
 
 
-    const [moKhungTaoTk, setMoKhungTaoTk] = useState<boolean>(false);
+    const [moKhungTaoDsTk, setMoKhungTaoDsTk] = useState<boolean>(false);
 
-    const moKhungTaoTkGiangVien = () => {
-        setMoKhungTaoTk(true);
+    const moKhungTaoDsTkGiangVien = () => {
+        setMoKhungTaoDsTk(true);
     };
 
-    const dongKhungTaoTkGiangVien = () => {
-        setMoKhungTaoTk(false);
+    const dongKhungTaoDsTkGiangVien = () => {
+        setMoKhungTaoDsTk(false);
         setIdHocKy("");
     };
 
@@ -173,10 +190,9 @@ const TrangQlGiangVienAd = () => {
     const [thongBao, setThongBao] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [dangTai, setDangTai] = useState<boolean>(false);
 
-    const submitTaoTkGiangVien = async (e: React.FormEvent) => {
+    const xuLyTaoDsTaiKhoanGv = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // Xử lý tạo tài khoản giảng viên ở đây
         setDangTai(true);
         try {
             const  dataTaoTk = await ketNoiAxios.post('/admin/tao-ds-taikhoan-gv', {
@@ -192,7 +208,7 @@ const TrangQlGiangVienAd = () => {
             layDsTkGiangVien();
 
             setTimeout(() => {
-                dongKhungTaoTkGiangVien();
+                dongKhungTaoDsTkGiangVien();
                 setThongBao(null);
             }, 3000);
 
@@ -202,6 +218,68 @@ const TrangQlGiangVienAd = () => {
             setTimeout(() => {
                 setThongBao(null);
             }, 3000);
+        } finally {
+            setDangTai(false);
+        }
+    }
+
+    // Xử lý tạo tài khoản sinh viên
+    const [moKhungTaoTk, setMoKhungTaoTk] = useState<boolean>(false);
+    const [email, setEmail] = useState<string>("");
+    const [hoTen, setHoTen] = useState<string>("");
+    const [hhhv, setHhhv] = useState<string>("");
+    const [soDienThoai, setSoDienThoai] = useState<string>("");
+    const [id_nganh, setIdNganh] = useState<string>("");
+    const [gioiTinh, setGioiTinh] = useState<string>("1");
+    const [laTruongBoMon, setLaTruongBoMon] = useState<boolean>(false);
+
+    
+
+    const moKhungTaoTkGiangVien = () => {
+        setMoKhungTaoTk(true);
+    };
+    const dongKhungTaoTkGiangVien = () => {
+        setMoKhungTaoTk(false);
+        setEmail("");
+        setHoTen("");
+        setHhhv("");
+        setSoDienThoai("");
+        setIdHocKy("");
+        setIdNganh("");
+        setGioiTinh("1");
+        setLaTruongBoMon(false);
+    }
+
+    const xuLyTaoTkGiangVien = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setDangTai(true);
+        try {
+            const phanhoi = await ketNoiAxios.post('/admin/tao-taikhoan-gv', {
+                email: email,
+                ho_ten: hoTen,
+                hoc_ham_hoc_vi: hhhv,
+                so_dien_thoai: soDienThoai,
+                ma_hocky: id_hocky,
+                ma_nganh: id_nganh,
+                gioi_tinh: gioiTinh,
+                la_truong_bomon: laTruongBoMon,
+            });
+
+            if(phanhoi.data.trangthai){
+                alert(phanhoi.data.thongbao);
+                layDsTkGiangVien();
+            }
+
+            setTimeout(() => {
+                dongKhungTaoTkGiangVien();
+            }, 2000);
+
+        } catch (error) {
+            console.error('Lỗi khi tạo tài khoản giảng viên:', error);
+            if (axios.isAxiosError(error)) {
+                alert(error.response?.data?.thongbao || "Lỗi hệ thống");
+            }
         } finally {
             setDangTai(false);
         }
@@ -285,10 +363,10 @@ const TrangQlGiangVienAd = () => {
                 <h1 className="tieude-trang">Danh Sách Giảng Viên</h1>
                 <div className="khung-ql-chucnang flex-row">
                     <div className="khung-tao-taikhoan flex-row">
-                        <div className="mokhung tao-dstaikhoan" onClick={moKhungTaoTkGiangVien}>
+                        <div className="mokhung tao-dstaikhoan" onClick={moKhungTaoDsTkGiangVien}>
                             Tạo tài khoản giảng viên
                         </div>
-                        <div className="mokhung them-taikhoan">
+                        <div className="mokhung them-taikhoan" onClick={moKhungTaoTkGiangVien}>
                             Thêm mới giảng viên
                         </div>
                     </div>
@@ -372,9 +450,10 @@ const TrangQlGiangVienAd = () => {
                         </div>
                     ) : null}
                 </div>
-                {moKhungTaoTk &&
+
+                {moKhungTaoDsTk &&
                     <div className="mokhung-tao-tk">
-                        <form onSubmit={submitTaoTkGiangVien} method="post" className="khung-tao-tk flex-col">
+                        <form onSubmit={xuLyTaoDsTaiKhoanGv} method="post" className="khung-tao-tk flex-col">
                             <h2 className="tieude-khungtao">Tạo tài khoản giảng viên</h2>
                             {thongBao && (
                                 <div className={`thongbao ${thongBao.type === 'success' ? 'thongbao-thanhcong' : 'thongbao-thatbai'}`}>
@@ -445,7 +524,7 @@ const TrangQlGiangVienAd = () => {
                             ) : null}
                              
                             <div className="khung-hanhdong flex-row">
-                                <button className="nut-dongkhung" onClick={dongKhungTaoTkGiangVien}>Đóng</button>
+                                <button className="nut-dongkhung" onClick={dongKhungTaoDsTkGiangVien}>Đóng</button>
                                 <button type="submit" className={`nut-taotaikhoan ${trangThaiLoc && !dangTai ? '' : 'disabled'}`} disabled={!trangThaiLoc || dangTai}>
                                     {dangTai ? 'Đang xử lý...' : 'Tạo tài khoản'}
                                 </button>
@@ -453,6 +532,110 @@ const TrangQlGiangVienAd = () => {
                         </form>
                     </div>
                 }
+
+
+                {moKhungTaoTk && (
+                    <div className="mokhung-tao-tk">
+                        <form method="post" className="khung-tao-tk flex-col" onSubmit={xuLyTaoTkGiangVien}>
+                            <h2 className="tieude-khungtao">Tạo tài khoản giảng viên</h2>
+                            <div className="khung-nhap-thong-tin flex-col">
+                                <div className="thong-tin-item flex-col">
+                                    <label htmlFor="email">Email <span style={{color: 'red'}}>*</span></label>
+                                    <input className="thong-tin-nhap"
+                                        type="email" id="email" name="email"
+                                        placeholder="Nhập email giảng viên"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required />
+                                </div>
+                                <div className="thong-tin-item flex-col">
+                                    <label htmlFor="hoTen">Họ và Tên <span style={{color: 'red'}}>*</span></label>
+                                    <input className="thong-tin-nhap"
+                                        type="text" id="hoTen" name="hoTen"
+                                        placeholder="Nhập họ tên giảng viên"
+                                        value={hoTen}
+                                        onChange={(e) => setHoTen(e.target.value)}
+                                        required 
+                                    />
+                                </div>
+                                <div className="thong-tin-item flex-col">
+                                    <label htmlFor="msv">Học hàm Học vị <span style={{color: 'red'}}>*</span></label>
+                                    <input  className="thong-tin-nhap"
+                                        type="text" id="msv" name="msv"
+                                        placeholder="Nhập học hàm học vị của giảng viên"
+                                        value={hhhv}
+                                        onChange={(e) => setHhhv(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="thong-tin-item flex-col">
+                                    <label htmlFor="hoTen">Số điện thoại</label>
+                                    <input  className="thong-tin-nhap"
+                                        type="text" id="soDienThoai" name="soDienThoai"
+                                        placeholder="Nhập số điện thoại (Nếu có)"
+                                        value={soDienThoai}
+                                        onChange={(e) => setSoDienThoai(e.target.value)}
+                                    />
+                                </div>
+                                <div className="thong-tin-tbm flex-row">
+                                    <input type="checkbox" name="laTBM" id="laTBM"
+                                        checked={laTruongBoMon}
+                                        onChange={(e) => setLaTruongBoMon(e.target.checked)} 
+                                    />
+                                    <label htmlFor="laTBM">
+                                        Trưởng Bộ Môn 
+                                        <span> (Click nếu là trưởng bộ môn)</span>
+                                    </label>
+                                </div>
+                                <div className="thong-tin-item-sl flex-row">
+                                    <div className="thong-tin-select flex-col">
+                                        <label htmlFor="hocKy">Học kỳ <span style={{color: 'red'}}>*</span></label>
+                                        <select id="hocKy" name="hocKy" className="chon-thong-tin"
+                                            value={id_hocky}
+                                            onChange={(e) => setIdHocKy(e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Tất cả</option>
+                                            {dsHocKy.map((hocKy) => (
+                                                <option key={hocKy.id_hocky} value={hocKy.id_hocky}>{hocKy.ten_hoc_ky}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="thong-tin-select flex-col">
+                                        <label htmlFor="nganh">Ngành <span style={{color: 'red'}}>*</span></label>
+                                        <select id="nganh" name="nganh" className="chon-thong-tin"
+                                            value={id_nganh}
+                                            onChange={(e) => setIdNganh(e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Tất cả</option>
+                                            {dsNganh.map((nganh) => (
+                                                <option key={nganh.id_nganh} value={nganh.id_nganh}>{nganh.ten_nganh}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="thong-tin-select flex-col">
+                                        <label htmlFor="gioiTinh">Giới tính</label>
+                                        <select id="gioiTinh" name="gioiTinh" className="chon-thong-tin"
+                                            value={gioiTinh}
+                                            onChange={(e) => setGioiTinh(e.target.value)}
+                                        >
+                                            <option value="1">Nam</option>
+                                            <option value="0">Nữ</option>
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div className="khung-hanhdong flex-row">
+                                <button type="button" className="nut-dongkhung" onClick={dongKhungTaoTkGiangVien}>Đóng</button>
+                                <button type="submit" className={`nut-taotaikhoan ${dangTai ? 'disabled' : ''}`} disabled={dangTai}>
+                                    {dangTai ? 'Đang xử lý...' : 'Tạo tài khoản'}
+                                </button>
+                            </div>      
+                        </form>
+                    </div>
+                )}
             </div>
         </>
     );

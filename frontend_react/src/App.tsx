@@ -25,7 +25,7 @@ import QuanLyPhanCong from './pages/TruongBoMon/quanLyPhanCong';
 import DanhSachPhanCong from './pages/TruongBoMon/danhSachPhanCong';
 
 // Giảng viên
-import GiangVien from './pages/GiangVien/giangVien';
+// import GiangVien from './pages/GiangVien/giangVien';
 import KhungGiangVien from './pages/GiangVien/khungTrangGiangVien';
 import QuanLySinhVien from './pages/GiangVien/quanLySinhVien';
 import DanhSachNhom from './pages/GiangVien/danhSachNhom';
@@ -83,7 +83,8 @@ function App() {
           <Route path='/giang-vien' element={
               <VaiTroNguoiDung trangcon={<KhungGiangVien />} vaitros={['GV']} />
             }>
-              <Route index element={<GiangVien />} />
+              {/* <Route index element={<GiangVien />} /> */}
+              <Route index element={<Navigate to="sinh-vien-phan-cong" replace />} />
               <Route path='sinh-vien-phan-cong' element={<QuanLySinhVien />} >
                 <Route index element={<DanhSachSinhVienPc />} />
                 <Route path='danhsach-nhom' element={<DanhSachNhom />} />

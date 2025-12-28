@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\TaoDsTaiKhoanRequest;
+use App\Http\Requests\TaoTaiKhoanGvRequest;
+use App\Http\Requests\TaoTaiKhoanSvRequest;
 use App\Models\User;
 use App\Models\SinhVien;
 use App\Http\Controllers\Controller;
@@ -18,10 +20,153 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+
+    public function taoTaiKhoanSV(TaoTaiKhoanSvRequest $request)
+    {
+        $duLieu = $request->validated();
+        
+        $ktraNguoiDung = NguoiDung::where('email', $duLieu['email'])->first();
+        if ($ktraNguoiDung) {
+            return response()->json(['message' => 'Email đã tồn tại trong hệ thống.'], 400);
+        }
+
+        DB::beginTransaction();
+        try {
+            $matKhauGoc = Str::random(8);
+        
+            $nguoiDung = NguoiDung::create([
+                'id_nguoidung'  => Str::uuid(),
+                'email'         => $duLieu['email'],
+                'mat_khau'      => Hash::make($matKhauGoc),
+                'ho_ten'        => $duLieu['ho_ten'],
+                'so_dien_thoai' => $duLieu['so_dien_thoai'] ?? null,
+                'dia_chi'       => $duLieu['dia_chi'] ?? null,
+                'gioi_tinh'     => $duLieu['gioi_tinh'] ?? true, 
+                'trang_thai'    => true,
+            ]);
+            
+
+            // Tạo sinh viên
+            SinhVien::create([
+                'id_sinhvien' => $nguoiDung->id_nguoidung,
+                'ma_lop'      => $duLieu['ma_lop'],
+                'msv'         => $duLieu['msv'],
+            ]);
+
+            // Lưu vào người dùng vai trò
+            $nguoiDung->vaiTros()->attach('SV');
+
+            // Người dùng học kỳ
+            DB::table('nguoidung_hocky')->insert([
+                'ma_nguoidung' => $nguoiDung->id_nguoidung,
+                'ma_hocky' => $duLieu['ma_hocky'], 
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            DB::commit();
+            
+            // Gửi mail thông báo
+            Mail::to($nguoiDung->email)->send(new ThongBaoCapTaiKhoan($nguoiDung, $matKhauGoc));
+
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Tạo tài khoản sinh viên thành công.'
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi tạo tài khoản sinh viên: ' . $e->getMessage());
+            return response()->json(['message' => 'Đã xảy ra lỗi trong quá trình xử lý.'], 500);
+        }
+    }
+    public function taoTaiKhoanGV(TaoTaiKhoanGvRequest $request)
+    {
+        $duLieu = $request->validated();
+        
+        $ktraNguoiDung = NguoiDung::where('email', $duLieu['email'])->first();
+        if ($ktraNguoiDung) {
+            return response()->json(['message' => 'Email đã tồn tại trong hệ thống.'], 400);
+        }
+
+        DB::beginTransaction();
+        try {
+            $matKhauGoc = Str::random(8);
+        
+            $nguoiDung = NguoiDung::create([
+                'id_nguoidung'  => Str::uuid(),
+                'email'         => $duLieu['email'],
+                'mat_khau'      => Hash::make($matKhauGoc),
+                'ho_ten'        => $duLieu['ho_ten'],
+                'so_dien_thoai' => $duLieu['so_dien_thoai'] ?? null,
+                'dia_chi'       => null,
+                'gioi_tinh'     => $duLieu['gioi_tinh'] ?? true, 
+                'trang_thai'    => true,
+            ]);
+            
+
+            // Tạo sinh viên
+            GiangVien::create([
+                'id_giangvien' => $nguoiDung->id_nguoidung,
+                'ma_nganh'      => $duLieu['ma_nganh'],
+                'hoc_ham_hoc_vi' => $duLieu['hoc_ham_hoc_vi'],
+            ]);
+
+            // Lưu vào vai trò người dùng
+            $nguoiDung->vaiTros()->attach('GV');
+            if(isset($duLieu['la_truong_bomon']) && $duLieu['la_truong_bomon']){
+                $nguoiDung->vaiTros()->attach('TBM');
+
+                $idTBMCu = DB::table('nganh')
+                        ->where('id_nganh', $duLieu['ma_nganh'])
+                        ->value('ma_truongbomon');
+
+                if ($idTBMCu && $idTBMCu !== $nguoiDung->id_nguoidung) {
+                    DB::table('nguoidung_vaitro')
+                        ->where('ma_nguoidung', $idTBMCu)
+                        ->where('ma_vaitro', 'TBM')
+                        ->delete();
+                }
+                    
+                DB::table('nganh')->where('id_nganh', $duLieu['ma_nganh'])->update(
+                    [
+                        'ma_truongbomon' => $nguoiDung->id_nguoidung, 
+                        'updated_at' => now(),
+                    ]
+                );
+            }
+
+            // Người dùng học kỳ
+            DB::table('nguoidung_hocky')->insert([
+                'ma_nguoidung' => $nguoiDung->id_nguoidung,
+                'ma_hocky' => $duLieu['ma_hocky'], 
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            DB::commit();
+            
+            // Gửi mail thông báo
+            Mail::to($nguoiDung->email)->send(new ThongBaoCapTaiKhoan($nguoiDung, $matKhauGoc));
+
+
+            return response()->json([
+                'trangthai' => true,
+                'thongbao' => 'Tạo tài khoản giảng viên thành công.'
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Lỗi khi tạo tài khoản giảng viên: ' . $e->getMessage());
+            return response()->json(['message' => 'Đã xảy ra lỗi trong quá trình xử lý.'], 500);
+        }
+    }
+
     public function taoDsTaiKhoanSv(TaoDsTaiKhoanRequest $taoDsTaiKhoanRequest)
     {
-        $validatedData = $taoDsTaiKhoanRequest->validated();
-        $idHocKy = $validatedData['id_hocky'];
+        $duLieu = $taoDsTaiKhoanRequest->validated();
+        $idHocKy = $duLieu['id_hocky'];
 
         $dsSinhVien = [];
 
@@ -44,7 +189,6 @@ class AdminController extends Controller
                     $nguoiDung->trang_thai = true;
                     $nguoiDung->save();
 
-                    // Gửi email thông báo tài khoản và mật khẩu cho sinh viên
                     Mail::to($nguoiDung->email)->send(new ThongBaoCapTaiKhoan($nguoiDung, $matKhauGoc));
 
                 }
@@ -71,8 +215,8 @@ class AdminController extends Controller
 
     public function taoDsTaiKhoanGv(TaoDsTaiKhoanRequest $taoDsTaiKhoanRequest)
     {
-        $data = $taoDsTaiKhoanRequest->validated();
-        $idHocKy = $data['id_hocky'];
+        $duLieu = $taoDsTaiKhoanRequest->validated();
+        $idHocKy = $duLieu['id_hocky'];
 
         DB::beginTransaction();
 
@@ -94,10 +238,8 @@ class AdminController extends Controller
                     $nguoiDung->trang_thai = true;
                     $nguoiDung->save();
 
-                    // Gửi email thông báo tài khoản và mật khẩu cho sinh viên
                     Mail::to($nguoiDung->email)->send(new ThongBaoCapTaiKhoan($nguoiDung, $matKhauGoc));
-
-                    
+  
                 }
                 $dsGiangVien[] = [
                     'giangvien' => $nguoiDung,
@@ -166,12 +308,12 @@ class AdminController extends Controller
 
             return response()->json([
                 'trangthai' => true,
-                'thongbao' => 'Xóa tài khoản giảng viên thành công.'
+                'thongbao' => 'Xóa tài khoản sinh viên thành công.'
             ], 200);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Lỗi khi xóa tài khoản giảng viên: ' . $e->getMessage());
+            Log::error('Lỗi khi xóa tài khoản sinh viên: ' . $e->getMessage());
             return response()->json(['message' => 'Lỗi: ' . $e->getMessage()], 500);
         }
     }
