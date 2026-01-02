@@ -114,8 +114,6 @@ function App() {
             
             <Route index element={<NhomChat />} />
             <Route path='bai-tap' element={<QuanLyBaiTap />} />
-
-            
           </Route>
       </Route>
 

@@ -794,7 +794,7 @@
     justify-content: space-between;
 }
 .khung-danh-sach-tep-da-chon .tep-cho-upload .ten-tep-rut-gon{
-    max-width: 450px;
+    max-width: max-content;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

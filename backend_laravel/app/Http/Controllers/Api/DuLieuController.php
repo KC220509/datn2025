@@ -429,7 +429,6 @@ class DuLieuController extends Controller
                 'con_han' => $dsNhiemVu->filter(fn($q) => in_array($q->trangthai_nhiemvu, ['con_han', 'dang_tre_han']))->values(),
                 'qua_han' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'da_dong')->values(),
                 'hoan_thanh' => $dsNhiemVu->filter(fn($q) => $q->trangthai_nhiemvu === 'hoan_thanh')->values(),
-
             ]
         ]);
     }

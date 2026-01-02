@@ -177,7 +177,7 @@
 }
 .khung-chitiet-thongbao .vung-xem-truc-tiep{
     width: 100%;
-    height: 500px;
+    /* height: 500px; */
     border: 1px solid #cccccc;
     box-sizing: border-box;
     overflow: hidden;

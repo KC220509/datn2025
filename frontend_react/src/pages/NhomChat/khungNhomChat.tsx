@@ -150,7 +150,7 @@ const KhungNhomChat = () => {
     const ds_menu = [
         { id: 'kenh-chat', ten: 'Kênh Chat', icon: '💬', duongdan: `.` },
         { id: 'bai-tap', ten: 'Bài Tập', icon: '📝', duongdan: `bai-tap` },
-        { id: 'tai-lieu', ten: 'Tài Liệu', icon: '📚', duongdan: `tai-lieu` },
+        // { id: 'tai-lieu', ten: 'Tài Liệu', icon: '📚', duongdan: `tai-lieu` },
     ];
 
     
