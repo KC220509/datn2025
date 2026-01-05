@@ -101,10 +101,14 @@ class NguoiDungService
                 'nguoiDung.hocKys',
             ])
             ->where('ma_nganh', $maNganh)
+            ->whereHas('nguoiDung', function ($query) {
+                $query->where('trang_thai', 1); 
+            })
             ->get();
 
         return $dsGiangVien;
     }
+
     public function layDsSinhVienTheoNganh($maNganh){
         $dsSinhVien = $this->sinhVienModel->with([
                 'nguoiDung',
@@ -114,6 +118,9 @@ class NguoiDungService
             ])
             ->whereHas('lop', function($query) use ($maNganh){
                 $query->where('ma_nganh', $maNganh);
+            })
+            ->whereHas('nguoiDung', function ($query) {
+                $query->where('trang_thai', 1); 
             })
             ->get();
 
