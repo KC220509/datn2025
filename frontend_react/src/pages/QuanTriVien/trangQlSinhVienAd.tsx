@@ -285,7 +285,7 @@ const TrangQlSinhVienAd = () => {
         } catch (error) {
             console.error('Lỗi khi tạo tài khoản sinh viên:', error);
             if (axios.isAxiosError(error)) {
-                alert(error.response?.data?.thongbao || "Lỗi hệ thống");
+                alert(error.response?.data?.thongbao || "Tạo tài khoản sinh viên không thành công.");
             }
         } finally {
             setDangTai(false);
