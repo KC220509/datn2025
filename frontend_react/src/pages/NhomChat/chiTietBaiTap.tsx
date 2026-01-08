@@ -186,6 +186,13 @@ const ChiTietBaiTap = ({ nhiemVuId, laGiangVien, onBack }: Props) => {
         tepChon.forEach(file => formData.append('tep_dinh_kem[]', file));
 
         setDangGui(true);
+        if (new Date() > new Date(baiTap!.han_dong)) {
+            alert("Quá hạn đóng bài, không thể nộp bài!");
+            setTepChon([]); 
+            setHoanTacNopBai(false);
+            setDangGui(false);
+            return;
+        }
         try {
             const phanhoi = await ketNoiAxios.post(`nhom/chi-tiet/nhiem-vu/${nhiemVuId}/nop-bai`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }

@@ -155,6 +155,7 @@ const PhanCongGvSv = () => {
                 alert(phanhoi.data.thongbao);
             }
         } catch (error) {
+            alert("Lỗi khi phân công ngẫu nhiên.");
             console.error("Lỗi khi phân công ngẫu nhiên:", error);
         }finally {
             setDangTai(false);

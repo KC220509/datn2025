@@ -191,6 +191,7 @@ const KhungNhomChat = () => {
                 alert('Thêm thành viên vào nhóm thất bại!');
             }
         } catch (error) {
+            alert('Lỗi khi thêm thành viên vào nhóm');
             console.error('Lỗi khi thêm thành viên vào nhóm:', error);
         }
     };
