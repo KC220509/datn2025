@@ -123,6 +123,7 @@ const DangNhap: React.FC = () => {
 
   const xuLyGuiEmailLayLaiMatKhau = async (e: React.FormEvent) => {
     e.preventDefault();
+    setDangChay(true);
     try{
       const dulieu = await ketNoiAxios.post('/cap-lai-mat-khau', {
         email: email,
@@ -149,6 +150,8 @@ const DangNhap: React.FC = () => {
         setTimeout(() => {
           setLoi("");
         }, 5000);
+    }finally{
+      setDangChay(false);
     }
   }
 
@@ -241,7 +244,9 @@ const DangNhap: React.FC = () => {
                         required />
                 </div>
                 <div className="khung-chucnang flex-col">
-                  <button className="nut-gui-email" type="submit">Gửi Email</button>
+                  <button className="nut-gui-email" type="submit" disabled={dangChay}>
+                    {dangChay ? "Đang gửi..." : "Gửi Email"}
+                  </button>
                   <p className="lienket-dangnhap" onClick={xuLyDongKhungLayMatKhau}>Quay lại đăng nhập</p>
                 </div>
                 {loi && <p className="loi-cap-matkhau text-red-500 mt-2">{loi}</p>}

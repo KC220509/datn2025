@@ -57,8 +57,7 @@ const DangThongBao = () => {
         }
         catch(error){
             console.error("Lỗi khi đăng thông báo:", error);
-            alert("Đã có lỗi xảy ra khi đăng thông báo. Vui lòng thử lại sau.");
-            // setDangTai(false);
+            alert("Đăng thông báo thất bại!");
         }
         finally{
             setDangTai(false);

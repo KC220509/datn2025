@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+.content {
+  max-width: 500px;
+  z-index: 1;
+}
+
+.errorCode {
+  font-size: 120px;
+  font-weight: 900;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1;
+}
+
+.title {
+  font-size: 32px;
+  color: #e11d48; /* Màu đỏ cảnh báo */
+  margin: 10px 0;
+}
+
+.message {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.backButton {
+  background-color: #2563eb; /* Màu xanh của Laravel/React style */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transform: translateY(-2px);
+}
+
+.iconWrapper {
+  margin-top: 50px;
+  opacity: 0.1;
+  position: absolute;
+}
+
+.lockIcon {
+  width: 300px;
+  height: 300px;
+  color: #1e293b;
+}

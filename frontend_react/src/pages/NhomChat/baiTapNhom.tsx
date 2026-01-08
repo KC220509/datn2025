@@ -253,11 +253,12 @@ const QuanLyBaiTap = () => {
                                         <button className="nut-chi-tiet" onClick={() => setIdNhiemVuDangXem(bt.id_nhiemvu)}>
                                             {laGiangVien ? (
                                                 <span className="nhan-trang-thai thong-ke-nop">
-                                                    {bt.trangthai_nhiemvu === 'hoan_thanh' ? (
+                                                    {/* {bt.trangthai_nhiemvu === 'hoan_thanh' ? (
                                                         `Đã nộp: ${bt.danh_sach_nop_bai_count || 0} / ${dsTrangThaiBaiTap.tong_so_sv || 0}`
                                                     ) : (
                                                         'Xem chi tiết'
-                                                    )}
+                                                    )} */}
+                                                    Xem chi tiết
                                                 </span>
                                             ) : (
                                                 bt.trangthai_nhiemvu === 'da_dong' ? 'Xem chi tiết' : 'Xem nhiệm vụ'

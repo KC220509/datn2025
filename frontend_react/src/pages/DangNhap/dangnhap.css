@@ -224,7 +224,8 @@
 .form-dang-nhap .khung-chucnang .nut-dang-nhap:hover{
     background-color: #0066ff;
 }
-.form-dang-nhap .khung-chucnang .nut-dang-nhap:disabled{
+.form-dang-nhap .khung-chucnang .nut-dang-nhap:disabled,
+.form-dang-nhap .khung-chucnang .nut-gui-email:disabled{
     background-color: #a0c4ff;
     cursor: not-allowed;
 }

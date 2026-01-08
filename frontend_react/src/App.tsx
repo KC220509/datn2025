@@ -41,6 +41,7 @@ import QuanLyThongBao from './pages/PhongDaoTao/qlThongBao';
 import DanhSachThongBao from './pages/PhongDaoTao/danhSachThongBao';
 import DangThongBao from './pages/PhongDaoTao/dangThongBao';
 import QuanLyBaiTap from './pages/NhomChat/baiTapNhom';
+import KhongCoQuyen from './pages/KhongCoQuyen/khongCoQuyen';
 
 
 function App() {
@@ -118,7 +119,7 @@ function App() {
       </Route>
 
       {/* CÁC ROUTE NGOẠI LỆ */}
-      <Route path="/khong-co-quyen" element={<div>Bạn không có quyền truy cập.</div>} />
+      <Route path="/khong-co-quyen" element={<KhongCoQuyen />} />
       <Route path="*" element={<div>Không tìm thấy trang.</div>} />
     </Routes>
   )
