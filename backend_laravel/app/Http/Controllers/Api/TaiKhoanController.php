@@ -50,7 +50,6 @@ class TaiKhoanController extends Controller
             ], 403);
         }
 
-        $firebaseToken = $this->firebaseAuth->createCustomToken((string)$nguoidung->id_nguoidung)->toString();
         
         $vaiTros = $nguoidung->vaiTros->map(function($vt){
             return [
@@ -58,6 +57,8 @@ class TaiKhoanController extends Controller
                 'ten_hien_thi' => $vt->ten_hien_thi
             ];
         });
+
+        $firebaseToken = $this->firebaseAuth->createCustomToken((string)$nguoidung->id_nguoidung)->toString();
 
         $token = $nguoidung->createToken('auth_token')->plainTextToken;
 
@@ -75,6 +76,19 @@ class TaiKhoanController extends Controller
         ]);
     }
 
+    public function dangXuat(Request $request)
+    {
+        $nguoidung = $request->user();
+
+        if ($nguoidung) {
+            $nguoidung->currentAccessToken()->delete();
+        }
+
+        return response()->json([
+            'trangthai' => true,
+            'thongbao' => 'Đăng xuất thành công.'
+        ], 200);
+    }
 
     public function layNguoiDung(Request $request)
     {

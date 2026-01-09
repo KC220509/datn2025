@@ -20,6 +20,8 @@ Route::post('/cap-lai-mat-khau', [TaiKhoanController::class, 'capLaiMatKhau']);
 Route::middleware('auth:sanctum')->get('/nguoi-dung', [TaiKhoanController::class, 'layNguoiDung']);
 Route::middleware('auth:sanctum')->post('/nguoi-dung/doi-mat-khau', [TaiKhoanController::class, 'doiMatKhau']);
 
+Route::middleware('auth:sanctum')->post('/dang-xuat', [TaiKhoanController::class, 'dangXuat']);
+
 //Admin 
 Route::middleware(['auth:sanctum', 'kiem_tra_dang_nhap:AD'])->prefix('admin')->group(function () {
     Route::get('/ds-hocky', [DuLieuController::class, 'dsHocKy'])->name('ad_dsHocKy');

@@ -82,6 +82,7 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
     // Hàm đăng xuất
     const dangXuat = useCallback(async () => {
 
+        await ketNoiAxios.post("/dang-xuat");
         await dangXuatFireBase();
 
         localStorage.removeItem('token'); 

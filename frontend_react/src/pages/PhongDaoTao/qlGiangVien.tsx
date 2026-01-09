@@ -215,8 +215,6 @@ const QlGiangVien = () => {
     }
   }
 
-
-
   return  (
     <>
       <div className="khung-daotao-sv flex-col">

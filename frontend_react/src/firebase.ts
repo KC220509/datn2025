@@ -34,6 +34,11 @@ export const dangNhapFireBase = async (fbtoken: string) => {
 export const dangXuatFireBase = async () => {
     try {
         await signOut(auth);
+        Object.keys(localStorage).forEach(key => {
+        if (key.includes('firebase')) {
+            localStorage.removeItem(key);
+        }
+    });
         console.log("Firebase Auth: Đã đăng xuất");
     } catch (error) {
         console.error("Firebase Logout Error:", error);
