@@ -115,7 +115,7 @@ return new class extends Migration
         Schema::create('nganh', function (Blueprint $table) {
             $table->uuid('id_nganh')->primary(); 
             $table->uuid('ma_khoa');
-            $table->string('ma_truongbomon')->nullable();
+            $table->uuid('ma_truongbomon')->nullable();
             $table->string('ten_nganh')->unique();
             $table->string('ky_hieu')->unique();
             $table->timestamps(); 

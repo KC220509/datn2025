@@ -317,12 +317,10 @@ class DuLieuController extends Controller
                 'updated_at'    => now()->getTimestamp() * 1000
             ];
             
-
             $this->firebaseDb->getReference('nhom_chat/' . $request->ma_nhom . '/tin_nhan')
                 ->push($dataFirebase);
 
         });
-
 
         return response()->json([
             'trangthai' => true, 

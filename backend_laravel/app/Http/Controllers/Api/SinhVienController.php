@@ -147,9 +147,6 @@ class SinhVienController extends Controller
                 'trang_thai' => now() > $nhiemvu->han_nop ? 'tre_han' : 'dung_han' 
             ]
         );
-        
-
-        
 
         return response()->json([
             'trangthai' => true,

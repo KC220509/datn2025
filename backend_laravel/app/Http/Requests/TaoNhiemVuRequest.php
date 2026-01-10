@@ -26,7 +26,7 @@ class TaoNhiemVuRequest extends FormRequest
             'noi_dung' => 'nullable|string',
             'tep_dinh_kem.*' => 'nullable|file|max:20480',
             'han_nop' => 'required|date',
-            'han_dong' => 'required|date|after_or_equal:today',
+            'han_dong' => 'required|date|after_or_equal:han_nop',
         ];
     }
 }

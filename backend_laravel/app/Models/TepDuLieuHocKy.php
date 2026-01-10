@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TepDuLieuHocKy extends Model
 {
-    
     protected $table = 'tep_dulieu_hocky';
     protected $primaryKey = 'id_tep';
     public $incrementing = false;

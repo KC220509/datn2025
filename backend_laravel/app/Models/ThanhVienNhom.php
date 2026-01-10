@@ -17,8 +17,6 @@ class ThanhVienNhom extends Model
     ];
 
 
-
-
     public function nhomDoAn()
     {
         return $this->belongsTo(NhomDoAn::class, 'ma_nhom', 'id_nhom');

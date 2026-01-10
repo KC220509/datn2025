@@ -85,8 +85,8 @@ class TruongBoMonController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Lỗi phân công ngẫu nhiên: ' . $e->getMessage());
-            return response()->json(
-                ['trangthai' => false,
+            return response()->json([
+                'trangthai' => false,
                 'thongbao' => 'Đã xảy ra lỗi trong quá trình phân công.'
             ], 500);
         }
