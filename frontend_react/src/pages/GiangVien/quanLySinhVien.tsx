@@ -6,7 +6,7 @@ const QuanLySinhVien = () => {
     return (
         <div className="khung-ql-nhom-doan flex-row">
             <div className="menu-ql-nhom-doan flex-col">
-                <h3 className="tieude-menu">Quản Lý Nhóm</h3>
+                <h3 className="tieude-menu">Quản Lý Sinh Viên</h3>
                 <ul className='flex-col'>
                     <li>
                         <NavLink to="/giang-vien/sinh-vien-phan-cong" end className={({ isActive }) => isActive ? 'muc-menu-active' : 'muc-menu'}>
