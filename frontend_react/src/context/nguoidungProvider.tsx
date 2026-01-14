@@ -84,13 +84,13 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
 
         await ketNoiAxios.post("/dang-xuat");
         await dangXuatFireBase();
-
+        
         localStorage.removeItem('token'); 
         sessionStorage.removeItem('token'); 
         setToken(null);
         setNguoiDung(null);
-
         window.location.replace('/dang-nhap');
+
     }, []);
 
     useEffect(() => {

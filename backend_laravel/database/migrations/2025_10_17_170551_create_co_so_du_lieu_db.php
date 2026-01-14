@@ -191,7 +191,7 @@ return new class extends Migration
             $table->uuid('ma_hocky');
             $table->timestamps(); 
 
-            $table->unique(['ma_sinhvien', 'ma_hocky']); // 1 sinh viên chỉ được phân công trong 1 học kỳ
+            $table->unique(['ma_sinhvien', 'ma_hocky']); // Mỗi sinh viên chỉ được phân công trong 1 học kỳ
 
             $table->foreign('ma_truongbomon')
                 ->references('id_giangvien')
