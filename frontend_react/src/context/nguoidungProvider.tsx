@@ -81,17 +81,24 @@ export const NguoiDungProvider: React.FC<{ noiDungCon: React.ReactNode }> = ({ n
 
     // Hàm đăng xuất
     const dangXuat = useCallback(async () => {
+        try{
+            await Promise.allSettled([
+                ketNoiAxios.post("/dang-xuat"),
+                dangXuatFireBase()
+            ]);
+        }catch(error){
+            console.error("Lỗi khi đăng xuất:", error);
+        }finally{
 
-        await ketNoiAxios.post("/dang-xuat");
-        await dangXuatFireBase();
-        
-        localStorage.removeItem('token'); 
-        sessionStorage.removeItem('token'); 
-        setToken(null);
-        setNguoiDung(null);
-        window.location.replace('/dang-nhap');
+            localStorage.removeItem('token'); 
+            sessionStorage.removeItem('token'); 
+            setToken(null);
+            setNguoiDung(null);
 
-    }, []);
+            window.location.replace('/dang-nhap');
+        }
+
+    }, [setToken, setNguoiDung]);
 
     useEffect(() => {
         const kiemTraTrangThaiDangNhap = async () => {

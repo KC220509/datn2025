@@ -287,7 +287,11 @@ class GiangVienController extends Controller
             $danhSachNop = $nhiemVu->danhSachNopBai;
 
             foreach ($danhSachNop as $nopBai) {
-                $trangThaiMoi = ($nopBai->thoigian_nop <= $duLieu['han_nop']) ? 'dung_han' : 'tre_han';
+                $thoiGianNop = strtotime($nopBai->thoigian_nop);
+                $hanNop = strtotime($duLieu['han_nop']);
+
+                $trangThaiMoi = ($thoiGianNop <= $hanNop) ? 'dung_han' : 'tre_han';
+                // $trangThaiMoi = ($nopBai->thoigian_nop <= $duLieu['han_nop']) ? 'dung_han' : 'tre_han';
                 
                 $nopBai->update(['trang_thai' => $trangThaiMoi]);
             }
