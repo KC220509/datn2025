@@ -242,6 +242,14 @@ const QlSinhVien = () => {
                         </select>
                     </div>
 
+                    <div className="khung-dulieu-mau flex-col">
+                      <span>Dữ liệu mẫu</span>
+                      <a className="khung-tai-dulieu-mau flex-row" href="https://res.cloudinary.com/dpkysexsr/raw/upload/v1768572169/Danh_s%C3%A1ch_sinh_vi%C3%AAn_-_m%E1%BA%ABu.xlsx" download>
+                        <p className="dulieu-mau">Tải xuống tệp dữ liệu mẫu</p>
+                        <i className="bi bi-download"></i>
+                      </a>
+                    </div>
+
                     <div className="noidung-khungtai flex-col">
                       <label htmlFor="chonfile" className="nhan-file">
                         <input 

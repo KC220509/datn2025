@@ -142,13 +142,48 @@
     cursor: pointer;
 }
 
-.khung-taidulieu-sv .noidung-khungtai{
- 
+.khung-taidulieu-sv .khung-dulieu-mau{
+    gap: 10px;
+    font-size: 13px;
+}
+
+.khung-taidulieu-sv .khung-dulieu-mau span{
+    font-weight: bold;
+    color: #3a9adb;
+    text-transform: uppercase;
+}
+
+.khung-taidulieu-sv .khung-dulieu-mau .khung-tai-dulieu-mau{
+    width: 100%;
+    gap: 10px;
+    padding: 5px 10px;
+    align-items: center;
+    justify-content: space-between;
+    color: #1275ff;
+    cursor: pointer;
+    border: 1px solid #5982ba;
+}
+
+.khung-dulieu-mau .khung-tai-dulieu-mau .dulieu-mau{
+    color: #5982ba;
+    text-decoration: underline;
     font-size: 14px;
-    color: #505050;
     gap: 15px;
 }
 
+.khung-dulieu-mau .khung-tai-dulieu-mau i{
+    font-size: 16px;
+    color: #5982ba;
+    font-weight: bold;
+}
+
+.khung-dulieu-mau .khung-tai-dulieu-mau:hover,
+.khung-dulieu-mau .khung-tai-dulieu-mau:hover .dulieu-mau,
+.khung-dulieu-mau .khung-tai-dulieu-mau:hover i{
+    color: #006eff;
+    background-color: #eef5ff;
+    border-color: #1275ff;
+}
 
 .khung-taidulieu-sv .noidung-khungtai .nhan-file{
     display: block;
